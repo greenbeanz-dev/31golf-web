@@ -1,0 +1,371 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator pothos {
+  provider     = "prisma-pothos-types"
+  output       = "./pothos-types.ts"
+  clientOutput = "@prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEXT_PUBLIC_DATABASE_URL")
+}
+
+model course {
+  id           BigInt    @id @default(autoincrement())
+  address      String?   @db.VarChar(255)
+  city         String?   @db.VarChar(255)
+  country      String?   @db.VarChar(255)
+  created_at   DateTime? @db.Timestamp(6)
+  fax          String?   @db.VarChar(255)
+  name         String?   @db.VarChar(255)
+  partner_name String?   @db.VarChar(255)
+  phone        String?   @db.VarChar(255)
+  state        String?   @db.VarChar(255)
+  updated_at   DateTime? @db.Timestamp(6)
+  product      product[]
+}
+
+model customer {
+  id          BigInt        @id @default(autoincrement())
+  created_at  DateTime?     @db.Timestamp(6)
+  email       String?       @db.VarChar(255)
+  memo        String?
+  name        String        @db.VarChar(255)
+  phone       String?       @db.VarChar(255)
+  updated_at  DateTime?     @db.Timestamp(6)
+  fax         String?       @db.VarChar(255)
+  is_villain  Boolean?      @default(false)
+  birth_day   DateTime?     @db.Date
+  manager_id  BigInt?
+  manager     manager?      @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fki314oiw4pybhycvpvyhrsf4u2")
+  request     request[]
+  reservation reservation[]
+}
+
+model manager {
+  id          BigInt        @id @default(autoincrement())
+  email       String        @unique(map: "uk_ch4c0h9mgdd2c5lategqkpsyi") @db.VarChar(100)
+  name        String        @db.VarChar(50)
+  password    String        @db.VarChar(250)
+  phone       String        @db.VarChar(20)
+  position    String?       @db.VarChar(255)
+  role        String?       @db.VarChar(255)
+  customer    customer[]
+  product     product[]
+  request     request[]
+  reservation reservation[]
+}
+
+/// This model has been renamed to 'Renamedpackage' during introspection, because the original name 'package' is reserved.
+model Renamedpackage {
+  id          BigInt  @id @default(autoincrement())
+  cost        Int
+  description String? @db.VarChar(255)
+  name        String? @db.VarChar(255)
+  price       Int
+
+  @@map("package")
+}
+
+model payment {
+  id             BigInt       @id @default(autoincrement())
+  created_date   DateTime?    @db.Timestamp(6)
+  payment_method String?      @db.VarChar(255)
+  payment_status String?      @db.VarChar(255)
+  price          Int
+  reservation_id BigInt?
+  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkrewpj5f9v9xehy4ga8g221nw1")
+}
+
+model product {
+  id                  BigInt                @id @default(autoincrement())
+  commission_company  String?               @db.VarChar(255)
+  cost                Float?
+  created_at          DateTime?             @db.Timestamp(6)
+  date_departure      DateTime?             @db.Timestamp(6)
+  is_block            Boolean
+  price               Float?
+  updated_at          DateTime?             @db.Timestamp(6)
+  manager_id          BigInt?
+  name                String?               @db.VarChar(255)
+  memo                String?
+  note                String?
+  tee_off             String?
+  block_status        String?               @db.VarChar(255)
+  block_name          String?               @db.VarChar(255)
+  fax                 String?               @db.VarChar(255)
+  is_active           Boolean?
+  course_id           BigInt?
+  category_1          String?               @db.VarChar(255)
+  category_2          String?               @db.VarChar(255)
+  category_3          String?               @db.VarChar(255)
+  memo_notice         String?
+  memo_manager        String?
+  memo_etc            String?
+  manager             manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkjr0yud7fty8ma1jvn0hif3no7")
+  course              course?               @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_course_id_fk")
+  product_attraction  product_attraction[]
+  product_inclusive   product_inclusive[]
+  product_price       product_price[]
+  request             request[]
+  reservation         reservation[]
+  reservation_product reservation_product[]
+}
+
+model reservation {
+  id                   BigInt                @id @default(autoincrement())
+  created_at           DateTime              @db.Timestamp(6)
+  date_departure       DateTime?             @db.Timestamp(6)
+  memo                 String?
+  num_people           Int?
+  num_team             Int?
+  status               String?               @db.VarChar(255)
+  updated_at           DateTime              @db.Timestamp(6)
+  customer_id          BigInt?
+  manager_id           BigInt?
+  transactions         BigInt[]
+  product_id           BigInt?
+  note_checkout        String?
+  done_receipt         Boolean?
+  done_invoice         Boolean?
+  is_card              Boolean?
+  price_custom         Float?                @db.Real
+  cost_custom          Float?                @db.Real
+  price_addon          Float?                @db.Real
+  days_day             Int?
+  days_night           Int?
+  sms_reservation      String?
+  sms_checkout         String?
+  price_addon_sub      Float?                @db.Real
+  price_addon_memo     String?
+  price_addon_sub_memo String?
+  sms_reservation_sub  String?
+  sms_confirmation     String?
+  message_history      message_history[]
+  payment              payment[]
+  request              request[]
+  manager              manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk1w6gpc1lfmlb953goyfvg3so9")
+  customer             customer?             @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk41v6ueo0hiran65w8y1cta2c2")
+  product              product?              @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkgoouhtuwwm277879njd9atahw")
+  reservation_file     reservation_file[]
+  reservation_product  reservation_product[]
+  savings_account      savings_account[]
+  transaction          transaction[]
+}
+
+model add_on {
+  id                 BigInt    @id @default(autoincrement())
+  commission_amount  Float
+  commission_company String?   @db.VarChar(255)
+  cost               Float?
+  created_at         DateTime  @db.Timestamp(6)
+  date_use           DateTime? @db.Timestamp(6)
+  name               String?   @db.VarChar(255)
+  price              Float?
+  type               String    @db.VarChar(255)
+  updated_at         DateTime  @db.Timestamp(6)
+}
+
+model company {
+  id      BigInt  @id @default(autoincrement())
+  address String? @db.VarChar(255)
+  email   String? @db.VarChar(255)
+  fax     String? @db.VarChar(255)
+  manager String? @db.VarChar(255)
+  name    String? @db.VarChar(255)
+  phone   String? @db.VarChar(255)
+}
+
+model member {
+  id      BigInt  @id @default(autoincrement())
+  team_id BigInt?
+}
+
+model request {
+  id              BigInt       @id @default(autoincrement())
+  created_at      DateTime     @db.Timestamp(6)
+  date_arrival    DateTime?    @db.Timestamp(6)
+  date_departure  DateTime?    @db.Timestamp(6)
+  memo            String?      @db.VarChar(255)
+  num_people      Int?
+  num_team        Int?
+  request_content String?      @db.VarChar(255)
+  updated_at      DateTime     @db.Timestamp(6)
+  customer_id     BigInt?
+  is_reservation  Boolean?
+  is_canceled     Boolean?
+  date_operation  String?
+  golf_course     String?
+  row_style       String?      @db.VarChar
+  todos           String[]
+  manager_id      BigInt?
+  product_id      BigInt?
+  reservation_id  BigInt?
+  customer        customer?    @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk6wuyy6femh1tl1jxmw1ilrs6b")
+  manager         manager?     @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkb333houpq99p6nl4pq5c6ykda")
+  product         product?     @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkbywsb4tohr9bviei9hqvp7r4i")
+  reservation     reservation? @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkroorlvnl3scypj5oigfmnyuox")
+}
+
+model transaction {
+  id                 BigInt           @id @default(autoincrement())
+  account            String?          @db.VarChar(255)
+  amount             Float
+  created_at         DateTime         @db.Timestamp(6)
+  memo               String?          @db.VarChar(255)
+  method             String?          @db.VarChar(255)
+  type               String?          @db.VarChar(255)
+  reservation_id     BigInt?
+  savings_account_id BigInt?
+  reservation        reservation?     @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk7nt3gdkmakj3g2m8s6pulwa45")
+  savings_account    savings_account? @relation(fields: [savings_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transaction_savings_account_id_fk")
+}
+
+model attraction {
+  id                 BigInt               @id @default(autoincrement())
+  name               String               @db.VarChar(255)
+  description        String?
+  photos             String[]             @db.VarChar(2000)
+  product_attraction product_attraction[]
+}
+
+model inclusive {
+  id                BigInt              @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  product_inclusive product_inclusive[]
+}
+
+model message_history {
+  id             BigInt       @id @default(autoincrement())
+  content        String?
+  send_date      DateTime?    @db.Timestamp(6)
+  status         String?      @db.VarChar(255)
+  type           String?      @db.VarChar(255)
+  reservation_id BigInt?
+  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkagsp6gehtvtkdb3hri7cx9r1o")
+}
+
+model product_attraction {
+  id            BigInt     @id @default(autoincrement())
+  product_id    BigInt
+  attraction_id BigInt
+  attraction    attraction @relation(fields: [attraction_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_attraction_attraction_fkey")
+  product       product    @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_attraction_product_fkey")
+}
+
+model product_inclusive {
+  id           BigInt    @id @default(autoincrement())
+  product_id   BigInt
+  inclusive_id BigInt
+  type         String    @db.VarChar(255)
+  inclusive    inclusive @relation(fields: [inclusive_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_inclusive_inclusive_fkey")
+  product      product   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_inclusive_product_fkey")
+}
+
+model product_price {
+  id         BigInt    @id @default(autoincrement())
+  product_id BigInt?
+  date       DateTime? @db.Timestamp(6)
+  price      Float?
+  cost       Float?
+  memo       String?
+  product    product?  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_price_product_fkey")
+}
+
+model reservation_product {
+  id             BigInt        @id(map: "reservation_product_pk") @default(autoincrement())
+  reservation_id BigInt?
+  product_id     BigInt?
+  fax_type       String?
+  row_01         String?
+  row_02         String?
+  row_04         String?
+  row_05         String?
+  row_06         String?
+  row_07         String?
+  row_08         String?
+  row_09         String?
+  row_10         String?
+  row_11         String?
+  row_03         String?
+  fax_history    fax_history[]
+  product        product?      @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reservation_product_product_id_fk")
+  reservation    reservation?  @relation(fields: [reservation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reservation_product_reservation_id_fk")
+}
+
+model savings_account {
+  id             BigInt        @id(map: "savings_account_pk") @default(autoincrement())
+  name           String        @db.VarChar(255)
+  amount         Float
+  created_at     DateTime      @db.Timestamp(6)
+  type           String        @db.VarChar(255)
+  account        String        @db.VarChar(255)
+  balance        Float
+  memo           String?
+  reservation_id BigInt?
+  reservation    reservation?  @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "savings_account_reservation_id_fk")
+  transaction    transaction[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model reservation_file {
+  id             BigInt       @id @default(autoincrement())
+  reservation_id BigInt?
+  url            String?
+  name           String?      @db.VarChar(255)
+  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reservation_file_reservation_id_fk")
+}
+
+model fax_history {
+  id                     BigInt               @id @default(autoincrement())
+  reservation_product_id BigInt?
+  name                   String?              @db.VarChar(255)
+  created_at             DateTime             @db.Timestamp(6)
+  reservation_product    reservation_product? @relation(fields: [reservation_product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}

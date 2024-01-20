@@ -12,13 +12,22 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noImplicitAny": false,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/gql/*": ["./src/gql/*"],
+      "@lib/*": ["./lib/*"],
+      "@component/*": ["./src/components/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

@@ -1,0 +1,74 @@
+import { classValidatorResolver } from "@hookform/resolvers/class-validator";
+import { Transform, Type } from "class-transformer";
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
+
+class BlockInputModel {
+  @IsOptional()
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  id?: number | null;
+
+  @IsOptional()
+  @IsString()
+  commissionCompany?: string | null;
+
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  dateDeparture?: Date | null;
+
+  @IsOptional()
+  @IsNumber({ allowNaN: true, allowInfinity: true })
+  cost: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isBlock: boolean;
+
+  @IsOptional()
+  @IsNumber({ allowNaN: true, allowInfinity: true })
+  price?: number | null;
+
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  updatedAt?: Date;
+
+  @IsOptional()
+  @IsNumber()
+  @Transform((value) => Number(value), { toClassOnly: true })
+  managerId?: number;
+
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  memo?: string | null;
+
+  @IsOptional()
+  @IsString()
+  note?: string | null;
+
+  @IsOptional()
+  @IsString()
+  teeOff?: string | null;
+
+  @IsOptional()
+  @IsString()
+  blockStatus?: string | null;
+
+  @IsOptional()
+  @IsString()
+  blockName?: string | null;
+}
+
+export default BlockInputModel;
+
+export const BlockInputModelResolver = classValidatorResolver(BlockInputModel);

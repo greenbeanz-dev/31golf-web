@@ -1,0 +1,15 @@
+import { builder } from "./builder";
+import "./models/Course";
+import "./models/Customer";
+import "./models/Manager";
+import "./models/Product";
+import "./models/ProductPrice";
+import "./models/Request";
+import "./models/Reservation";
+import "./models/ReservationProduct";
+import "./models/ReservationFile";
+import "./models/SavingsAccount";
+import "./models/Transaction";
+import "./models/MessageHistory";
+import "./models/FaxHistory";
+export const schema = builder.toSchema();
