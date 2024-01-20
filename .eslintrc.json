@@ -1,0 +1,18 @@
+{
+  "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
+  "globals": {
+    "React": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": [
+      1,
+      {
+        "args": "none",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-empty-pattern": "warn",
+    "react-hooks/exhaustive-deps": "off"
+  },
+  "ignorePatterns": ["src/gql/__generated__/"]
+}
