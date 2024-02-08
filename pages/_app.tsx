@@ -1,4 +1,4 @@
-import type { AppProps } from "next/app";
+import Layout from "@component/Layout";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Hydrate,
@@ -7,7 +7,9 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { AppProps } from "next/app";
 import { useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -38,15 +40,23 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <NextUIProvider>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <NextThemesProvider attribute="class" defaultTheme="dark">
-            <Component {...pageProps} />
-          </NextThemesProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </NextUIProvider>
+    <SessionProvider
+      session={pageProps.session}
+      refetchInterval={5 * 60}
+      refetchOnWindowFocus={true}
+    >
+      <NextUIProvider>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <NextThemesProvider attribute="class" defaultTheme="dark">
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </NextThemesProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </NextUIProvider>
+    </SessionProvider>
   );
 }
 
