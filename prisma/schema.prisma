@@ -220,6 +220,7 @@ model transaction {
   type               String?          @db.VarChar(255)
   reservation_id     BigInt?
   savings_account_id BigInt?
+  date_transaction   DateTime?        @db.Timestamptz(6)
   reservation        reservation?     @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk7nt3gdkmakj3g2m8s6pulwa45")
   savings_account    savings_account? @relation(fields: [savings_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transaction_savings_account_id_fk")
 }
@@ -245,7 +246,7 @@ model message_history {
   status         String?      @db.VarChar(255)
   type           String?      @db.VarChar(255)
   reservation_id BigInt?
-  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkagsp6gehtvtkdb3hri7cx9r1o")
+  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fkagsp6gehtvtkdb3hri7cx9r1o")
 }
 
 model product_attraction {
@@ -272,7 +273,7 @@ model product_price {
   price      Float?
   cost       Float?
   memo       String?
-  product    product?  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_price_product_fkey")
+  product    product?  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "product_price_product_fkey")
 }
 
 model reservation_product {
@@ -368,4 +369,10 @@ model fax_history {
   name                   String?              @db.VarChar(255)
   created_at             DateTime             @db.Timestamp(6)
   reservation_product    reservation_product? @relation(fields: [reservation_product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model savings_account_log {
+  id        BigInt    @id(map: "savings_account_log_pk") @default(autoincrement())
+  timestamp DateTime? @db.Timestamptz(6)
+  memo      String?
 }
