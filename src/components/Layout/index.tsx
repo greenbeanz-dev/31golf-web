@@ -1,3 +1,4 @@
+import { Footer } from "@component/organism/Footer";
 import ToolBar from "@component/organism/ToolBar";
 import TopButton from "@component/organism/TopButton";
 import React from "react";
@@ -48,7 +49,9 @@ const Layout: React.FC<Props> = ({ children }) => {
         <TopButton />
         <ToolBar />
         {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
-        <main className="h-[calc(100vh-70px)]">{children}</main>
+        <main className="h-full">{children}</main>
+        <div style={{ minHeight: 72 }} />
+        <Footer />
       </div>
     </ErrorBoundary>
   );
