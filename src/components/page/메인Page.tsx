@@ -1,31 +1,101 @@
-import { Spinner } from "@nextui-org/react";
-import { Suspense } from "react";
+import {
+  Button,
+  Divider,
+  Input,
+  Navbar,
+  NavbarContent,
+  NavbarItem,
+  Spinner,
+} from "@nextui-org/react";
+import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 const 메인Page = () => {
+  const mainImageList = [
+    {
+      url: "/images/logo/golf_img1.png",
+      title: "여수 디오션 C.C 1박 2일 (36홀)",
+      description:
+        "바다름 품은 골프장! 다도해의 아름다움과 탁트인 바다의 상쾌감을 느껴보세요.",
+      price: 246000,
+    },
+    {
+      url: "/images/logo/golf_img2.png",
+      title: "남해 사우스케이프 C.C 1박 2일 (36홀)",
+      description:
+        "크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을 해보세요.",
+      price: 775000,
+    },
+    {
+      url: "/images/logo/golf_img3.png",
+      title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
+      description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
+      price: 305000,
+    },
+  ];
   return (
     <ErrorBoundary fallback={<div>메인</div>}>
       <Suspense fallback={<Spinner />}>
         <ImageCarousel />
-        <div style={{ height: 32 }}></div>
+        <div style={{ minHeight: 32 }}></div>
         <div className="flex w-full">
-          <div
-            style={{
-              flex: 1,
-              gap: 3,
-            }}
-          >
-            <div className="text-xl font-bold">회원로그인</div>
-          </div>
+          {/*  회원 로그인  */}
+          <Login />
+          <div style={{ minWidth: 24 }}></div>
+          {/* 베스트 상품  */}
           <div style={{ flex: 4 }}>
             <div className="flex gap-2 items-end">
-              <div className="text-xl font-bold">베스트 이미지</div>
+              <div className="text-xl font-bold">삼일골프 베스트</div>
               <div style={{ fontSize: 16, fontWeight: "normal" }}>
                 삼일골프의 베스트 투어 상품을 만나보세요!
               </div>
             </div>
+            <div style={{ minHeight: 24 }} />
+            {/* <div className="flex justify-around"> */}
+            <div className="flex justify-between">
+              {mainImageList.map((item) => {
+                return (
+                  <div
+                    style={{
+                      width: 290,
+                    }}
+                  >
+                    <img
+                      className={"rounded-2xl"}
+                      src={item.url}
+                      height={223}
+                      width={"100%"}
+                    />
+                    <div style={{ minHeight: 16 }} />
+                    <div className="text-base font-bold">{item.title}</div>
+                    <div
+                      className="text-base font-normal"
+                      style={{
+                        width: "100%",
+                        overflowWrap: "break-word",
+                      }}
+                    >
+                      {item.description}
+                    </div>
+                    <div className="text-sky-600 text-xl font-bold">
+                      {item.price.toLocaleString()}원 ~
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ minHeight: 24 }}></div>
+
+            {/* 투어 전체보기 */}
+            <div className="flex gap-2 items-end">
+              <div className="text-xl font-bold">투어 전체보기</div>
+              <div style={{ fontSize: 16, fontWeight: "normal" }}>
+                삼일골프의 다양한 투어 상품을 만나보세요!
+              </div>
+            </div>
+            <ToolBar />
           </div>
         </div>
       </Suspense>
@@ -58,4 +128,292 @@ const ImageCarousel = () => {
   );
 };
 
+const Login = () => {
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  return (
+    <div
+      style={{
+        flex: 1,
+        gap: 3,
+      }}
+    >
+      <div
+        className="text-xl font-bold"
+        style={{
+          marginLeft: 16,
+        }}
+      >
+        회원로그인
+        <div className="h-6" />
+        <div
+          className="flex flex-col"
+          style={{
+            gap: "8px",
+          }}
+        >
+          <Input
+            classNames={{
+              mainWrapper: ["w-full"],
+              input: [
+                "!ring-transparent",
+                "bg-transparent",
+                //   "text-black/90 dark:text-white/90",
+                //   "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              // innerWrapper: "bg-transparent",
+              // inputWrapper: [
+              //   "shadow-xl",
+              //   "bg-wihte-200/50",
+              //   "dark:bg-default/60",
+              //   "backdrop-blur-xl",
+              //   "backdrop-saturate-200",
+              //   "hover:bg-default-200/70",
+              //   "dark:hover:bg-default/70",
+              //   "group-data-[focused=true]:bg-default-200/50",
+              //   "dark:group-data-[focused=true]:bg-default/60",
+              //   "!cursor-text",
+              // ],
+            }}
+            placeholder="아이디"
+            size={"sm"}
+            value={id}
+            onChange={(e) => {
+              setId(e.target.value);
+            }}
+          />
+          <Input
+            classNames={{
+              input: ["!ring-transparent"],
+              mainWrapper: ["w-full"],
+            }}
+            placeholder="비밀번호"
+            size={"sm"}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <Button
+            style={{
+              height: 48,
+              backgroundColor: "#004964",
+              color: "white",
+            }}
+          >
+            네이버
+          </Button>
+          <Button
+            style={{
+              height: 48,
+              backgroundColor: "#FEE500",
+            }}
+          >
+            카카오로 로그인
+          </Button>
+          <Button
+            style={{
+              height: 48,
+              backgroundColor: "#03C75A",
+              color: "white",
+            }}
+          >
+            네이버로 로그인
+          </Button>
+          <div
+            className="h-8 items-center inline-flex"
+            style={{
+              fontSize: 14,
+              fontWeight: "normal",
+              justifyContent: "space-around",
+            }}
+          >
+            <div
+              className="flex justify-center items-center"
+              style={{
+                alignItems: "center",
+              }}
+            >
+              회원가입
+            </div>
+            <Divider orientation="vertical" style={{ height: 16 }} />
+            <div
+              className="flex"
+              style={{
+                alignItems: "center",
+              }}
+            >
+              아이디·비밀번호
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ToolBar = () => {
+  const navItem = [
+    {
+      label: "국내골프",
+      name: "domestic",
+    },
+    {
+      label: "제주골프",
+      name: "jeju",
+    },
+    {
+      label: "해외골프",
+      name: "overseas",
+    },
+  ];
+  const [tab, setTab] = useState("domestic");
+  return (
+    <>
+      <Navbar
+        // isBordered
+        classNames={{
+          wrapper: ["px-0", "cursor-pointer", "max-w-[1200px]"],
+          item: [
+            "flex",
+            "relative",
+            "h-full",
+            "cursor-pointer",
+            "items-center",
+            "data-[active=true]:after:content-['']",
+            "data-[active=true]:after:absolute",
+            "data-[active=true]:after:bottom-0",
+            "data-[active=true]:after:left-0",
+            "data-[active=true]:after:right-0",
+            "data-[active=true]:after:h-[2px]",
+            "data-[active=true]:after:rounded-[2px]",
+            "data-[active=true]:after:bg-sky-900",
+          ],
+          menu: ["px-0"],
+        }}
+      >
+        <NavbarContent className="flex px-0">
+          {navItem.map((item) => {
+            return (
+              <NavbarItem
+                className="px-4"
+                key={item.label}
+                isActive={tab === item.name}
+                onClick={() => {
+                  setTab(item.name);
+                }}
+              >
+                {item.label}
+              </NavbarItem>
+            );
+          })}
+        </NavbarContent>
+      </Navbar>
+      <div style={{ minHeight: 24 }} />
+      {tab == "domestic" && (
+        <div>
+          <DomesticTab />
+        </div>
+      )}
+      {tab == "jeju" && <div>hihi2</div>}
+      {tab == "overseas" && <div>hihi3</div>}
+    </>
+  );
+};
+
+const DomesticTab = () => {
+  const ImageList = [
+    {
+      url: "/images/logo/golf_img1.png",
+      title: "여수 디오션 C.C 1박 2일 (36홀)1",
+      description: "바다를 품은 골프장1!",
+      price: 246000,
+      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
+    },
+    {
+      url: "/images/logo/golf_img2.png",
+      title: "여수 디오션 C.C 1박 2일 (36홀)2",
+      description: "바다를 품은 골프장2!",
+      price: 246001,
+      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
+    },
+    {
+      url: "/images/logo/golf_img1.png",
+      title: "여수 디오션 C.C 1박 2일 (36홀)3",
+      description: "바다를 품은 골프장3!",
+      price: 246003,
+      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
+    },
+    {
+      url: "/images/logo/golf_img2.png",
+      title: "여수 디오션 C.C 1박 2일 (36홀)4",
+      description: "바다를 품은 골프장4!",
+      price: 246004,
+      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
+    },
+  ];
+  return (
+    <div className="w-full">
+      <div className="w-full flex flex-wrap justify-between">
+        {ImageList.map((item) => {
+          return (
+            <div
+              style={{
+                width: 448,
+              }}
+            >
+              <img
+                className={"rounded-3xl"}
+                src={item.url}
+                height={345}
+                width={"100%"}
+              />
+              <div style={{ minHeight: 16 }} />
+              <div
+                className="text-base font-normal"
+                style={{
+                  width: "100%",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {item.description}
+              </div>
+              <div className="text-base font-bold">{item.title}</div>
+
+              <div className="flex gap-1">
+                {item.contents.map((content) => {
+                  return (
+                    <div className="relative inline-block">
+                      <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
+                        <div className="text-green-500 text-sm font-normal">
+                          {content}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="text-sky-600 text-xl font-bold">
+                {item.price.toLocaleString()}원 ~
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ minHeight: 24 }} />
+      <Button
+        style={{
+          width: "100%",
+          height: 48,
+          backgroundColor: "#004964",
+          color: "white",
+        }}
+      >
+        <img src={"/images/logo/add-circle.png"} className="w-6 h-6" />
+        투어 상품 더보기
+      </Button>
+    </div>
+  );
+};
 export default 메인Page;
