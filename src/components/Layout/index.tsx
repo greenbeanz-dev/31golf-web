@@ -56,8 +56,8 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
-      {/* <div className="max-w-[100vw] min-h-[100vh]"> */}
-      <div className="max-w-screen max-h-screen">
+      <div className="max-w-[100vw] min-h-[100vh]">
+        {/* <div className="max-w-screen max-h-screen"> */}
         <div style={{ height: 40 }} />
         {isMobile ? (
           <MobileToolBar />
