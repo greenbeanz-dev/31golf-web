@@ -8,6 +8,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
@@ -18,6 +19,8 @@ export function MobileToolBar() {
     { label: "회원가입", href: "" },
     { label: "아이디/비밀번호 찾기", href: "" },
   ];
+  const router = useRouter();
+
   return (
     <Navbar
       isBordered
@@ -36,7 +39,17 @@ export function MobileToolBar() {
 
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
-          <img src={"/images/logo/31Logo_mobile.png"} width={120} height={54} />
+          <img
+            style={{
+              cursor: "pointer",
+            }}
+            src={"/images/logo/31Logo_mobile.png"}
+            width={120}
+            height={54}
+            onClick={() => {
+              router.push("/");
+            }}
+          />
         </NavbarBrand>
       </NavbarContent>
 

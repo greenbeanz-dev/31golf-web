@@ -1,4 +1,5 @@
 import { 상품이미지Component } from "@component/Image/상품이미지Component";
+import { 베스트상품Component } from "@component/Product/베스트상품Component";
 import {
   Button,
   Divider,
@@ -76,8 +77,8 @@ const 메인Page = () => {
             </div>
           </div>
           <div style={{ minHeight: 24 }} />
-          {/* <div className="flex justify-around"> */}
-          <div
+          <베스트상품Component />
+          {/* <div
             className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
           >
             {mainImageList.map((item) => {
@@ -110,7 +111,7 @@ const 메인Page = () => {
                 </div>
               );
             })}
-          </div>
+          </div> */}
           <div style={{ minHeight: isMobile ? 48 : 24 }}></div>
 
           {/* 투어 전체보기 */}

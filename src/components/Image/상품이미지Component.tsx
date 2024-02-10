@@ -6,14 +6,14 @@ export function 상품이미지Component({
   mobileHeight,
   pcWidth,
   pcHeight,
-  discountPrice,
+  discount,
 }: {
   item: any;
   mobileWidth?: number;
   mobileHeight?: number;
   pcWidth?: number;
   pcHeight?: number;
-  discountPrice?: number;
+  discount?: number;
 }) {
   const isMobile = useIsMobile();
   return (
@@ -39,7 +39,9 @@ export function 상품이미지Component({
       >
         {item.description}
       </div>
+      <div style={{ minHeight: 8 }} />
       <div className="text-base font-bold">{item.title}</div>
+      <div style={{ minHeight: 8 }} />
       {!isMobile && (
         <div className="flex gap-1">
           {item.contents.map((content) => (
@@ -53,8 +55,19 @@ export function 상품이미지Component({
           ))}
         </div>
       )}
-      <div className={`text-sky-600 text-xl font-bold`}>
-        {item.price.toLocaleString()}원 ~
+      <div style={{ minHeight: 8 }} />
+      <div className="flex">
+        {!isMobile && discount && (
+          <>
+            <div className={`text-red-500 text-xl font-bold`}>
+              {discount}% 할인
+            </div>
+            <div style={{ minWidth: 16 }} />
+          </>
+        )}
+        <div className={`text-sky-600 text-xl font-bold`}>
+          {item.price.toLocaleString()}원 ~
+        </div>
       </div>
     </div>
   );
