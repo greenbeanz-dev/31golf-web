@@ -30,21 +30,34 @@ export const Footer = () => {
   ];
   return (
     <div>
-      <div className="w-full h-16 border-t border-b border-black border-opacity-10 flex items-center justify-around">
-        {list.map((item, index) => (
-          <>
-            <div key={index} className="text-sm text-gray-500">
-              {item}
-            </div>
-            {index === list.length - 1 ? null : (
-              <Divider className="h-8" orientation="vertical" />
-            )}
-          </>
-        ))}
+      <div className="w-full h-16 border-t border-b border-black border-opacity-10">
+        <div
+          className="h-full"
+          style={{
+            paddingLeft: "5%",
+            paddingRight: "5%",
+          }}
+        >
+          <div className="h-full flex items-center justify-around">
+            {list.map((item, index) => (
+              <>
+                <div key={index} className="text-sm text-gray-500">
+                  {item}
+                </div>
+                {index === list.length - 1 ? null : (
+                  <Divider className="h-8" orientation="vertical" />
+                )}
+              </>
+            ))}
+          </div>
+        </div>
       </div>
+      <div className="h-4" />
       <div
         style={{
           marginLeft: "32px",
+          paddingLeft: "5%",
+          paddingRight: "5%",
         }}
       >
         <img src={"/images/logo/31Logo.png"} />

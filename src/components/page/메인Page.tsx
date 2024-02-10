@@ -5,14 +5,15 @@ import {
   Navbar,
   NavbarContent,
   NavbarItem,
-  Spinner,
 } from "@nextui-org/react";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const 메인Page = () => {
+  const isMobile = useIsMobile();
   const mainImageList = [
     {
       url: "/images/logo/golf_img1.png",
@@ -37,68 +38,87 @@ const 메인Page = () => {
   ];
   return (
     <ErrorBoundary fallback={<div>메인</div>}>
-      <Suspense fallback={<Spinner />}>
-        <ImageCarousel />
-        <div style={{ minHeight: 32 }}></div>
-        <div className="flex w-full">
-          {/*  회원 로그인  */}
-          <Login />
-          <div style={{ minWidth: 24 }}></div>
-          {/* 베스트 상품  */}
-          <div style={{ flex: 4 }}>
-            <div className="flex gap-2 items-end">
-              <div className="text-xl font-bold">삼일골프 베스트</div>
-              <div style={{ fontSize: 16, fontWeight: "normal" }}>
-                삼일골프의 베스트 투어 상품을 만나보세요!
-              </div>
+      {/* <Suspense fallback={<Spinner />}>  suspense 오류뜸  */}
+      {isMobile ? (
+        <></>
+      ) : (
+        <>
+          <ImageCarousel />
+          <div style={{ minHeight: 32 }}></div>
+        </>
+      )}
+      <div className="flex w-full">
+        {isMobile ? (
+          <></>
+        ) : (
+          <>
+            {/*  회원 로그인  */}
+            <Login />
+          </>
+        )}
+
+        <div style={{ minWidth: isMobile ? 0 : 24 }}></div>
+        {/* 베스트 상품  */}
+        <div style={{ flex: isMobile ? 0 : 4, width: "100%" }}>
+          <div
+            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
+          >
+            <div className="text-xl font-bold">삼일골프 베스트</div>
+            <div style={{ fontSize: 16, fontWeight: "normal" }}>
+              삼일골프의 베스트 투어 상품을 만나보세요!
             </div>
-            <div style={{ minHeight: 24 }} />
-            {/* <div className="flex justify-around"> */}
-            <div className="flex justify-between">
-              {mainImageList.map((item) => {
-                return (
+          </div>
+          <div style={{ minHeight: 24 }} />
+          {/* <div className="flex justify-around"> */}
+          <div
+            className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
+          >
+            {mainImageList.map((item) => {
+              return (
+                <div
+                  style={{
+                    width: isMobile ? 256 : 290,
+                    minWidth: isMobile ? 256 : 290,
+                  }}
+                >
+                  <img
+                    className={"rounded-2xl"}
+                    src={item.url}
+                    height={isMobile ? 343 : 223}
+                  />
+                  <div style={{ minHeight: 16 }} />
+                  <div className="text-base font-bold">{item.title}</div>
                   <div
+                    className="text-base font-normal"
                     style={{
-                      width: 290,
+                      width: "100%",
+                      overflowWrap: "break-word",
                     }}
                   >
-                    <img
-                      className={"rounded-2xl"}
-                      src={item.url}
-                      height={223}
-                      width={"100%"}
-                    />
-                    <div style={{ minHeight: 16 }} />
-                    <div className="text-base font-bold">{item.title}</div>
-                    <div
-                      className="text-base font-normal"
-                      style={{
-                        width: "100%",
-                        overflowWrap: "break-word",
-                      }}
-                    >
-                      {item.description}
-                    </div>
-                    <div className="text-sky-600 text-xl font-bold">
-                      {item.price.toLocaleString()}원 ~
-                    </div>
+                    {item.description}
                   </div>
-                );
-              })}
-            </div>
-            <div style={{ minHeight: 24 }}></div>
-
-            {/* 투어 전체보기 */}
-            <div className="flex gap-2 items-end">
-              <div className="text-xl font-bold">투어 전체보기</div>
-              <div style={{ fontSize: 16, fontWeight: "normal" }}>
-                삼일골프의 다양한 투어 상품을 만나보세요!
-              </div>
-            </div>
-            <ToolBar />
+                  <div className="text-sky-600 text-xl font-bold">
+                    {item.price.toLocaleString()}원 ~
+                  </div>
+                </div>
+              );
+            })}
           </div>
+          <div style={{ minHeight: isMobile ? 48 : 24 }}></div>
+
+          {/* 투어 전체보기 */}
+          <div
+            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
+          >
+            <div className="text-xl font-bold">투어 전체보기</div>
+            <div style={{ fontSize: 16, fontWeight: "normal" }}>
+              삼일골프의 다양한 투어 상품을 만나보세요!
+            </div>
+          </div>
+          <TabBar />
         </div>
-      </Suspense>
+      </div>
+      {/* </Suspense> */}
     </ErrorBoundary>
   );
 };
@@ -119,9 +139,12 @@ const ImageCarousel = () => {
     >
       {imageList.map((image) => {
         return (
-          <div style={{ borderRadius: "2%", overflow: "hidden" }}>
-            <img src={image} height={1200} width={400} />
-          </div>
+          <img
+            src={image}
+            height={1200}
+            width={400}
+            className={"rounded-3xl"}
+          />
         );
       })}
     </Carousel>
@@ -252,7 +275,7 @@ const Login = () => {
   );
 };
 
-const ToolBar = () => {
+const TabBar = () => {
   const navItem = [
     {
       label: "국내골프",
@@ -322,6 +345,8 @@ const ToolBar = () => {
 };
 
 const DomesticTab = () => {
+  const isMobile = useIsMobile();
+
   const ImageList = [
     {
       url: "/images/logo/golf_img1.png",
@@ -354,18 +379,19 @@ const DomesticTab = () => {
   ];
   return (
     <div className="w-full">
+      {/* 반응형 여기 수정  */}
       <div className="w-full flex flex-wrap justify-between">
         {ImageList.map((item) => {
           return (
             <div
               style={{
-                width: 448,
+                width: isMobile ? 160 : 448,
               }}
             >
               <img
                 className={"rounded-3xl"}
                 src={item.url}
-                height={345}
+                height={isMobile ? 160 : 345}
                 width={"100%"}
               />
               <div style={{ minHeight: 16 }} />
@@ -380,21 +406,29 @@ const DomesticTab = () => {
               </div>
               <div className="text-base font-bold">{item.title}</div>
 
-              <div className="flex gap-1">
-                {item.contents.map((content) => {
-                  return (
-                    <div className="relative inline-block">
-                      <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
-                        <div className="text-green-500 text-sm font-normal">
-                          {content}
+              {isMobile ? (
+                <></>
+              ) : (
+                <div className="flex gap-1">
+                  {item.contents.map((content) => {
+                    return (
+                      <div className="relative inline-block">
+                        <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
+                          <div className="text-green-500 text-sm font-normal">
+                            {content}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
 
-              <div className="text-sky-600 text-xl font-bold">
+              <div
+                className={`text-sky-600 text-xl font-bold ${
+                  isMobile ? "mb-4" : ""
+                }`}
+              >
                 {item.price.toLocaleString()}원 ~
               </div>
             </div>

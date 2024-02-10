@@ -35,6 +35,10 @@ export default function Topbar() {
   return (
     <>
       <Navbar
+        style={{
+          backgroundColor: "white",
+          zIndex: 1000, // 가장 상위로올림 (다른 탭과 겹칠 경우를 피하기 위함 )
+        }}
         // isBordered
         classNames={{
           item: [
@@ -54,7 +58,7 @@ export default function Topbar() {
         }}
       >
         <NavbarBrand>
-          <img src={"/images/logo/31Logo.png"} height={70} width={160} />
+          <img src={"/images/logo/31Logo.png"} height={65} width={160} />
           {/* <Image
             src="/images/logo/31Logo.png"
             width={160}
