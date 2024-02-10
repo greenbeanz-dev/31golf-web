@@ -1,3 +1,4 @@
+import { 상품이미지Component } from "@component/Image/상품이미지Component";
 import {
   Button,
   Divider,
@@ -6,8 +7,12 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { FaBusAlt, FaCarSide, FaMapMarkedAlt, FaStore } from "react-icons/fa";
+import { FaCircleQuestion, FaTree } from "react-icons/fa6";
+import { PiAirplaneTakeoffFill } from "react-icons/pi";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -58,8 +63,10 @@ const 메인Page = () => {
         )}
 
         <div style={{ minWidth: isMobile ? 0 : 24 }}></div>
+
         {/* 베스트 상품  */}
         <div style={{ flex: isMobile ? 0 : 4, width: "100%" }}>
+          {isMobile && <MobileMenu />}
           <div
             className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
           >
@@ -275,6 +282,88 @@ const Login = () => {
   );
 };
 
+const MobileMenu = () => {
+  const router = useRouter();
+  const firstRow = [
+    {
+      label: "국내골프",
+      icon: <FaMapMarkedAlt size={32} color="#004964" />,
+      herf: "/domestic",
+    },
+    {
+      label: "제주골프",
+      icon: <FaTree size={32} color="#004964" />,
+      href: "/jeju",
+    },
+    {
+      label: "해외골프",
+      icon: <PiAirplaneTakeoffFill size={32} color="#004964" />,
+      href: "/overseas",
+    },
+    {
+      label: "버스출발",
+      icon: <FaBusAlt size={32} color="#004964" />,
+      herf: "/bus",
+    },
+  ];
+
+  const secondRow = [
+    {
+      label: "차량",
+      icon: <FaCarSide size={32} color="#004964" />,
+      herf: "/bus",
+    },
+    {
+      label: "질문/후기",
+      icon: <FaCircleQuestion size={32} color="#004964" />,
+      herf: "/question",
+    },
+    {
+      label: "질문/후기",
+      icon: <FaStore size={32} color="#004964" />,
+      herf: "/question",
+    },
+    {
+      label: "",
+      icon: <></>,
+      herf: "/question",
+    },
+  ];
+  return (
+    <div style={{ marginBottom: 40 }}>
+      <div className="flex justify-between items-center">
+        {firstRow.map((item) => (
+          <div
+            className="flex flex-col items-center gap-2"
+            style={{ width: 72 }}
+            onClick={() => {
+              router.push(item.herf as string);
+            }}
+          >
+            {item.icon}
+            <div>{item.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ minHeight: 16 }} />
+      <div className="flex justify-between items-center">
+        {secondRow.map((item) => (
+          <div
+            className="flex flex-col items-center gap-2"
+            style={{ width: 72 }}
+            onClick={() => {
+              router.push(item.herf as string);
+            }}
+          >
+            {item.icon}
+            <div>{item.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const TabBar = () => {
   const navItem = [
     {
@@ -383,58 +472,17 @@ const DomesticTab = () => {
       <div className="w-full flex flex-wrap justify-between">
         {ImageList.map((item) => {
           return (
-            <div
-              style={{
-                width: isMobile ? 160 : 448,
-              }}
-            >
-              <img
-                className={"rounded-3xl"}
-                src={item.url}
-                height={isMobile ? 160 : 345}
-                width={"100%"}
-              />
-              <div style={{ minHeight: 16 }} />
-              <div
-                className="text-base font-normal"
-                style={{
-                  width: "100%",
-                  overflowWrap: "break-word",
-                }}
-              >
-                {item.description}
-              </div>
-              <div className="text-base font-bold">{item.title}</div>
-
-              {isMobile ? (
-                <></>
-              ) : (
-                <div className="flex gap-1">
-                  {item.contents.map((content) => {
-                    return (
-                      <div className="relative inline-block">
-                        <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
-                          <div className="text-green-500 text-sm font-normal">
-                            {content}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              <div
-                className={`text-sky-600 text-xl font-bold ${
-                  isMobile ? "mb-4" : ""
-                }`}
-              >
-                {item.price.toLocaleString()}원 ~
-              </div>
-            </div>
+            <상품이미지Component
+              item={item}
+              mobileWidth={160}
+              mobileHeight={160}
+              pcWidth={448}
+              pcHeight={345}
+            />
           );
         })}
       </div>
+
       <div style={{ minHeight: 24 }} />
       <Button
         style={{

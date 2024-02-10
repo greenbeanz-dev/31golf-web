@@ -14,16 +14,20 @@ import { AiOutlineSearch } from "react-icons/ai";
 export function MobileToolBar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const menuItems = [
-    { label: "국내골프", href: "/domestic" },
-    { label: "제주골프", href: "/jeju" },
-    { label: "해외골프", href: "/overseas" },
-    { label: "버스출발", href: "/bus" },
-    { label: "차량", href: "/car" },
-    { label: "질문/후기", href: "/question" },
-    { label: "질문/후기", href: "" },
+    { label: "로그인", href: "" },
+    { label: "회원가입", href: "" },
+    { label: "아이디/비밀번호 찾기", href: "" },
   ];
   return (
-    <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      isBordered
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+      style={{
+        backgroundColor: "white",
+        zIndex: 1000, // 가장 상위로올림 (다른 탭과 겹칠 경우를 피하기 위함 )
+      }}
+    >
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
