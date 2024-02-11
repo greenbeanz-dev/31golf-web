@@ -17,7 +17,7 @@ const navItem = [
   },
   {
     label: "추가메뉴",
-    href: "/addmenu",
+    href: "/addMenu",
   },
 ];
 
