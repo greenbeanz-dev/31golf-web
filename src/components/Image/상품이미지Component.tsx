@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 export function 상품이미지Component({
@@ -16,11 +17,15 @@ export function 상품이미지Component({
   discount?: number;
 }) {
   const isMobile = useIsMobile();
+  const router = useRouter();
   return (
     <div
       style={{
         width: isMobile ? mobileWidth : pcWidth,
         marginBottom: isMobile ? "16px" : "48px",
+      }}
+      onClick={() => {
+        router.push(`/detail/${item.id}`);
       }}
     >
       <img
