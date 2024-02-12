@@ -5,19 +5,19 @@ import useLogin from "../../utils/login/useLogin";
 const navItem = [
   {
     label: "국내골프",
-    href: "/domestic",
+    href: "domestic",
   },
   {
     label: "제주골프",
-    href: "/jeju",
+    href: "jeju",
   },
   {
     label: "해외골프",
-    href: "/overseas",
+    href: "overseas",
   },
   {
     label: "추가메뉴",
-    href: "/addMenu",
+    href: "addMenu",
   },
 ];
 

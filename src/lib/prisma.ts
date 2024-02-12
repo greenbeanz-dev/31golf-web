@@ -21,3 +21,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export default prisma;
+
+export type ReservationColumnName = keyof Prisma.reservationSelectScalar;

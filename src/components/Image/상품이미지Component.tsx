@@ -49,8 +49,8 @@ export function 상품이미지Component({
       <div style={{ minHeight: 8 }} />
       {!isMobile && (
         <div className="flex gap-1">
-          {item.contents.map((content) => (
-            <div className="relative inline-block">
+          {item.contents.map((content, idx) => (
+            <div key={idx} className="relative inline-block">
               <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
                 <div className="text-green-500 text-sm font-normal">
                   {content}

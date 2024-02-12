@@ -63,16 +63,22 @@ export const Footer = () => {
         <img src={"/images/logo/31Logo.png"} />
         <div className="h-4" />
         <div className="flex gap-4">
-          {firstRow.map((item) => (
-            <div className="flex gap-1 text-black text-opacity-70 text-xs">
+          {firstRow.map((item, idx) => (
+            <div
+              key={idx}
+              className="flex gap-1 text-black text-opacity-70 text-xs"
+            >
               <div className="font-bold">{item.title}</div>
               <div className="font-medium">{item.content}</div>
             </div>
           ))}
         </div>
         <div className="flex gap-4">
-          {secondRow.map((item) => (
-            <div className="flex gap-1 text-black text-opacity-70 text-xs">
+          {secondRow.map((item, idx) => (
+            <div
+              key={idx}
+              className="flex gap-1 text-black text-opacity-70 text-xs"
+            >
               <div className="font-bold">{item.title}</div>
               <div className="font-medium">{item.content}</div>
             </div>

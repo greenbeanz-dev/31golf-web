@@ -15,22 +15,22 @@ export function MobileMenu() {
     {
       label: "국내골프",
       icon: <FaMapMarkedAlt size={32} color="#004964" />,
-      herf: "/domestic",
+      herf: "domestic",
     },
     {
       label: "제주골프",
       icon: <FaTree size={32} color="#004964" />,
-      href: "/jeju",
+      href: "jeju",
     },
     {
       label: "해외골프",
       icon: <PiAirplaneTakeoffFill size={32} color="#004964" />,
-      href: "/overseas",
+      href: "overseas",
     },
     {
       label: "버스출발",
       icon: <FaBusAlt size={32} color="#004964" />,
-      herf: "/bus",
+      herf: "bus",
     },
   ];
 
@@ -59,8 +59,9 @@ export function MobileMenu() {
   return (
     <div style={{ marginBottom: 40 }}>
       <div className="flex justify-between items-center">
-        {firstRow.map((item) => (
+        {firstRow.map((item, idx) => (
           <div
+            key={idx}
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {
@@ -74,8 +75,9 @@ export function MobileMenu() {
       </div>
       <div style={{ minHeight: 16 }} />
       <div className="flex justify-between items-center">
-        {secondRow.map((item) => (
+        {secondRow.map((item, idx) => (
           <div
+            key={idx}
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {

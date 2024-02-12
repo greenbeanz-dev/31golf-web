@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 const mainImageList = [
   {
+    id: 10,
     url: "/images/logo/golf_img1.png",
     title: "여수 디오션 C.C 1박 2일 (36홀)",
     description:
@@ -9,6 +11,7 @@ const mainImageList = [
     price: 246000,
   },
   {
+    id: 11,
     url: "/images/logo/golf_img2.png",
     title: "남해 사우스케이프 C.C 1박 2일 (36홀)",
     description:
@@ -16,6 +19,7 @@ const mainImageList = [
     price: 775000,
   },
   {
+    id: 12,
     url: "/images/logo/golf_img3.png",
     title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
     description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
@@ -25,18 +29,23 @@ const mainImageList = [
 
 export function 베스트상품Component() {
   const isMobile = useIsMobile();
-
+  const router = useRouter();
   return (
     <>
       <div
         className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
       >
-        {mainImageList.map((item) => {
+        {mainImageList.map((item, idx) => {
           return (
             <div
+              key={idx}
               style={{
                 width: isMobile ? 256 : 290,
                 minWidth: isMobile ? 256 : 290,
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                router.push(`/detail/${item.id}`);
               }}
             >
               <img
