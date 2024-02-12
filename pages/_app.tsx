@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NextUIProvider>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <NextThemesProvider attribute="class" defaultTheme="dark">
+            <NextThemesProvider attribute="class" defaultTheme="white">
               <Layout>
                 <Component {...pageProps} />
               </Layout>
