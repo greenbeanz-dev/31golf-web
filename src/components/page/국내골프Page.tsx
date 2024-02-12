@@ -191,9 +191,10 @@ const 강원도Tab = () => {
     <div className="w-full">
       {/* 반응형 여기 수정  */}
       <div className="w-full flex flex-wrap justify-between">
-        {ImageList.map((item) => {
+        {ImageList.map((item, idx) => {
           return (
             <상품이미지Component
+              key={idx}
               item={item}
               mobileWidth={160}
               mobileHeight={160}

@@ -72,8 +72,8 @@ export function 골프상세Page() {
             <>
               <div style={{ minHeight: 8 }} />
               <div className="flex gap-1">
-                {MOBILE_CONTENT.map((content) => (
-                  <div className="relative inline-block">
+                {MOBILE_CONTENT.map((content, idx) => (
+                  <div key={idx} className="relative inline-block">
                     <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
                       <div className="text-green-500 text-sm font-normal">
                         {content}
@@ -291,8 +291,8 @@ const 일정상세 = () => {
           {isMobile && <div style={{ minHeight: 24 }} />}
           <div className="text-xl font-bold">포함 사항</div>
           <div style={{ minHeight: 24 }} />
-          {includeList.map((item) => (
-            <div className="flex items-center gap-2">
+          {includeList.map((item, idx) => (
+            <div key={idx} className="flex items-center gap-2">
               <AiFillPlusSquare size={16} color="#004964" />
               {item}
             </div>
@@ -306,8 +306,8 @@ const 일정상세 = () => {
           )}
           <div className="text-xl font-bold">불포함 사항</div>
           <div style={{ minHeight: 24 }} />
-          {excludeList.map((item) => (
-            <div className="flex items-center gap-2">
+          {excludeList.map((item, idx) => (
+            <div key={idx} className="flex items-center gap-2">
               <BiSolidMinusSquare size={16} color="#FF502A" />
               {item}
             </div>
@@ -395,8 +395,8 @@ const 유의사항 = () => {
       >
         [계약 및 입금 안내]
       </div>
-      {계약안내.map((data) => (
-        <li>{data}</li>
+      {계약안내.map((data, idx) => (
+        <li key={idx}>{data}</li>
       ))}
       <div
         style={{
@@ -410,8 +410,9 @@ const 유의사항 = () => {
         <>
           <li>{data.title}</li>
           {data.subTitle &&
-            data.subTitle.map((item) => (
+            data.subTitle.map((item, idx) => (
               <li
+                key={idx}
                 style={{
                   marginLeft: "1rem",
                 }}
@@ -447,8 +448,9 @@ const ButtonList = () => {
         justifyContent: "center",
       }}
     >
-      {labelList.map((data) => (
+      {labelList.map((data, idx) => (
         <Button
+          key={idx}
           style={{
             minWidth: isMobile ? 328 : 417,
             height: 56,
