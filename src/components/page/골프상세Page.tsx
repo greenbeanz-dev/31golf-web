@@ -6,7 +6,7 @@ import {
   Button,
   Divider,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { BiSolidMinusSquare } from "react-icons/bi";
 import { BsBuildingFillCheck } from "react-icons/bs";
@@ -25,6 +25,27 @@ import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
 
 export function 골프상세Page() {
+  const productRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (productRef.current) {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+        if (scrollTop > 280) {
+          //  @ts-ignore
+          productRef.current.style.marginTop = `${scrollTop - 280}px`;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="w-full h-full">
       <div className="flex">
@@ -71,7 +92,7 @@ export function 골프상세Page() {
             <GolfDetail />
           </div>
         </div>
-        <div className="flex" style={{ flex: 1 }}>
+        <div className="flex" ref={productRef} style={{ flex: 1 }}>
           <div>
             <GolfProductPayment />
           </div>
