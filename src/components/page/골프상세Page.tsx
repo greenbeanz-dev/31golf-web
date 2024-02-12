@@ -23,6 +23,7 @@ import { GiHotMeal } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowRoundForward } from "react-icons/io";
 import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export function 골프상세Page() {
   const productRef = useRef(null);
@@ -46,22 +47,44 @@ export function 골프상세Page() {
     };
   }, []);
 
+  const isMobile = useIsMobile();
+  const PC_MESSAGE = "남해 사우스케이프 C.C 1박 2일 (36홀)";
+  const MOBILE_MESSAGE = "남해 사우스케이프 C.C ";
+  const MOBILE_CONTENT = ["36홀", "1박 2일"];
   return (
     <div className="w-full h-full">
-      <div className="flex">
+      <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex-1">
           <img src={"/images/logo/detail_image.png"} width={640} height={492} />
         </div>
         <div style={{ minWidth: 24 }} />
+        <div style={{ minHeight: isMobile ? 16 : 0 }} />
         <div className="flex-1">
           <Breadcrumbs size="lg">
             <BreadcrumbItem>국내골프</BreadcrumbItem>
             <BreadcrumbItem>남해</BreadcrumbItem>
           </Breadcrumbs>
           <div style={{ minHeight: 8 }} />
-          <div className="font-bold text-4xl">
-            남해 사우스케이프 C.C 1박 2일 (36홀)
+          <div className={`font-bold ${isMobile ? "text-xl" : "text-4xl"}`}>
+            {isMobile ? `${MOBILE_MESSAGE}` : `${PC_MESSAGE}`}
           </div>
+          {isMobile && (
+            <>
+              <div style={{ minHeight: 8 }} />
+              <div className="flex gap-1">
+                {MOBILE_CONTENT.map((content) => (
+                  <div className="relative inline-block">
+                    <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
+                      <div className="text-green-500 text-sm font-normal">
+                        {content}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
           <div style={{ minHeight: 8 }} />
           <div className="text-base font-normal">
             크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을
@@ -74,8 +97,8 @@ export function 골프상세Page() {
       {/* 예약 가이드  */}
       <div className="flex">
         <div className="flex" style={{ flex: 2 }}>
-          <div>
-            <예약가이드 />
+          <div className="w-full">
+            {!isMobile && <예약가이드 />}
             <div style={{ minHeight: 40 }} />
             <일정상세 />
             <div style={{ minHeight: 24 }} />
@@ -92,11 +115,17 @@ export function 골프상세Page() {
             <GolfDetail />
           </div>
         </div>
-        <div className="flex" ref={productRef} style={{ flex: 1 }}>
-          <div>
-            <GolfProductPayment />
-          </div>
-        </div>
+
+        {!isMobile && (
+          <>
+            <div style={{ minWidth: 16 }} />
+            <div className="flex" ref={productRef} style={{ flex: 1 }}>
+              <div>
+                <GolfProductPayment />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -200,8 +229,9 @@ const 일정상세 = () => {
     "교통편",
     "개별소비세(19홀 당 21,120원)",
   ];
+  const isMobile = useIsMobile();
   return (
-    <div className="flex">
+    <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
       <div
         className="flex"
         // style={{ flex: 2 }}
@@ -212,6 +242,7 @@ const 일정상세 = () => {
       >
         <div className="w-full">
           <div className="text-xl font-bold">일정 상세</div>
+          {isMobile && <div style={{ minHeight: 24 }} />}
           <Accordion variant="light" selectionMode="multiple">
             {planList.map((data, index) => (
               <AccordionItem
@@ -257,6 +288,7 @@ const 일정상세 = () => {
       <div style={{ minWidth: 32 }} />
       <div className="flex" style={{ flex: 1 }}>
         <div className="w-full">
+          {isMobile && <div style={{ minHeight: 24 }} />}
           <div className="text-xl font-bold">포함 사항</div>
           <div style={{ minHeight: 24 }} />
           {includeList.map((item) => (
@@ -266,10 +298,16 @@ const 일정상세 = () => {
             </div>
           ))}
           <div style={{ minHeight: 40 }} />
+          {isMobile && (
+            <>
+              <Divider />
+              <div style={{ minHeight: 40 }} />
+            </>
+          )}
           <div className="text-xl font-bold">불포함 사항</div>
           <div style={{ minHeight: 24 }} />
           {excludeList.map((item) => (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <BiSolidMinusSquare size={16} color="#FF502A" />
               {item}
             </div>
@@ -400,16 +438,22 @@ const ButtonList = () => {
     "이용 후기",
     "이 상품 찜하기",
   ];
+  const isMobile = useIsMobile();
   return (
     <div
       className="flex gap-2 w-full"
       style={{
         flexWrap: "wrap",
+        justifyContent: "center",
       }}
     >
       {labelList.map((data) => (
         <Button
-          style={{ minWidth: 417, height: 56, borderColor: "gray" }}
+          style={{
+            minWidth: isMobile ? 328 : 417,
+            height: 56,
+            borderColor: "gray",
+          }}
           variant="bordered"
         >
           {data}
@@ -426,9 +470,14 @@ const GolfDetail = () => {
     { label: "주소", value: "전남 영광군 백수읍 해안로 1362-70번지" },
     { label: "홈페이지", value: "https://www.westoceancc.co.kr/" },
   ];
+  const isMobile = useIsMobile();
   return (
-    <div>
-      <img src={"/images/logo/detail_image.png"} height={492} width={822} />
+    <div className={`flex ${isMobile ? "flex-col" : "flex-col"} items-center`}>
+      <img
+        src={"/images/logo/detail_image.png"}
+        height={492}
+        width={isMobile ? 328 : 822}
+      />
       <div style={{ minHeight: 24 }}></div>
       {detailList.map((data) => (
         <>
@@ -439,6 +488,7 @@ const GolfDetail = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              width: "100%",
             }}
           >
             <div className="flex h-full items-center">
