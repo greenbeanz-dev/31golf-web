@@ -22,6 +22,7 @@ import {
 } from "react-icons/fa6";
 import { GiHotMeal } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowRoundForward } from "react-icons/io";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -61,6 +62,8 @@ export function 골프상세Page() {
   const PC_MESSAGE = "남해 사우스케이프 C.C 1박 2일 (36홀)";
   const MOBILE_MESSAGE = "남해 사우스케이프 C.C ";
   const MOBILE_CONTENT = ["36홀", "1박 2일"];
+
+  const [showDetail, setShowDetail] = useState(false);
   return (
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
@@ -143,6 +146,47 @@ export function 골프상세Page() {
           </>
         )}
       </div>
+      {/* 바텀시트  */}
+      {isMobile && (
+        <div
+          className="fixed bottom-0 left-0 w-full rounded-tr-2xl"
+          style={{
+            display: "block",
+            zIndex: 9999,
+            borderTop: "1px solid #E5E5E5",
+            borderTopLeftRadius: "30px",
+            borderTopRightRadius: "30px",
+            backgroundColor: "white",
+          }}
+        >
+          {showDetail && (
+            <div className="p-4 flex-col justify-start inline-flex">
+              <div
+                className="flex justify-center"
+                onClick={(e) => {
+                  setShowDetail(!showDetail);
+                }}
+              >
+                <MdKeyboardArrowDown size={24} />
+              </div>
+              <상품결제정보 />
+            </div>
+          )}
+          <div className="w-full h-28 p-4 flex-col justify-start items-center gap-4 inline-flex">
+            {!showDetail && (
+              <div
+                className="w-full flex justify-center"
+                onClick={(e) => {
+                  setShowDetail(!showDetail);
+                }}
+              >
+                <MdKeyboardArrowUp size={24} />
+              </div>
+            )}
+            <투어예약하기Button />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -528,6 +572,16 @@ const GolfDetail = () => {
 };
 
 const GolfProductPayment = () => {
+  return (
+    <div>
+      <상품결제정보 />
+      <div style={{ minHeight: 8 }} />
+      <투어예약하기Button />
+    </div>
+  );
+};
+
+const 상품결제정보 = () => {
   const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
   const startDate = "2024.05.08(수)";
   const endDate = "2024.05.09(목)";
@@ -537,7 +591,7 @@ const GolfProductPayment = () => {
   const price = 243000;
   const [count, setCount] = useState<number>(4);
   return (
-    <div>
+    <>
       <div className="font-bold text-xl">{title}</div>
       <div className="flex">
         <div style={{ marginRight: "1rem" }}>기간</div>
@@ -590,21 +644,24 @@ const GolfProductPayment = () => {
           {(count * price).toLocaleString()} 원
         </div>
       </div>
+    </>
+  );
+};
 
-      <div style={{ minHeight: 8 }} />
-      <Button
-        size="lg"
-        style={{
-          width: "100%",
-          height: 48,
-          backgroundColor: "#004964",
-          color: "white",
-          fontWeight: "bold",
-        }}
-      >
-        투어 예약하기
-      </Button>
-    </div>
+const 투어예약하기Button = () => {
+  return (
+    <Button
+      size="lg"
+      style={{
+        width: "100%",
+        height: 48,
+        backgroundColor: "#004964",
+        color: "white",
+        fontWeight: "bold",
+      }}
+    >
+      투어 예약하기
+    </Button>
   );
 };
 
