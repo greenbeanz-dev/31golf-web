@@ -7,14 +7,13 @@ import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useMediaQuery } from "react-responsive";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import useLogin from "../../utils/login/useLogin";
 import { isMobileSize } from "../../utils/responsive/isMobile";
 
 interface Props {
   children: React.ReactNode;
 }
 const Layout: React.FC<Props> = ({ children }) => {
-  const { login, isLogin, logOut, userProfile } = useLogin();
+  // const { login, isLogin, logOut, userProfile } = useLogin();
 
   // const isDesktop = useMediaQuery({
   //   query: "(min-width: 1024px)",
