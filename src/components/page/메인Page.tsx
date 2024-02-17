@@ -233,17 +233,23 @@ const Login = () => {
               color: "white",
             }}
           >
-            네이버
+            로그인
           </Button>
-          <Button
+          <img
+            src={"/images/logo/kakao_login.png"}
+            style={{
+              height: 48,
+            }}
+          />
+          {/* <Button
             style={{
               height: 48,
               backgroundColor: "#FEE500",
             }}
           >
             카카오로 로그인
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             style={{
               height: 48,
               backgroundColor: "#03C75A",
@@ -251,7 +257,13 @@ const Login = () => {
             }}
           >
             네이버로 로그인
-          </Button>
+          </Button> */}
+          <img
+            src={"/images/logo/naver_login.png"}
+            style={{
+              height: 48,
+            }}
+          />
           <div
             className="h-8 items-center inline-flex"
             style={{

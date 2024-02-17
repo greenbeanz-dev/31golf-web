@@ -8,7 +8,6 @@ import {
 } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
@@ -48,11 +47,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NextUIProvider>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <NextThemesProvider attribute="class" defaultTheme="white">
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </NextThemesProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </Hydrate>
         </QueryClientProvider>
       </NextUIProvider>

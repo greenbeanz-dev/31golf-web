@@ -1,4 +1,5 @@
 import { Footer } from "@component/organism/Footer";
+import { MobileFooter } from "@component/organism/MobileFooter";
 import { MobileToolBar } from "@component/organism/MobileToolBar";
 import ToolBar from "@component/organism/ToolBar";
 import TopButton from "@component/organism/TopButton";
@@ -79,7 +80,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           {children}
         </main>
         <div style={{ minHeight: 72 }} />
-        <Footer />
+        {isMobile ? <MobileFooter /> : <Footer />}
       </div>
     </ErrorBoundary>
   );
