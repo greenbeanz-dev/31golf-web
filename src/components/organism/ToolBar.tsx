@@ -1,6 +1,5 @@
 import { Link, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import useLogin from "../../utils/login/useLogin";
 
 const navItem = [
   {
@@ -23,7 +22,7 @@ const navItem = [
 
 export default function Topbar() {
   const { pathname } = useRouter();
-  const { login, isLogin, logOut, userProfile } = useLogin();
+  // const { login, isLogin, logOut, userProfile } = useLogin();
   const router = useRouter();
 
   return (
