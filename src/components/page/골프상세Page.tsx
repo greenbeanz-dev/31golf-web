@@ -25,17 +25,26 @@ import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
+const HEADER_HEIGHT = 95;
 export function 골프상세Page() {
   const productRef = useRef(null);
 
+  const 예약가이드Ref = useRef(null);
+  const scrollYRef = useRef(0);
+  const [fixed, setFixed] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (productRef.current) {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      scrollYRef.current = window.scrollY;
 
-        if (scrollTop > 280) {
-          //  @ts-ignore
-          productRef.current.style.marginTop = `${scrollTop - 280}px`;
+      if (예약가이드Ref.current) {
+        const 예약가이드Top = (예약가이드Ref.current as any).offsetTop;
+
+        // 헤더높이만큼 더해줘야함
+        if (scrollYRef.current + HEADER_HEIGHT > 예약가이드Top) {
+          setFixed(true);
+        } else {
+          setFixed(false);
         }
       }
     };
@@ -98,7 +107,7 @@ export function 골프상세Page() {
       <div className="flex">
         <div className="flex" style={{ flex: 2 }}>
           <div className="w-full">
-            {!isMobile && <예약가이드 />}
+            {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
             <div style={{ minHeight: 40 }} />
             <일정상세 />
             <div style={{ minHeight: 24 }} />
@@ -119,8 +128,13 @@ export function 골프상세Page() {
         {!isMobile && (
           <>
             <div style={{ minWidth: 16 }} />
-            <div className="flex" ref={productRef} style={{ flex: 1 }}>
-              <div>
+            <div className="flex h-full" ref={productRef} style={{ flex: 1 }}>
+              <div
+                style={{
+                  position: fixed ? "fixed" : "relative",
+                  top: fixed ? `${HEADER_HEIGHT}px` : "0px", // header height만큼 넣어줘야 이쁘게 스크롤 됨
+                }}
+              >
                 <GolfProductPayment />
               </div>
             </div>
@@ -131,10 +145,12 @@ export function 골프상세Page() {
   );
 }
 
-const 예약가이드 = () => {
+const 예약가이드 = ({ 예약가이드Ref }: any) => {
   return (
     <div>
-      <div className="text-xl font-bold">예약 가이드</div>
+      <div className="text-xl font-bold" ref={예약가이드Ref}>
+        예약 가이드
+      </div>
       <div style={{ minHeight: 16 }} />
       <div className="w-full flex flex-grow justify-start items-center gap-1 inline-flex">
         <Step
