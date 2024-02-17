@@ -1,3 +1,4 @@
+import { 상품캘린더 } from "@component/calendar";
 import {
   Accordion,
   AccordionItem,
@@ -93,12 +94,14 @@ export function 골프상세Page() {
               </div>
             </>
           )}
-
           <div style={{ minHeight: 8 }} />
           <div className="text-base font-normal">
             크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을
             해보세요!
           </div>
+          <div style={{ minHeight: 10 }} />
+          <상품캘린더 />
+          {/* 캘린더  */}
         </div>
       </div>
 
