@@ -101,7 +101,6 @@ export function 골프상세Page() {
           </div>
           <div style={{ minHeight: 10 }} />
           <상품캘린더 />
-          {/* 캘린더  */}
         </div>
       </div>
 

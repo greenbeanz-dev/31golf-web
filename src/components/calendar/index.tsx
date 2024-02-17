@@ -105,7 +105,14 @@ const CustomToolbar = (toolbar) => {
 
   return (
     <div>
-      <div className="rbc-toolbar">
+      <div
+        className=""
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <span className="flex gap-2 items-center">
           <IoIosArrowBack size={24} color="#000000" onClick={goToBack} />
         </span>
