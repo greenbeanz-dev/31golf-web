@@ -1,0 +1,34 @@
+.rbc-row-bg {
+  background-color: #004964 !important;
+  opacity: 0.1;
+}
+
+.rbc-day-bg {
+  cursor: pointer;
+}
+
+.rbc-day-bg:active {
+  background-color: #004964 !important;
+  color: white !important;
+}
+
+.rbc-header {
+  border-bottom: 1px solid white !important;
+}
+
+.rbc-header + .rbc-header {
+  border-left: 1px solid white !important;
+}
+
+.rbc-month-view {
+  border: 1px solid white !important;
+}
+
+.rbc-day-bg.rbc-today {
+  background-color: #004964 !important;
+  opacity: 0.1;
+}
+
+.rbc-toolbar {
+  display: flex !important;
+}
