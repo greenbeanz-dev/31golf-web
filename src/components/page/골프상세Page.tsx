@@ -514,7 +514,7 @@ const ButtonList = () => {
         <Button
           key={idx}
           style={{
-            minWidth: isMobile ? 328 : 417,
+            minWidth: isMobile ? 328 : 350,
             height: 56,
             borderColor: "gray",
           }}
