@@ -25,6 +25,7 @@ import { IoIosArrowDown, IoIosArrowRoundForward } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
+import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 const HEADER_HEIGHT = 95;
@@ -203,28 +204,28 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
           number="1단계"
           description1="예약 신청"
           description2=" 및 비용 결제"
-          icon={<FaRegCalendarPlus size={32} color="#004964" />}
+          icon={<FaRegCalendarPlus size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="2단계"
           description1="골프장 및 숙박시설"
           description2="예약 가능 여부 확인"
-          icon={<BsBuildingFillCheck size={32} color="#004964" />}
+          icon={<BsBuildingFillCheck size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="3단계"
           description1="예약 가능 (예약 완료)"
           description2="예약 불가 (자동 취소 및 환불)"
-          icon={<FaCheckToSlot size={32} color="#004964" />}
+          icon={<FaCheckToSlot size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="4단계"
           description1="골프 투어 "
           description2="GO GO~"
-          icon={<FaGolfBallTee size={32} color="#004964" />}
+          icon={<FaGolfBallTee size={32} color={theme.colors.primary} />}
         />
       </div>
     </div>
@@ -239,17 +240,17 @@ const 일정상세 = () => {
         {
           title: "개인출발",
           time: 9,
-          icon: <FaCarSide size={24} color="#004964" />,
+          icon: <FaCarSide size={24} color={theme.colors.primary} />,
         },
         {
           title: "골프장 도착",
           time: 11,
-          icon: <TbFlag3Filled size={24} color="#004964" />,
+          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
         },
         {
           title: "오후-남해사우스케이프오너스 C.C",
           time: 13,
-          icon: <FaGolfBallTee size={24} color="#004964" />,
+          icon: <FaGolfBallTee size={24} color={theme.colors.primary} />,
         },
       ],
       hotel: "가든스위트 리조트(2인 1실)",
@@ -261,17 +262,17 @@ const 일정상세 = () => {
         {
           title: "체크아웃/골프장이동",
           time: 0,
-          icon: <TbFlag3Filled size={24} color="#004964" />,
+          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
         },
         {
           title: "조식",
           time: 11,
-          icon: <PiForkKnifeFill size={24} color="#004964" />,
+          icon: <PiForkKnifeFill size={24} color={theme.colors.primary} />,
         },
         {
           title: "골프장 출발",
           time: 13,
-          icon: <TbFlag3Filled size={24} color="#004964" />,
+          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
         },
       ],
       hotel: "가든스위트 리조트(2인 1실)",
@@ -310,7 +311,9 @@ const 일정상세 = () => {
               <AccordionItem
                 key={index}
                 title={`${data.day}일차`}
-                indicator={<IoIosArrowDown size={24} color="#004964" />}
+                indicator={
+                  <IoIosArrowDown size={24} color={theme.colors.primary} />
+                }
               >
                 <>
                   {data.item.map((item, idx) => (
@@ -328,7 +331,7 @@ const 일정상세 = () => {
                   <div style={{ minHeight: 16 }} />
                   <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
                     <GuideInfo
-                      icon={<FaBed size={16} color="#004964" />}
+                      icon={<FaBed size={16} color={theme.colors.primary} />}
                       label="호텔"
                       value={data.hotel}
                     />
@@ -336,7 +339,9 @@ const 일정상세 = () => {
                   <div style={{ minHeight: 8 }} />
                   <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
                     <GuideInfo
-                      icon={<GiHotMeal size={16} color="#004964" />}
+                      icon={
+                        <GiHotMeal size={16} color={theme.colors.primary} />
+                      }
                       label="식사"
                       value={data.meal}
                     />
@@ -355,7 +360,7 @@ const 일정상세 = () => {
           <div style={{ minHeight: 24 }} />
           {includeList.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
-              <AiFillPlusSquare size={16} color="#004964" />
+              <AiFillPlusSquare size={16} color={theme.colors.primary} />
               {item}
             </div>
           ))}
@@ -370,7 +375,7 @@ const 일정상세 = () => {
           <div style={{ minHeight: 24 }} />
           {excludeList.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
-              <BiSolidMinusSquare size={16} color="#FF502A" />
+              <BiSolidMinusSquare size={16} color={theme.colors.secondary} />
               {item}
             </div>
           ))}
@@ -618,7 +623,7 @@ const 상품결제정보 = () => {
           <div className="flex">
             <FaCircleMinus
               size={24}
-              color="#004964"
+              color={theme.colors.primary}
               onClick={() => {
                 if (count > 4) setCount(count - 1);
               }}
@@ -655,7 +660,7 @@ const 투어예약하기Button = () => {
       style={{
         width: "100%",
         height: 48,
-        backgroundColor: "#004964",
+        backgroundColor: theme.colors.primary,
         color: "white",
         fontWeight: "bold",
       }}
