@@ -32,3 +32,8 @@
 .rbc-toolbar {
   display: flex !important;
 }
+
+.rbc-event-content {
+  text-align: end !important;
+  font-size: 12px !important;
+}
