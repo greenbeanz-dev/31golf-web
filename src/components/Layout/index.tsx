@@ -56,30 +56,39 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
-      <div className="max-w-[100vw] min-h-[100vh]">
-        {/* <div className="max-w-screen max-h-screen"> */}
-        <div style={{ height: 40 }} />
-        {isMobile ? (
-          <MobileToolBar />
-        ) : (
-          <>
-            <TopButton />
-            <ToolBar />
-          </>
-        )}
+      <div
+        className="max-w-[100vw] min-h-[100vh]"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ maxWidth: isMobile ? "100%" : "1200px" }}>
+          {/* <div className="max-w-screen max-h-screen"> */}
+          <div style={{ height: 40 }} />
+          {isMobile ? (
+            <MobileToolBar />
+          ) : (
+            <>
+              <TopButton />
+              <ToolBar />
+            </>
+          )}
 
-        {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
-        <main
-          className="h-full"
-          style={{
-            paddingLeft: isMobile ? "3%" : "5%",
-            paddingRight: isMobile ? "3%" : "5%",
-          }}
-        >
-          {children}
-        </main>
-        <div style={{ minHeight: 72 }} />
-        {isMobile ? <MobileFooter /> : <Footer />}
+          {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
+          <main
+            className="h-full"
+            style={{
+              paddingLeft: isMobile ? "3%" : "0%",
+              paddingRight: isMobile ? "3%" : "0%",
+            }}
+          >
+            {children}
+          </main>
+          <div style={{ minHeight: 72 }} />
+          {isMobile ? <MobileFooter /> : <Footer />}
+        </div>
       </div>
     </ErrorBoundary>
   );

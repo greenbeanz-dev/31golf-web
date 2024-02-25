@@ -16,6 +16,7 @@ import { FaCircleQuestion, FaTree } from "react-icons/fa6";
 import { PiAirplaneTakeoffFill } from "react-icons/pi";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 const 메인Page = () => {
@@ -229,7 +230,7 @@ const Login = () => {
           <Button
             style={{
               height: 48,
-              backgroundColor: "#004964",
+              backgroundColor: theme.colors.primary,
               color: "white",
             }}
           >
@@ -301,22 +302,22 @@ const MobileMenu = () => {
   const firstRow = [
     {
       label: "국내골프",
-      icon: <FaMapMarkedAlt size={32} color="#004964" />,
+      icon: <FaMapMarkedAlt size={32} color={theme.colors.primary} />,
       herf: "domestic",
     },
     {
       label: "제주골프",
-      icon: <FaTree size={32} color="#004964" />,
+      icon: <FaTree size={32} color={theme.colors.primary} />,
       href: "jeju",
     },
     {
       label: "해외골프",
-      icon: <PiAirplaneTakeoffFill size={32} color="#004964" />,
+      icon: <PiAirplaneTakeoffFill size={32} color={theme.colors.primary} />,
       href: "overseas",
     },
     {
       label: "버스출발",
-      icon: <FaBusAlt size={32} color="#004964" />,
+      icon: <FaBusAlt size={32} color={theme.colors.primary} />,
       herf: "bus",
     },
   ];
@@ -324,17 +325,17 @@ const MobileMenu = () => {
   const secondRow = [
     {
       label: "차량",
-      icon: <FaCarSide size={32} color="#004964" />,
+      icon: <FaCarSide size={32} color={theme.colors.primary} />,
       herf: "/bus",
     },
     {
       label: "질문/후기",
-      icon: <FaCircleQuestion size={32} color="#004964" />,
+      icon: <FaCircleQuestion size={32} color={theme.colors.primary} />,
       herf: "/question",
     },
     {
       label: "질문/후기",
-      icon: <FaStore size={32} color="#004964" />,
+      icon: <FaStore size={32} color={theme.colors.primary} />,
       herf: "/question",
     },
     {
@@ -505,7 +506,7 @@ const DomesticTab = () => {
         style={{
           width: "100%",
           height: 48,
-          backgroundColor: "#004964",
+          backgroundColor: theme.colors.primary,
           color: "white",
         }}
       >
