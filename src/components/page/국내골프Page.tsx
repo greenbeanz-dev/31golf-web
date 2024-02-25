@@ -1,6 +1,7 @@
 import { 상품이미지Component } from "@component/Image/상품이미지Component";
 import { Button, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { useState } from "react";
+import { theme } from "../../../pages/_app";
 
 export function 국내골프Page() {
   return (
@@ -211,7 +212,7 @@ const 강원도Tab = () => {
         style={{
           width: "100%",
           height: 48,
-          backgroundColor: "#004964",
+          backgroundColor: theme.colors.primary,
           color: "white",
         }}
       >

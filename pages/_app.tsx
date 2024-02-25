@@ -17,6 +17,13 @@ import "../styles/tailwind.css";
 
 dayjs.locale("ko");
 
+export const theme = {
+  colors: {
+    primary: "#004964",
+    secondary: "#FF502A",
+  },
+};
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
