@@ -687,11 +687,11 @@ const PlanItem = ({ icon, title, time }) => (
       </div>
       <div className="text-black text-base">{title}</div>
     </div>
-    <div className="h-5 pr-2 justify-between items-center flex">
+    {/* <div className="h-5 pr-2 justify-between items-center flex">
       <div className="w-12 text-right text-black text-opacity-70 text-sm font-normal">
         {time}:00
       </div>
-    </div>
+    </div> */}
   </div>
 );
 
