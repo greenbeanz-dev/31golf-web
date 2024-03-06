@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
-export function MobileToolBar() {
+export default function MobileTopBar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const menuItems = [
     { label: "로그인", href: "" },

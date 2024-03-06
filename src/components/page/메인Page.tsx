@@ -18,6 +18,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import Image from "next/image";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -39,7 +40,7 @@ const 메인Page = () => {
     {
       url: "/images/logo/golf_img3.png",
       title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
-      description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
+      description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
       price: 305000,
     },
   ];
@@ -64,7 +65,7 @@ const 메인Page = () => {
           </>
         )}
 
-        <div style={{ minWidth: isMobile ? 0 : 24 }}></div>
+        <div style={{ minWidth: isMobile ? 0 : 40 }}></div>
 
         {/* 베스트 상품  */}
         <div style={{ flex: isMobile ? 0 : 4, width: "100%" }}>
@@ -73,7 +74,7 @@ const 메인Page = () => {
             className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
           >
             <div className="text-xl font-bold">삼일골프 베스트</div>
-            <div style={{ fontSize: 16, fontWeight: "normal" }}>
+            <div className="text-[16px] leading-6 opacity-70">
               삼일골프의 베스트 투어 상품을 만나보세요!
             </div>
           </div>
@@ -113,14 +114,13 @@ const 메인Page = () => {
               );
             })}
           </div> */}
-          <div style={{ minHeight: isMobile ? 48 : 24 }}></div>
-
+          <div className={isMobile ? "min-h-[48px]" : "min-h-[36px]"} />
           {/* 투어 전체보기 */}
           <div
             className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
           >
             <div className="text-xl font-bold">투어 전체보기</div>
-            <div style={{ fontSize: 16, fontWeight: "normal" }}>
+            <div className="text-[16px] leading-6 opacity-70">
               삼일골프의 다양한 투어 상품을 만나보세요!
             </div>
           </div>
@@ -148,7 +148,8 @@ const ImageCarousel = () => {
     >
       {imageList.map((image, idx) => {
         return (
-          <img
+          <Image
+            alt={"mainImage"}
             key={idx}
             src={image}
             height={1200}
@@ -165,48 +166,15 @@ const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <div
-      style={{
-        flex: 1,
-        gap: 3,
-      }}
-    >
-      <div
-        className="text-xl font-bold"
-        style={{
-          marginLeft: 16,
-        }}
-      >
-        회원로그인
+    <div className="flex-1 flex-col">
+      <div className="text-xl font-bold">
+        회원 로그인
         <div className="h-6" />
-        <div
-          className="flex flex-col"
-          style={{
-            gap: "8px",
-          }}
-        >
-          <Input
+        <div className="flex flex-col gap-2">
+          {/* <Input
             classNames={{
               mainWrapper: ["w-full"],
-              input: [
-                "!ring-transparent",
-                "bg-transparent",
-                //   "text-black/90 dark:text-white/90",
-                //   "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-              ],
-              // innerWrapper: "bg-transparent",
-              // inputWrapper: [
-              //   "shadow-xl",
-              //   "bg-wihte-200/50",
-              //   "dark:bg-default/60",
-              //   "backdrop-blur-xl",
-              //   "backdrop-saturate-200",
-              //   "hover:bg-default-200/70",
-              //   "dark:hover:bg-default/70",
-              //   "group-data-[focused=true]:bg-default-200/50",
-              //   "dark:group-data-[focused=true]:bg-default/60",
-              //   "!cursor-text",
-              // ],
+              input: ["!ring-transparent", "bg-transparent"],
             }}
             placeholder="아이디"
             size={"sm"}
@@ -226,46 +194,39 @@ const Login = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-          />
-          <Button
-            style={{
-              height: 48,
-              backgroundColor: theme.colors.primary,
-              color: "white",
-            }}
-          >
-            로그인
-          </Button>
-          <img
-            src={"/images/logo/kakao_login.png"}
-            style={{
-              height: 48,
-            }}
-          />
-          {/* <Button
-            style={{
-              height: 48,
-              backgroundColor: "#FEE500",
-            }}
-          >
-            카카오로 로그인
-          </Button> */}
-          {/* <Button
-            style={{
-              height: 48,
-              backgroundColor: "#03C75A",
-              color: "white",
-            }}
-          >
-            네이버로 로그인
-          </Button> */}
-          <img
-            src={"/images/logo/naver_login.png"}
-            style={{
-              height: 48,
-            }}
-          />
+          /> */}
           <div
+            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
+            // onClick={loginNaver}
+          >
+            <Image
+              src="/icons/client/kakao_logo.svg"
+              alt="naver"
+              width={24}
+              height={24}
+            />
+            <div className="pl-1.5" />
+            {/* TODO: 텍스트 아래 공백 제거 */}
+            <div className="text-[16px] font-medium text-black opacity-85 leading-none">
+              카카오 로그인
+            </div>
+          </div>
+          <div
+            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
+            // onClick={loginNaver}
+          >
+            <Image
+              src="/icons/client/naver_logo.png"
+              alt="naver"
+              width={32}
+              height={32}
+            />
+            <div className="pl-1" />
+            <div className="text-[16px] font-medium text-white leading-none">
+              네이버 로그인
+            </div>
+          </div>
+          {/* <div
             className="h-8 items-center inline-flex"
             style={{
               fontSize: 14,
@@ -290,7 +251,7 @@ const Login = () => {
             >
               아이디·비밀번호
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -406,9 +367,10 @@ const TabBar = () => {
           item: [
             "flex",
             "relative",
-            "h-full",
+            "h-[30px]",
             "cursor-pointer",
-            "items-center",
+            "items-end",
+            "justify-end",
             "data-[active=true]:after:content-['']",
             "data-[active=true]:after:absolute",
             "data-[active=true]:after:bottom-0",
@@ -438,14 +400,22 @@ const TabBar = () => {
           })}
         </NavbarContent>
       </Navbar>
-      <div style={{ minHeight: 24 }} />
+      <div className="min-h-[12px]" />
       {tab == "domestic" && (
         <div>
           <DomesticTab />
         </div>
       )}
-      {tab == "jeju" && <div>hihi2</div>}
-      {tab == "overseas" && <div>hihi3</div>}
+      {tab == "jeju" && (
+        <div>
+          <DomesticTab />
+        </div>
+      )}
+      {tab == "overseas" && (
+        <div>
+          <DomesticTab />
+        </div>
+      )}
     </>
   );
 };
@@ -500,17 +470,13 @@ const DomesticTab = () => {
           );
         })}
       </div>
-
-      <div style={{ minHeight: 24 }} />
-      <Button
-        style={{
-          width: "100%",
-          height: 48,
-          backgroundColor: theme.colors.primary,
-          color: "white",
-        }}
-      >
-        <img src={"/images/logo/add-circle.png"} className="w-6 h-6" />
+      <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
+        <Image
+          alt="circle"
+          src={"/images/logo/add-circle.png"}
+          width={24}
+          height={24}
+        />
         투어 상품 더보기
       </Button>
     </div>
