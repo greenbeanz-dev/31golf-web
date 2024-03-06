@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import Image from "next/image";
 
 export function 상품이미지Component({
   item,
@@ -28,31 +29,26 @@ export function 상품이미지Component({
         router.push(`/detail/${item.id}`);
       }}
     >
-      <img
-        className={"rounded-3xl"}
+      <Image
+        alt={item.title}
+        className="rounded-[24px]"
         src={item.url}
         height={isMobile ? mobileHeight : pcHeight}
-        width={"100%"}
+        width={isMobile ? mobileWidth : pcWidth}
       />
-      <div style={{ minHeight: 16 }} />
-      <div
-        className="text-base font-normal"
-        style={{
-          width: "100%",
-          overflowWrap: "break-word",
-        }}
-      >
+      <div className="min-h-[16px]" />
+      <div className="text-[14px] font-normal overflow-ellipsis overflow-hidden leading-6 opacity-70">
         {item.description}
       </div>
-      <div style={{ minHeight: 8 }} />
-      <div className="text-base font-bold">{item.title}</div>
-      <div style={{ minHeight: 8 }} />
+      <div className="min-h-1" />
+      <div className="text-[16px] font-bold leading-6">{item.title}</div>
+      <div className="min-h-2" />
       {!isMobile && (
         <div className="flex gap-1">
           {item.contents.map((content, idx) => (
             <div key={idx} className="relative inline-block">
-              <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
-                <div className="text-green-500 text-sm font-normal">
+              <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
+                <div className="text-[14px] font-normal text-[#17C964] leading-5">
                   {content}
                 </div>
               </div>
@@ -60,7 +56,7 @@ export function 상품이미지Component({
           ))}
         </div>
       )}
-      <div style={{ minHeight: 8 }} />
+      <div className="min-h-2" />
       <div className="flex">
         {!isMobile && discount && (
           <>

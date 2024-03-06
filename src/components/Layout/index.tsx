@@ -1,7 +1,7 @@
 import { Footer } from "@component/organism/Footer";
 import { MobileFooter } from "@component/organism/MobileFooter";
-import { MobileToolBar } from "@component/organism/MobileToolBar";
-import ToolBar from "@component/organism/ToolBar";
+import TopBar from "@component/organism/TopBar";
+import MobileTopBar from "@component/organism/MobilTopBar";
 import TopButton from "@component/organism/TopButton";
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -65,14 +65,13 @@ const Layout: React.FC<Props> = ({ children }) => {
         }}
       >
         <div style={{ maxWidth: isMobile ? "100%" : "1200px" }}>
-          {/* <div className="max-w-screen max-h-screen"> */}
-          <div style={{ height: 40 }} />
+          <div className="flex h-8 justify-start" />
           {isMobile ? (
-            <MobileToolBar />
+            <MobileTopBar />
           ) : (
             <>
               <TopButton />
-              <ToolBar />
+              <TopBar />
             </>
           )}
 

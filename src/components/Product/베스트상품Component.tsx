@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import Image from "next/image";
 
 const mainImageList = [
   {
@@ -22,7 +23,7 @@ const mainImageList = [
     id: 12,
     url: "/images/logo/golf_img3.png",
     title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
-    description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
+    description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
     price: 305000,
   },
 ];
@@ -31,46 +32,42 @@ export function 베스트상품Component() {
   const isMobile = useIsMobile();
   const router = useRouter();
   return (
-    <>
-      <div
-        className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
-      >
-        {mainImageList.map((item, idx) => {
-          return (
-            <div
-              key={idx}
-              style={{
-                width: isMobile ? 256 : 290,
-                minWidth: isMobile ? 256 : 290,
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                router.push(`/detail/${item.id}`);
-              }}
-            >
-              <img
-                className={"rounded-2xl"}
-                src={item.url}
-                height={isMobile ? 343 : 223}
-              />
-              <div style={{ minHeight: 16 }} />
-              <div className="text-base font-bold">{item.title}</div>
-              <div
-                className="text-base font-normal"
-                style={{
-                  width: "100%",
-                  overflowWrap: "break-word",
-                }}
-              >
-                {item.description}
-              </div>
-              <div className="text-sky-600 text-xl font-bold">
-                {item.price.toLocaleString()}원 ~
-              </div>
+    <div
+      className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
+    >
+      {mainImageList.map((item, idx) => {
+        return (
+          <div
+            key={idx}
+            style={{
+              width: isMobile ? 256 : 292,
+              minWidth: isMobile ? 256 : 292,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              router.push(`/detail/${item.id}`);
+            }}
+          >
+            <Image
+              alt={item.title}
+              className="rounded-[20px]"
+              src={item.url}
+              height={isMobile ? 343 : 223}
+              width={isMobile ? 256 : 292}
+            />
+            <div style={{ minHeight: 16 }} />
+            <div className="text-[16px] font-bold leading-6">{item.title}</div>
+            <div className="pt-1" />
+            <div className="text-[16px] font-normal w-full overflow-ellipsis overflow-hidden leading-normal tracking-tight opacity-70">
+              {item.description}
             </div>
-          );
-        })}
-      </div>
-    </>
+            <div className="pt-1" />
+            <div className="text-[20px] font-bold text-[#0A7BE4] leading-6 tracking-tight">
+              {item.price.toLocaleString()}원 ~
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
