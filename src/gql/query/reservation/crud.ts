@@ -81,48 +81,28 @@ query reservationListInfinityQuery(
 // 부가 상품 추가 부분 API를 추가 필요함
 
 // 등록날짜, 출발일자, 예약자, 연락처, 인원, 일정(1박,2일), 상품, 부가상품, 메모
-export const CreateReservationQuery = gql(`
-mutation createReservation(
+export const CreateReservationQueryByWeb = gql(`
+mutation createReservationByWeb(
   $dateDeparture: String
-  $memo: String
   $numPeople: Int
   $numTeam: Int
   $status: String
   $customerId: Int
-  $managerId: Int
   $productId: Int
-  $noteCheckout: String
-  $priceCustom: Float
-  $costCustom: Float
-  $priceAddon: Float
-  $priceAddonMemo: String
-  $priceAddonSub: Float
-  $priceAddonSubMemo: String
   $daysDay: Int
   $daysNight: Int
-  $smsReservation: String
-  $smsCheckout: String
+  $priceCustom: Float
 ) {
-  createReservation(
+  createReservationByWeb(
     dateDeparture: $dateDeparture
-    memo: $memo
     numPeople: $numPeople
     numTeam: $numTeam
     status: $status
     customerId: $customerId
-    managerId: $managerId
     productId: $productId
-    noteCheckout: $noteCheckout
-    priceCustom: $priceCustom
-    costCustom: $costCustom
-    priceAddon: $priceAddon
-    priceAddonMemo: $priceAddonMemo
-    priceAddonSub: $priceAddonSub
-    priceAddonSubMemo: $priceAddonSubMemo
     daysDay: $daysDay
     daysNight: $daysNight
-    smsReservation: $smsReservation
-    smsCheckout: $smsCheckout
+    priceCustom: $priceCustom
   ) {
     id
     updatedAt
