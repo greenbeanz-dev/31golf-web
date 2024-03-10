@@ -273,55 +273,33 @@ builder.queryField("reservationById", (t) =>
   })
 );
 
-builder.mutationField("createReservation", (t) =>
+builder.mutationField("createReservationByWeb", (t) =>
   t.prismaField({
     type: "reservation",
     args: {
       dateDeparture: t.arg.string(),
-      memo: t.arg.string(),
       numPeople: t.arg.int(),
       numTeam: t.arg.int(),
       status: t.arg.string(),
       customerId: t.arg.int(),
-      managerId: t.arg.int(),
       productId: t.arg.int(),
-      noteCheckout: t.arg.string(),
-      doneReceipt: t.arg.boolean(),
-      doneInvoice: t.arg.boolean(),
-      isCard: t.arg.boolean(),
-      priceCustom: t.arg.float(),
-      costCustom: t.arg.float(),
-      priceAddon: t.arg.float(),
-      priceAddonMemo: t.arg.string(),
-      priceAddonSub: t.arg.float(),
-      priceAddonSubMemo: t.arg.string(),
       daysDay: t.arg.int(),
       daysNight: t.arg.int(),
-      smsReservation: t.arg.string(),
-      smsCheckout: t.arg.string(),
+      priceCustom: t.arg.float(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.reservation.create({
         ...query,
         data: {
           date_departure: _args.dateDeparture,
-          memo: _args.memo,
           num_people: _args.numPeople,
           num_team: _args.numTeam,
           status: null,
           customer_id: _args.customerId,
-          manager_id: _args.managerId,
           product_id: _args.productId,
-          note_checkout: _args.noteCheckout,
-          done_receipt: _args.doneReceipt,
-          done_invoice: _args.doneInvoice,
-          is_card: _args.isCard,
-          price_custom: _args.priceCustom,
-          cost_custom: _args.costCustom,
           days_day: _args.daysDay,
           days_night: _args.daysNight,
-          sms_reservation: _args.smsReservation,
-          sms_checkout: _args.smsCheckout,
+          price_custom: _args.priceCustom,
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
         },

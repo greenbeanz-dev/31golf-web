@@ -168,13 +168,9 @@ export default interface PrismaTypes {
         Where: Prisma.reservationWhereInput;
         Create: {};
         Update: {};
-        RelationName: "message_history" | "payment" | "request" | "manager" | "customer" | "product" | "reservation_file" | "reservation_product" | "savings_account" | "transaction";
-        ListRelations: "message_history" | "payment" | "request" | "reservation_file" | "reservation_product" | "savings_account" | "transaction";
+        RelationName: "payment" | "request" | "manager" | "customer" | "product" | "reservation_file" | "reservation_product" | "savings_account" | "transaction";
+        ListRelations: "payment" | "request" | "reservation_file" | "reservation_product" | "savings_account" | "transaction";
         Relations: {
-            message_history: {
-                Shape: message_history[];
-                Name: "message_history";
-            };
             payment: {
                 Shape: payment[];
                 Name: "payment";
@@ -350,21 +346,16 @@ export default interface PrismaTypes {
     message_history: {
         Name: "message_history";
         Shape: message_history;
-        Include: Prisma.message_historyInclude;
+        Include: never;
         Select: Prisma.message_historySelect;
         OrderBy: Prisma.message_historyOrderByWithRelationInput;
         WhereUnique: Prisma.message_historyWhereUniqueInput;
         Where: Prisma.message_historyWhereInput;
         Create: {};
         Update: {};
-        RelationName: "reservation";
+        RelationName: never;
         ListRelations: never;
-        Relations: {
-            reservation: {
-                Shape: reservation | null;
-                Name: "reservation";
-            };
-        };
+        Relations: {};
     };
     product_attraction: {
         Name: "product_attraction";

@@ -1,4 +1,5 @@
 import { 상품캘린더 } from "@component/calendar";
+import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import {
   Accordion,
   AccordionItem,
@@ -6,8 +7,9 @@ import {
   Breadcrumbs,
   Button,
   Divider,
+  useDisclosure,
 } from "@nextui-org/react";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { BiSolidMinusSquare } from "react-icons/bi";
 import { BsBuildingFillCheck } from "react-icons/bs";
@@ -29,12 +31,28 @@ import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 const HEADER_HEIGHT = 95;
+
+const productId = 756;
+const customerId = 39713;
+const customerName = "김민지";
+const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
+const dateDeparture = new Date("2024.05.08");
+const startDate = "2024.05.08(수)";
+const endDate = "2024.05.09(목)";
+const desc = "( 2~3인 진행 시 별도 문의 부탁드립니다)";
+const daysDay = 1;
+const daysNight = 2;
+const price = 243000;
+const numTeam = 1;
+// const numPeople = 3;
+
 export function 골프상세Page() {
   const productRef = useRef(null);
 
   const 예약가이드Ref = useRef(null);
   const scrollYRef = useRef(0);
   const [fixed, setFixed] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,6 +83,23 @@ export function 골프상세Page() {
   const MOBILE_CONTENT = ["36홀", "1박 2일"];
 
   const [showDetail, setShowDetail] = useState(false);
+  const [numPeople, setNumPeople] = useState<number>(4);
+
+  const reservationInfo = {
+    status: "QUOTATION",
+    dateDeparture: dateDeparture,
+    numPeople: numPeople,
+    numTeam: numTeam,
+    productId: productId,
+    customerId: customerId,
+    priceCustom: Number(price),
+    daysDay: daysDay,
+    daysNight: daysNight,
+  };
+
+  const [판매가, set판매가] = useState<number>(price);
+  const 일정 = `${startDate} ~ ${endDate} (${daysDay}박 ${daysNight}일)`;
+
   return (
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
@@ -141,19 +176,37 @@ export function 골프상세Page() {
                   top: fixed ? `${HEADER_HEIGHT}px` : "0px", // header height만큼 넣어줘야 이쁘게 스크롤 됨
                 }}
               >
-                <GolfProductPayment />
+                <GolfProductPayment
+                  일정={일정}
+                  판매가={판매가}
+                  reservation={reservationInfo}
+                  setNumPeople={setNumPeople}
+                />
               </div>
             </div>
           </>
         )}
       </div>
+      {isOpen && (
+        <예약추가Modal
+          reservation={reservationInfo}
+          setNumPeople={setNumPeople}
+          일정={일정}
+          판매가={판매가}
+          isOpen={isOpen}
+          onClose={() => {
+            onClose();
+            setShowDetail(false);
+          }}
+        />
+      )}
       {/* 바텀시트  */}
       {isMobile && (
         <div
           className="fixed bottom-0 left-0 w-full rounded-tr-2xl"
           style={{
             display: "block",
-            zIndex: 9999,
+            zIndex: isOpen ? 0 : 9999,
             borderTop: "1px solid #E5E5E5",
             borderTopLeftRadius: "30px",
             borderTopRightRadius: "30px",
@@ -170,7 +223,7 @@ export function 골프상세Page() {
               >
                 <MdKeyboardArrowDown size={24} />
               </div>
-              <상품결제정보 />
+              <상품결제정보 count={numPeople} setCount={setNumPeople} />
             </div>
           )}
           <div className="w-full h-28 p-4 flex-col justify-start items-center gap-4 inline-flex">
@@ -184,7 +237,7 @@ export function 골프상세Page() {
                 <MdKeyboardArrowUp size={24} />
               </div>
             )}
-            <투어예약하기Button />
+            <투어예약하기Button onOpen={onOpen} />
           </div>
         </div>
       )}
@@ -576,25 +629,57 @@ const GolfDetail = () => {
   );
 };
 
-const GolfProductPayment = () => {
+const GolfProductPayment = ({
+  reservation,
+  setNumPeople,
+  일정,
+  판매가,
+}: {
+  판매가: number;
+  일정: string;
+  reservation: {
+    status: string;
+    dateDeparture: Date;
+    numPeople: number;
+    numTeam: number;
+    productId: number;
+    customerId: number;
+    priceCustom: number;
+    daysDay: number;
+    daysNight: number;
+  };
+  setNumPeople: Dispatch<SetStateAction<number>>;
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <div>
-      <상품결제정보 />
+      <상품결제정보 count={reservation.numPeople} setCount={setNumPeople} />
       <div style={{ minHeight: 8 }} />
-      <투어예약하기Button />
+
+      {isOpen && (
+        <예약추가Modal
+          reservation={reservation}
+          setNumPeople={setNumPeople}
+          일정={일정}
+          판매가={판매가}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
+
+      <투어예약하기Button onOpen={onOpen} />
     </div>
   );
 };
 
-const 상품결제정보 = () => {
-  const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
-  const startDate = "2024.05.08(수)";
-  const endDate = "2024.05.09(목)";
-  const desc = "( 2~3인 진행 시 별도 문의 부탁드립니다)";
-  const days = 1;
-  const night = 2;
-  const price = 243000;
-  const [count, setCount] = useState<number>(4);
+const 상품결제정보 = ({
+  count,
+  setCount,
+}: {
+  count: number;
+  setCount: Dispatch<SetStateAction<number>>;
+}) => {
   return (
     <>
       <div className="font-bold text-xl">{title}</div>
@@ -603,8 +688,8 @@ const 상품결제정보 = () => {
         <div>{startDate}</div>
         <div>~</div>
         <div style={{ marginRight: "0.5rem" }}>{endDate}</div>
-        <div>{days}박</div>
-        <div>{night}일</div>
+        <div>{daysDay}박</div>
+        <div>{daysNight}일</div>
       </div>
       <div className="text-red-500 text-sm font-normal">{desc}</div>
       <div style={{ minHeight: 8 }} />
@@ -653,7 +738,7 @@ const 상품결제정보 = () => {
   );
 };
 
-const 투어예약하기Button = () => {
+const 투어예약하기Button = ({ onOpen }: { onOpen: () => void }) => {
   return (
     <Button
       size="lg"
@@ -663,6 +748,9 @@ const 투어예약하기Button = () => {
         backgroundColor: theme.colors.primary,
         color: "white",
         fontWeight: "bold",
+      }}
+      onClick={() => {
+        onOpen();
       }}
     >
       투어 예약하기
