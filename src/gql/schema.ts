@@ -3,6 +3,7 @@ import "./models/Course";
 import "./models/Customer";
 import "./models/Manager";
 import "./models/Product";
+import "./models/ProductImage";
 import "./models/ProductPrice";
 import "./models/Request";
 import "./models/Reservation";

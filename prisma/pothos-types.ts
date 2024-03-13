@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, course, customer, manager, Renamedpackage, payment, product, reservation, add_on, company, member, request, transaction, attraction, inclusive, message_history, product_attraction, product_inclusive, product_price, reservation_product, savings_account, Account, Session, User, VerificationToken, reservation_file, fax_history, savings_account_log } from "@prisma/client";
+import type { Prisma, course, customer, manager, Renamedpackage, payment, product, reservation, add_on, company, member, request, transaction, attraction, inclusive, message_history, product_attraction, product_inclusive, product_price, reservation_product, savings_account, Account, Session, User, VerificationToken, reservation_file, fax_history, savings_account_log, product_image } from "@prisma/client";
 export default interface PrismaTypes {
     course: {
         Name: "course";
@@ -121,8 +121,8 @@ export default interface PrismaTypes {
         Where: Prisma.productWhereInput;
         Create: {};
         Update: {};
-        RelationName: "manager" | "course" | "product_attraction" | "product_inclusive" | "product_price" | "request" | "reservation" | "reservation_product";
-        ListRelations: "product_attraction" | "product_inclusive" | "product_price" | "request" | "reservation" | "reservation_product";
+        RelationName: "manager" | "course" | "product_attraction" | "product_image" | "product_inclusive" | "product_price" | "request" | "reservation" | "reservation_product";
+        ListRelations: "product_attraction" | "product_image" | "product_inclusive" | "product_price" | "request" | "reservation" | "reservation_product";
         Relations: {
             manager: {
                 Shape: manager | null;
@@ -135,6 +135,10 @@ export default interface PrismaTypes {
             product_attraction: {
                 Shape: product_attraction[];
                 Name: "product_attraction";
+            };
+            product_image: {
+                Shape: product_image[];
+                Name: "product_image";
             };
             product_inclusive: {
                 Shape: product_inclusive[];
@@ -598,5 +602,24 @@ export default interface PrismaTypes {
         RelationName: never;
         ListRelations: never;
         Relations: {};
+    };
+    product_image: {
+        Name: "product_image";
+        Shape: product_image;
+        Include: Prisma.product_imageInclude;
+        Select: Prisma.product_imageSelect;
+        OrderBy: Prisma.product_imageOrderByWithRelationInput;
+        WhereUnique: Prisma.product_imageWhereUniqueInput;
+        Where: Prisma.product_imageWhereInput;
+        Create: {};
+        Update: {};
+        RelationName: "product";
+        ListRelations: never;
+        Relations: {
+            product: {
+                Shape: product;
+                Name: "product";
+            };
+        };
     };
 }
