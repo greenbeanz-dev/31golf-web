@@ -125,6 +125,7 @@ model product {
   manager             manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkjr0yud7fty8ma1jvn0hif3no7")
   course              course?               @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_course_id_fk")
   product_attraction  product_attraction[]
+  product_image       product_image[]
   product_inclusive   product_inclusive[]
   product_price       product_price[]
   request             request[]
@@ -401,4 +402,12 @@ model savings_account_log {
   id        BigInt    @id(map: "savings_account_log_pk") @default(autoincrement())
   timestamp DateTime? @db.Timestamptz(6)
   memo      String?
+}
+
+model product_image {
+  id         BigInt  @id(map: "product_image_pk") @default(autoincrement())
+  product_id BigInt
+  url        String?
+  name       String? @db.VarChar(255)
+  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_image_product_id_fk")
 }
