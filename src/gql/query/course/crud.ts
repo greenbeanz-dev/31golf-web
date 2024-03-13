@@ -5,12 +5,18 @@ query courseListInfinityQuery(
   $first: Int,
   $after: ID,
   $name: String,
-  $address: String) {
+  $address: String,
+  $category1: String,
+  $category2: String,
+  $category3: String) {
     courseList(
       first: $first
       after: $after
       name: $name
       address: $address
+      category1: $category1
+      category2: $category2
+      category3: $category3
     ) {
       pageInfo {
         endCursor
@@ -22,12 +28,17 @@ query courseListInfinityQuery(
           id
           name
           address
-          city
-          country
           fax
           partnerName
           phone
-          state
+          category1
+          category2
+          category3
+          priceCheck
+          contact
+          reservationCheck
+          confirmCheck
+          memo
         }
       }
     }
@@ -38,22 +49,32 @@ export const CreateCourseQuery = gql(`
 mutation CreateCourse(
   $name: String!
   $address: String
-  $city: String
-  $country: String
   $fax: String
   $partnerName: String
   $phone: String
-  $state: String
+  $category1: String
+  $category2: String
+  $category3: String
+  $priceCheck: String
+  $contact: String
+  $reservationCheck: String
+  $confirmCheck: String
+  $memo: String
 ) {
   createCourse(
     name: $name
     address: $address
-    city: $city
-    country: $country
     fax: $fax
     partnerName: $partnerName
     phone: $phone
-    state: $state
+    category1: $category1
+    category2: $category2
+    category3: $category3
+    priceCheck: $priceCheck
+    contact: $contact
+    reservationCheck: $reservationCheck
+    confirmCheck: $confirmCheck
+    memo: $memo
   ) {
     id
   }
@@ -65,23 +86,33 @@ mutation UpdateCourseById(
   $id: ID!
   $name: String!
   $address: String
-  $city: String
-  $country: String
   $fax: String
   $partnerName: String
   $phone: String
-  $state: String
+  $category1: String
+  $category2: String
+  $category3: String
+  $priceCheck: String
+  $contact: String
+  $reservationCheck: String
+  $confirmCheck: String
+  $memo: String
 ) {
   updateCourseById(
     id: $id
     name: $name
     address: $address
-    city: $city
-    country: $country
     fax: $fax
     partnerName: $partnerName
     phone: $phone
-    state: $state
+    category1: $category1
+    category2: $category2
+    category3: $category3
+    priceCheck: $priceCheck
+    contact: $contact
+    reservationCheck: $reservationCheck
+    confirmCheck: $confirmCheck
+    memo: $memo
   ) {
     id
   }

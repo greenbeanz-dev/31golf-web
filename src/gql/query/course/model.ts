@@ -33,14 +33,6 @@ class CourseInputModel {
 
   @IsOptional()
   @IsString()
-  city?: string | null;
-
-  @IsOptional()
-  @IsString()
-  country?: string | null;
-
-  @IsOptional()
-  @IsString()
   // @ValidateIf((object, value) => value !== "")
   fax?: string | null;
 
@@ -55,7 +47,35 @@ class CourseInputModel {
 
   @IsOptional()
   @IsString()
-  state?: string | null;
+  category1?: string | null;
+
+  @IsOptional()
+  @IsString()
+  category2?: string | null;
+
+  @IsOptional()
+  @IsString()
+  category3?: string | null;
+
+  @IsOptional()
+  @IsString()
+  priceCheck?: string | null;
+
+  @IsOptional()
+  @IsString()
+  contact?: string | null;
+
+  @IsOptional()
+  @IsString()
+  reservationCheck?: string | null;
+
+  @IsOptional()
+  @IsString()
+  confirmCheck?: string | null;
+
+  @IsOptional()
+  @IsString()
+  memo?: string | null;
 }
 
 export default CourseInputModel;
