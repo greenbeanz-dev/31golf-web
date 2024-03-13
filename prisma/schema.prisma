@@ -14,18 +14,23 @@ datasource db {
 }
 
 model course {
-  id           BigInt    @id @default(autoincrement())
-  address      String?   @db.VarChar(255)
-  city         String?   @db.VarChar(255)
-  country      String?   @db.VarChar(255)
-  created_at   DateTime? @db.Timestamp(6)
-  fax          String?   @db.VarChar(255)
-  name         String?   @db.VarChar(255)
-  partner_name String?   @db.VarChar(255)
-  phone        String?   @db.VarChar(255)
-  state        String?   @db.VarChar(255)
-  updated_at   DateTime? @db.Timestamp(6)
-  product      product[]
+  id                BigInt    @id @default(autoincrement())
+  address           String?   @db.VarChar(255)
+  created_at        DateTime? @db.Timestamp(6)
+  fax               String?   @db.VarChar(255)
+  name              String?   @db.VarChar(255)
+  partner_name      String?
+  phone             String?   @db.VarChar(255)
+  updated_at        DateTime? @db.Timestamp(6)
+  category_1        String?   @db.VarChar(255)
+  category_2        String?   @db.VarChar(255)
+  category_3        String?   @db.VarChar(255)
+  price_check       String?
+  contact           String?
+  reservation_check String?
+  confirm_check     String?
+  memo              String?
+  product           product[]
 }
 
 model customer {
@@ -86,7 +91,7 @@ model product {
   cost                Float?
   created_at          DateTime?             @db.Timestamp(6)
   date_departure      DateTime?             @db.Timestamp(6)
-  is_block            Boolean
+  is_block            Boolean?
   price               Float?
   updated_at          DateTime?             @db.Timestamp(6)
   manager_id          BigInt?
@@ -106,6 +111,17 @@ model product {
   memo_notice         String?
   memo_manager        String?
   memo_etc            String?
+  type                String?
+  inclusives          String?
+  exclusives          String?
+  summary             String?
+  schedule_pc         String?
+  benefit             String?
+  notice              String?
+  caution             String?
+  schedule_table_pc   String?
+  course_address      String?
+  cancellation_policy String?
   manager             manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkjr0yud7fty8ma1jvn0hif3no7")
   course              course?               @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_course_id_fk")
   product_attraction  product_attraction[]
@@ -117,45 +133,50 @@ model product {
 }
 
 model reservation {
-  id                   BigInt                @id @default(autoincrement())
-  created_at           DateTime              @db.Timestamp(6)
-  date_departure       DateTime?             @db.Timestamp(6)
-  memo                 String?
-  num_people           Int?
-  num_team             Int?
-  status               String?               @db.VarChar(255)
-  updated_at           DateTime              @db.Timestamp(6)
-  customer_id          BigInt?
-  manager_id           BigInt?
-  transactions         BigInt[]
-  product_id           BigInt?
-  note_checkout        String?
-  done_receipt         Boolean?
-  done_invoice         Boolean?
-  is_card              Boolean?
-  price_custom         Float?                @db.Real
-  cost_custom          Float?                @db.Real
-  price_addon          Float?                @db.Real
-  days_day             Int?
-  days_night           Int?
-  sms_reservation      String?
-  sms_checkout         String?
-  price_addon_sub      Float?                @db.Real
-  price_addon_memo     String?
-  price_addon_sub_memo String?
-  sms_reservation_sub  String?
-  sms_confirmation     String?
-  cost_addon           Float?                @db.Real
-  cost_addon_sub       Float?                @db.Real
-  payment              payment[]
-  request              request[]
-  manager              manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk1w6gpc1lfmlb953goyfvg3so9")
-  customer             customer?             @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk41v6ueo0hiran65w8y1cta2c2")
-  product              product?              @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkgoouhtuwwm277879njd9atahw")
-  reservation_file     reservation_file[]
-  reservation_product  reservation_product[]
-  savings_account      savings_account[]
-  transaction          transaction[]
+  id                      BigInt                @id @default(autoincrement())
+  created_at              DateTime              @db.Timestamp(6)
+  date_departure          DateTime?             @db.Timestamp(6)
+  memo                    String?
+  num_people              Int?
+  num_team                Int?
+  status                  String?               @db.VarChar(255)
+  updated_at              DateTime              @db.Timestamp(6)
+  customer_id             BigInt?
+  manager_id              BigInt?
+  transactions            BigInt[]
+  product_id              BigInt?
+  note_checkout           String?
+  done_receipt            Boolean?
+  done_invoice            Boolean?
+  is_card                 Boolean?
+  price_custom            Float?                @db.Real
+  cost_custom             Float?                @db.Real
+  price_addon             Float?                @db.Real
+  days_day                Int?
+  days_night              Int?
+  sms_reservation         String?
+  sms_checkout            String?
+  price_addon_sub         Float?                @db.Real
+  price_addon_memo        String?
+  price_addon_sub_memo    String?
+  sms_reservation_sub     String?
+  sms_confirmation        String?
+  cost_addon              Float?                @db.Real
+  cost_addon_sub          Float?                @db.Real
+  transaction_deposit     Float?                @db.Real
+  transaction_withdrawal  Float?                @db.Real
+  transaction_remainder   Float?                @db.Real
+  transaction_unpaid      Int?
+  is_transaction_editable Boolean?
+  payment                 payment[]
+  request                 request[]
+  manager                 manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk1w6gpc1lfmlb953goyfvg3so9")
+  customer                customer?             @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk41v6ueo0hiran65w8y1cta2c2")
+  product                 product?              @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkgoouhtuwwm277879njd9atahw")
+  reservation_file        reservation_file[]
+  reservation_product     reservation_product[]
+  savings_account         savings_account[]
+  transaction             transaction[]
 }
 
 model add_on {
@@ -224,6 +245,7 @@ model transaction {
   reservation_id     BigInt?
   savings_account_id BigInt?
   date_transaction   DateTime?        @db.Timestamptz(6)
+  is_active          Boolean?
   reservation        reservation?     @relation(fields: [reservation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk7nt3gdkmakj3g2m8s6pulwa45")
   savings_account    savings_account? @relation(fields: [savings_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transaction_savings_account_id_fk")
 }
