@@ -8,6 +8,7 @@ const useProductInfiniteQuery = () => {
   const dateDeparture = useProductInfiniteQueryBody(
     (state) => state.dateDeparture
   );
+  const size = useProductInfiniteQueryBody((state) => state.size);
   const name = useProductInfiniteQueryBody((state) => state.name);
   const memo = useProductInfiniteQueryBody((state) => state.memo);
   const isActive = useProductInfiniteQueryBody((state) => state.isActive);
@@ -20,6 +21,9 @@ const useProductInfiniteQuery = () => {
     name: name,
     memo: memo,
     isActive: isActive,
+    category1: category1 === "선택안함" ? undefined : category1,
+    category2: category2,
+    category3: category3,
   };
 
   return useInfiniteQuery({
@@ -29,10 +33,13 @@ const useProductInfiniteQuery = () => {
       name,
       memo,
       isActive,
+      category1,
+      category2,
+      category3,
     ],
     queryFn: async ({
       pageParam = {
-        first: 10,
+        first: size,
         ...requestBody,
         isActive,
       },
@@ -80,7 +87,7 @@ const initialState: State = {
   category1: undefined,
   category2: undefined,
   category3: undefined,
-  size: 20,
+  size: 50,
 };
 
 export const useProductInfiniteQueryBody = create(

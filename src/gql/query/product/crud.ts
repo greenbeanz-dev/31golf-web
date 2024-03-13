@@ -61,6 +61,17 @@ query productListInfinityQuery(
         memoNotice
         memoManager
         memoEtc
+        type
+        inclusives
+        exclusives
+        summary
+        schedulePc
+        benefit
+        notice
+        caution
+        scheduleTablePc
+        courseAddress
+        cancellationPolicy
       }
     }
   }
@@ -78,6 +89,7 @@ mutation createProduct(
   $name: String
   $memo: String
   $fax: String
+  $isActive: Boolean
   $courseId: Int
   $category1: String
   $category2: String
@@ -85,6 +97,17 @@ mutation createProduct(
   $memoNotice: String
   $memoManager: String
   $memoEtc: String
+  $type: String
+  $inclusives: String
+  $exclusives: String
+  $summary: String
+  $schedulePc: String
+  $benefit: String
+  $notice: String
+  $caution: String
+  $scheduleTablePc: String
+  $courseAddress: String
+  $cancellationPolicy: String
 ) {
   createProduct(
     commissionCompany: $commissionCompany
@@ -96,6 +119,7 @@ mutation createProduct(
     name: $name
     memo: $memo
     fax: $fax
+    isActive: $isActive
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -103,6 +127,17 @@ mutation createProduct(
     memoNotice: $memoNotice
     memoManager: $memoManager
     memoEtc: $memoEtc
+    type: $type
+    inclusives: $inclusives
+    exclusives: $exclusives
+    summary: $summary
+    schedulePc: $schedulePc
+    benefit: $benefit
+    notice: $notice
+    caution: $caution
+    scheduleTablePc: $scheduleTablePc
+    courseAddress: $courseAddress
+    cancellationPolicy: $cancellationPolicy
   ) {
     id
     commissionCompany
@@ -121,6 +156,17 @@ mutation createProduct(
     memoNotice
     memoManager
     memoEtc
+    type
+    inclusives
+    exclusives
+    summary
+    schedulePc
+    benefit
+    notice
+    caution
+    scheduleTablePc
+    courseAddress
+    cancellationPolicy
   }
 }
 `);
@@ -145,6 +191,17 @@ mutation updateProductById(
   $memoNotice: String
   $memoManager: String
   $memoEtc: String
+  $type: String
+  $inclusives: String
+  $exclusives: String
+  $summary: String
+  $schedulePc: String
+  $benefit: String
+  $notice: String
+  $caution: String
+  $scheduleTablePc: String
+  $courseAddress: String
+  $cancellationPolicy: String
 ) {
   updateProductById(
     id: $id
@@ -165,6 +222,17 @@ mutation updateProductById(
     memoNotice: $memoNotice
     memoManager: $memoManager
     memoEtc: $memoEtc
+    type: $type
+    inclusives: $inclusives
+    exclusives: $exclusives
+    summary: $summary
+    schedulePc: $schedulePc
+    benefit: $benefit
+    notice: $notice
+    caution: $caution
+    scheduleTablePc: $scheduleTablePc
+    courseAddress: $courseAddress
+    cancellationPolicy: $cancellationPolicy
   ) {
     id
     commissionCompany
@@ -184,6 +252,17 @@ mutation updateProductById(
     memoNotice
     memoManager
     memoEtc
+    type
+    inclusives
+    exclusives
+    summary
+    schedulePc
+    benefit
+    notice
+    caution
+    scheduleTablePc
+    courseAddress
+    cancellationPolicy
   }
 }
 `);
@@ -223,6 +302,17 @@ query ProductById($id: ID!) {
     memoNotice
     memoManager
     memoEtc
+    type
+    inclusives
+    exclusives
+    summary
+    schedulePc
+    benefit
+    notice
+    caution
+    scheduleTablePc
+    courseAddress
+    cancellationPolicy
   }
 }
 `);

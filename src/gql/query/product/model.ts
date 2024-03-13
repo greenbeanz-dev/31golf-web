@@ -103,6 +103,50 @@ class ProductInputModel {
   @IsOptional()
   @IsString()
   memoEtc?: string | null;
+
+  @IsOptional()
+  @IsString()
+  type?: string | null;
+
+  @IsOptional()
+  @IsString()
+  inclusives?: string | null;
+
+  @IsOptional()
+  @IsString()
+  exclusives?: string | null;
+
+  @IsOptional()
+  @IsString()
+  summary?: string | null;
+
+  @IsOptional()
+  @IsString()
+  schedulePc?: string | null;
+
+  @IsOptional()
+  @IsString()
+  benefit?: string | null;
+
+  @IsOptional()
+  @IsString()
+  notice?: string | null;
+
+  @IsOptional()
+  @IsString()
+  caution?: string | null;
+
+  @IsOptional()
+  @IsString()
+  scheduleTablePc?: string | null;
+
+  @IsOptional()
+  @IsString()
+  courseAddress?: string | null;
+
+  @IsOptional()
+  @IsString()
+  cancellationPolicy?: string | null;
 }
 
 export default ProductInputModel;
