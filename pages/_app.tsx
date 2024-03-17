@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
@@ -46,21 +47,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   return (
-    // <SessionProvider
-    //   session={pageProps.session}
-    //   refetchInterval={5 * 60}
-    //   refetchOnWindowFocus={true}
-    // >
-    <NextUIProvider>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Hydrate>
-      </QueryClientProvider>
-    </NextUIProvider>
-    // </SessionProvider>
+    <SessionProvider
+      session={pageProps.session}
+      refetchInterval={5 * 60}
+      refetchOnWindowFocus={true}
+    >
+      <NextUIProvider>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Hydrate>
+        </QueryClientProvider>
+      </NextUIProvider>
+    </SessionProvider>
   );
 }
 

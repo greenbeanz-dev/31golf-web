@@ -76,6 +76,30 @@ mutation CreateCustomer(
 }
 `);
 
+export const CreateCustomerQueryByWeb = gql(`
+mutation CreateCustomerByWeb(
+  $name: String!
+  $phone: String
+  $email: String
+  $memo: String
+  $fax: String
+  $isVillain: Boolean
+  $provider: String
+) {
+  createCustomerByWeb(
+    name: $name
+    phone: $phone
+    email: $email
+    memo: $memo
+    fax: $fax
+    isVillain: $isVillain
+    provider: $provider
+  ) {
+    id
+  }
+}
+`);
+
 export const UpdateCustomerByIdQuery = gql(`
 mutation UpdateCustomerById(
   $id: ID!

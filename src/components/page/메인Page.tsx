@@ -1,15 +1,9 @@
 import { 상품이미지Component } from "@component/Image/상품이미지Component";
 import { 베스트상품Component } from "@component/Product/베스트상품Component";
-import {
-  Button,
-  Divider,
-  Input,
-  Navbar,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/react";
+import { Button, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { FaBusAlt, FaCarSide, FaMapMarkedAlt, FaStore } from "react-icons/fa";
 import { FaCircleQuestion, FaTree } from "react-icons/fa6";
@@ -18,7 +12,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import Image from "next/image";
+import useLogin from "../../utils/login/useLogin";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -165,10 +159,22 @@ const ImageCarousel = () => {
 const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const { login, isLogin, logOut, userProfile } = useLogin();
+
+  useEffect(() => {
+    if (isLogin && !userProfile.id) {
+      window.location.href = "/signup";
+    }
+  }, [isLogin, userProfile]);
+
   return (
     <div className="flex-1 flex-col">
       <div className="text-xl font-bold">
         회원 로그인
+        {/* 임의로 로그인 확인하기 위해 추가함  */}
+        {isLogin && userProfile.name && (
+          <div>{userProfile.name} 님 환영합니다.</div>
+        )}
         <div className="h-6" />
         <div className="flex flex-col gap-2">
           {/* <Input
@@ -197,7 +203,9 @@ const Login = () => {
           /> */}
           <div
             className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
-            // onClick={loginNaver}
+            onClick={() => {
+              login();
+            }}
           >
             <Image
               src="/icons/client/kakao_logo.svg"
@@ -213,7 +221,9 @@ const Login = () => {
           </div>
           <div
             className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
-            // onClick={loginNaver}
+            onClick={() => {
+              login();
+            }}
           >
             <Image
               src="/icons/client/naver_logo.png"
