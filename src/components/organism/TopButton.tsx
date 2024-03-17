@@ -1,6 +1,8 @@
 import { Button } from "@nextui-org/react";
+import useLogin from "../../utils/login/useLogin";
 
 export default function TopButton() {
+  const { login, isLogin, logOut, userProfile } = useLogin();
   return (
     <div
       className="flex justify-end"
@@ -10,8 +12,13 @@ export default function TopButton() {
     >
       <Button
         style={{ height: "100%", color: "black", background: "transparent" }}
+        onClick={() => {
+          if (isLogin && userProfile.id) {
+            logOut();
+          }
+        }}
       >
-        로그인
+        {isLogin && userProfile.id ? "로그아웃" : "로그인"}
       </Button>
       <Button
         style={{ height: "100%", color: "black", background: "transparent" }}

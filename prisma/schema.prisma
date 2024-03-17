@@ -45,6 +45,7 @@ model customer {
   is_villain  Boolean?      @default(false)
   birth_day   DateTime?     @db.Date
   manager_id  BigInt?
+  provider    String?       @unique @db.VarChar(255)
   manager     manager?      @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fki314oiw4pybhycvpvyhrsf4u2")
   request     request[]
   reservation reservation[]

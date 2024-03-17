@@ -1,5 +1,4 @@
 import { Icon } from "@component/icon/Icon";
-import React from "react";
 import styled from "styled-components";
 
 export interface ButtonProps {
