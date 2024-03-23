@@ -143,6 +143,8 @@ builder.mutationField("createCustomerByWeb", (t) =>
       fax: t.arg.string(),
       isVillain: t.arg.boolean(),
       provider: t.arg.string(),
+      userId: t.arg.string(),
+      password: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.customer.create({
@@ -157,6 +159,8 @@ builder.mutationField("createCustomerByWeb", (t) =>
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
           provider: _args.provider,
+          userid: _args.userId,
+          password: _args.password,
         },
       });
       return result;
