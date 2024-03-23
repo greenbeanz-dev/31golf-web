@@ -1,6 +1,13 @@
 import { 상품이미지Component } from "@component/Image/상품이미지Component";
 import { 베스트상품Component } from "@component/Product/베스트상품Component";
-import { Button, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Input,
+  Navbar,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -160,6 +167,7 @@ const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLogin, logOut, userProfile } = useLogin();
+  const router = useRouter();
 
   useEffect(() => {
     if (isLogin && !userProfile.id) {
@@ -177,7 +185,7 @@ const Login = () => {
         )}
         <div className="h-6" />
         <div className="flex flex-col gap-2">
-          {/* <Input
+          <Input
             classNames={{
               mainWrapper: ["w-full"],
               input: ["!ring-transparent", "bg-transparent"],
@@ -200,7 +208,17 @@ const Login = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-          /> */}
+          />
+          <Button
+            className="flex justify-center items-center h-[48px] w-full rounded-[8px]"
+            style={{
+              backgroundColor: theme.colors.primary,
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            로그인
+          </Button>
           <div
             className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
             onClick={() => {
@@ -236,7 +254,7 @@ const Login = () => {
               네이버 로그인
             </div>
           </div>
-          {/* <div
+          <div
             className="h-8 items-center inline-flex"
             style={{
               fontSize: 14,
@@ -248,6 +266,13 @@ const Login = () => {
               className="flex justify-center items-center"
               style={{
                 alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                router.push({
+                  pathname: "/signup",
+                  query: { provider: "local" },
+                });
               }}
             >
               회원가입
@@ -257,11 +282,12 @@ const Login = () => {
               className="flex"
               style={{
                 alignItems: "center",
+                cursor: "pointer",
               }}
             >
               아이디·비밀번호
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
