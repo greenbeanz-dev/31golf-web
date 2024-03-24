@@ -169,6 +169,19 @@ const Login = () => {
   const { login, isLogin, logOut, userProfile } = useLogin();
   const router = useRouter();
 
+  const handleSubmit = async () => {
+    // console.log("로그인");
+    const result = await login("credentials", {
+      username: "test",
+      password: "1234",
+      provider: "credentials",
+      redirect: true,
+      callbackUrl: "/",
+    });
+    // console.log({ result });
+  };
+
+  console.log({ isLogin, userProfile });
   useEffect(() => {
     if (isLogin && !userProfile.id) {
       window.location.href = "/signup";
@@ -216,6 +229,7 @@ const Login = () => {
               color: "white",
               fontWeight: "bold",
             }}
+            onClick={handleSubmit}
           >
             로그인
           </Button>
@@ -232,7 +246,6 @@ const Login = () => {
               height={24}
             />
             <div className="pl-1.5" />
-            {/* TODO: 텍스트 아래 공백 제거 */}
             <div className="text-[16px] font-medium text-black opacity-85 leading-none">
               카카오 로그인
             </div>

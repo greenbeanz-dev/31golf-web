@@ -1,9 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
+import prisma from "../../../src/lib/prisma";
 
 declare module "next-auth" {
   // eslint-disable-next-line no-unused-vars
@@ -27,10 +27,35 @@ declare module "next-auth" {
   }
 }
 
-const prisma = new PrismaClient();
-
 export const authOptions: NextAuthOptions = {
   providers: [
+    // CredentialsProvider({
+    //   name: "credentials",
+    //   credentials: {
+    //     username: { label: "아이디", type: "text" },
+    //     password: { label: "비밀번호", type: "password" },
+    //   },
+    //   async authorize(credentials) {
+    //     if (credentials !== undefined) {
+    //       const response = await prisma.customer.findMany({
+    //         where: {
+    //           userid: credentials.username,
+    //         },
+    //       });
+    //       if (response && response.length > 0) {
+    //         return {
+    //           user: {
+    //             id: response[0].id.toString(),
+    //             provider: response[0].provider,
+    //             name: response[0].name,
+    //             phone: response[0].phone,
+    //           },
+    //         };
+    //       }
+    //     }
+    //     return null;
+    //   },
+    // }),
     KakaoProvider({
       clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID || "",
       clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET || "",
@@ -57,11 +82,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn() {
+    async signIn({ user }) {
       return true;
     },
-    async session({ session, user }) {
-      console.log("user", user);
+    // credentials일 경우 session을 타지 않음.
+    async session({ session, user, token }) {
+      // console.log({ session, user, token });
 
       const response = await prisma.customer.findMany({
         where: {

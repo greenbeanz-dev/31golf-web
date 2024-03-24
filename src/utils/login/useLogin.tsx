@@ -8,7 +8,7 @@ export default function useLogin() {
     await axios.get("/api/auth/signout");
     await signOut({ redirect: true });
   };
-  console.log("session", session);
+  // console.log("session", session);
 
   return {
     login: signIn,

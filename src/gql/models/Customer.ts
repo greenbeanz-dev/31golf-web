@@ -132,35 +132,17 @@ builder.mutationField("createCustomer", (t) =>
   })
 );
 
-builder.mutationField("createCustomerByWeb", (t) =>
+builder.mutationField("CustomerByIdWeb", (t) =>
   t.prismaField({
     type: "customer",
     args: {
-      name: t.arg.string(),
-      phone: t.arg.string(),
-      email: t.arg.string(),
-      memo: t.arg.string(),
-      fax: t.arg.string(),
-      isVillain: t.arg.boolean(),
-      provider: t.arg.string(),
-      userId: t.arg.string(),
-      password: t.arg.string(),
+      id: t.arg.id(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
-      const result = await prisma.customer.create({
+      const result = await prisma.customer.findMany({
         ...query,
-        data: {
-          name: _args.name || "",
-          phone: _args.phone,
-          email: _args.email,
-          memo: _args.memo,
-          fax: _args.fax,
-          is_villain: _args.isVillain,
-          created_at: new Date(Date.now()).toISOString(),
-          updated_at: new Date(Date.now()).toISOString(),
-          provider: _args.provider,
-          userid: _args.userId,
-          password: _args.password,
+        where: {
+          id: Number(_args.id),
         },
       });
       return result;
@@ -168,7 +150,7 @@ builder.mutationField("createCustomerByWeb", (t) =>
   })
 );
 
-builder.mutationField("updateCustomerById", (t) =>
+builder.mutationField("UpdateCustomerByIdWeb", (t) =>
   t.prismaField({
     type: "customer",
     args: {
@@ -179,6 +161,8 @@ builder.mutationField("updateCustomerById", (t) =>
       memo: t.arg.string(),
       fax: t.arg.string(),
       isVillain: t.arg.boolean(),
+      userId: t.arg.string(),
+      password: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.customer.update({
@@ -194,6 +178,8 @@ builder.mutationField("updateCustomerById", (t) =>
           fax: _args.fax,
           is_villain: _args.isVillain,
           updated_at: new Date(Date.now()).toISOString(),
+          userid: _args.userId,
+          password: _args.password,
         },
       });
       return result;
