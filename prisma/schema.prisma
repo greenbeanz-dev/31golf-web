@@ -34,23 +34,24 @@ model course {
 }
 
 model customer {
-  id          BigInt        @id @default(autoincrement())
-  created_at  DateTime?     @db.Timestamp(6)
-  email       String?       @db.VarChar(255)
-  memo        String?
-  name        String        @db.VarChar(255)
-  phone       String?       @db.VarChar(255)
-  updated_at  DateTime?     @db.Timestamp(6)
-  fax         String?       @db.VarChar(255)
-  is_villain  Boolean?      @default(false)
-  birth_day   DateTime?     @db.Date
-  manager_id  BigInt?
-  provider    String?       @unique @db.VarChar(255)
-  userid      String?       @unique @db.VarChar(255)
-  password    String?       @db.VarChar(255)
-  manager     manager?      @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fki314oiw4pybhycvpvyhrsf4u2")
-  request     request[]
-  reservation reservation[]
+  id                BigInt        @id @default(autoincrement())
+  created_at        DateTime?     @db.Timestamp(6)
+  email             String?       @db.VarChar(255)
+  memo              String?
+  name              String        @db.VarChar(255)
+  phone             String?       @db.VarChar(255)
+  updated_at        DateTime?     @db.Timestamp(6)
+  fax               String?       @db.VarChar(255)
+  is_villain        Boolean?      @default(false)
+  birth_day         DateTime?     @db.Date
+  manager_id        BigInt?
+  provider          String?       @unique @db.VarChar(255)
+  userid            String?       @unique @db.VarChar(255)
+  password          String?       @db.VarChar(255)
+  verification_code String?       @db.VarChar(255)
+  manager           manager?      @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fki314oiw4pybhycvpvyhrsf4u2")
+  request           request[]
+  reservation       reservation[]
 }
 
 model manager {
