@@ -54,27 +54,27 @@ query CustomerAllListQuery {
 }
 `);
 
-export const CreateCustomerQuery = gql(`
-mutation CreateCustomer(
-  $name: String!
-  $phone: String
-  $email: String
-  $memo: String
-  $fax: String
-  $isVillain: Boolean
-) {
-  createCustomer(
-    name: $name
-    phone: $phone
-    email: $email
-    memo: $memo
-    fax: $fax
-    isVillain: $isVillain
-  ) {
-    id
-  }
-}
-`);
+// export const CreateCustomerQuery = gql(`
+// mutation CreateCustomer(
+//   $name: String!
+//   $phone: String
+//   $email: String
+//   $memo: String
+//   $fax: String
+//   $isVillain: Boolean
+// ) {
+//   createCustomer(
+//     name: $name
+//     phone: $phone
+//     email: $email
+//     memo: $memo
+//     fax: $fax
+//     isVillain: $isVillain
+//   ) {
+//     id
+//   }
+// }
+// `);
 
 export const CreateCustomerQueryByWeb = gql(`
 mutation CreateCustomerByWeb(

@@ -119,7 +119,7 @@ export function 회원가입Page() {
   };
 
   const updateCustomerInfo = () => {
-    updateCustomer();
+    // updateCustomer();
   };
   return (
     <div className="flex flex-col gap-4">
