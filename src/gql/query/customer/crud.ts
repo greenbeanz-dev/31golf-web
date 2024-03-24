@@ -104,8 +104,8 @@ mutation CreateCustomerByWeb(
 }
 `);
 
-export const UpdateCustomerByIdQuery = gql(`
-mutation UpdateCustomerById(
+export const UpdateCustomerByIdQueryByWeb = gql(`
+mutation UpdateCustomerByIdWeb(
   $id: ID!
   $name: String!
   $phone: String
@@ -113,8 +113,10 @@ mutation UpdateCustomerById(
   $memo: String
   $fax: String
   $isVillain: Boolean
+  $userId: String
+  $password: String
 ) {
-  updateCustomerById(
+  UpdateCustomerByIdWeb(
     id: $id
     name: $name
     phone: $phone
@@ -122,6 +124,8 @@ mutation UpdateCustomerById(
     memo: $memo
     fax: $fax
     isVillain: $isVillain
+    userId: $userId
+    password: $password
   ) {
     id
   }
