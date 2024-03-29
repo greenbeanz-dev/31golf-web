@@ -23,6 +23,7 @@ const documents = {
     "\nmutation DeleteCourseById(\n  $id: ID!\n) {\n  deleteCourseById(\n    id: $id\n  ) {\n    id\n  }\n}\n": types.DeleteCourseByIdDocument,
     "\nquery customerListInfinityQuery(\n  $first: Int, \n  $after: ID,\n  $name: String,\n  $phone: String,\n  $email: String,\n  $memo: String) {\n    customerList(\n      first: $first\n      after: $after\n      name: $name\n      phone: $phone\n      email: $email\n      memo: $memo\n    ) {\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n      edges {\n        cursor\n        node {\n          id\n          memo\n          name\n          phone\n          email\n          fax\n          isVillain\n        }\n      }\n    }\n  }\n": types.CustomerListInfinityQueryDocument,
     "\nquery CustomerAllListQuery {\n  customerList: customerList {\n    edges {\n      node {\n        id\n        memo\n        name\n        phone\n        email\n        fax\n        isVillain\n      }\n    }\n  }\n}\n": types.CustomerAllListQueryDocument,
+    "\nquery customerByIdWeb($id: ID!) {\n  customerByIdWeb(id: $id) {\n    id\n    name\n  }\n}\n": types.CustomerByIdWebDocument,
     "\nmutation CreateCustomerByWeb(\n  $name: String!\n  $phone: String\n  $email: String\n  $memo: String\n  $fax: String\n  $isVillain: Boolean\n  $provider: String\n  $userId: String\n  $password: String\n) {\n  createCustomerByWeb(\n    name: $name\n    phone: $phone\n    email: $email\n    memo: $memo\n    fax: $fax\n    isVillain: $isVillain\n    provider: $provider\n    userId: $userId\n    password: $password\n  ) {\n    id\n  }\n}\n": types.CreateCustomerByWebDocument,
     "\nmutation UpdateCustomerByIdWeb(\n  $id: ID!\n  $name: String!\n  $phone: String\n  $email: String\n  $memo: String\n  $fax: String\n  $isVillain: Boolean\n  $userId: String\n  $password: String\n) {\n  UpdateCustomerByIdWeb(\n    id: $id\n    name: $name\n    phone: $phone\n    email: $email\n    memo: $memo\n    fax: $fax\n    isVillain: $isVillain\n    userId: $userId\n    password: $password\n  ) {\n    id\n  }\n}\n": types.UpdateCustomerByIdWebDocument,
     "\nmutation DeleteCustomerById($customerId: ID!) {\n  deleteCustomerById(id: $customerId) {\n    id\n  }\n}\n": types.DeleteCustomerByIdDocument,
@@ -123,6 +124,10 @@ export function gql(source: "\nquery customerListInfinityQuery(\n  $first: Int, 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\nquery CustomerAllListQuery {\n  customerList: customerList {\n    edges {\n      node {\n        id\n        memo\n        name\n        phone\n        email\n        fax\n        isVillain\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery CustomerAllListQuery {\n  customerList: customerList {\n    edges {\n      node {\n        id\n        memo\n        name\n        phone\n        email\n        fax\n        isVillain\n      }\n    }\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery customerByIdWeb($id: ID!) {\n  customerByIdWeb(id: $id) {\n    id\n    name\n  }\n}\n"): (typeof documents)["\nquery customerByIdWeb($id: ID!) {\n  customerByIdWeb(id: $id) {\n    id\n    name\n  }\n}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

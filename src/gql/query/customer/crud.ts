@@ -76,6 +76,15 @@ query CustomerAllListQuery {
 // }
 // `);
 
+export const CustomerByIdQueryWeb = gql(`
+query customerByIdWeb($id: ID!) {
+  customerByIdWeb(id: $id) {
+    id
+    name
+  }
+}
+`);
+
 export const CreateCustomerQueryByWeb = gql(`
 mutation CreateCustomerByWeb(
   $name: String!

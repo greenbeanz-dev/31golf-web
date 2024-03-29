@@ -5,6 +5,7 @@ import {
 } from "@/gql/query/customer/crud";
 import { Button, Input } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSmsSend } from "../../service/sms/useSmsSend";
@@ -114,8 +115,16 @@ export function 회원가입Page() {
     }
   };
 
-  const verificationCode = () => {
-    setIsVertify(true);
+  const verificationCode = async () => {
+    const { data } = await axios.get<any>(`/api/customer?id=${customerId}`);
+
+    console.log("인증번호: ", data.verification_code);
+    if (data.verification_code === code) {
+      setIsVertify(true);
+    } else {
+      alert("인증번호가 일치하지 않습니다.");
+      setIsVertify(false);
+    }
   };
 
   const updateCustomerInfo = () => {
@@ -179,7 +188,7 @@ export function 회원가입Page() {
         variant="bordered"
         label="휴대폰번호"
       />
-      {isSendCode && (
+      {isSendCode && !isVertify && (
         <>
           <Input
             classNames={{
