@@ -138,24 +138,6 @@ builder.mutationField("createCustomerByWeb", (t) =>
   })
 );
 
-builder.mutationField("CustomerByIdWeb", (t) =>
-  t.prismaField({
-    type: "customer",
-    args: {
-      id: t.arg.id(),
-    },
-    resolve: async (query, _parent, _args, _ctx): Promise<any> => {
-      const result = await prisma.customer.findMany({
-        ...query,
-        where: {
-          id: Number(_args.id),
-        },
-      });
-      return result;
-    },
-  })
-);
-
 builder.mutationField("UpdateCustomerByIdWeb", (t) =>
   t.prismaField({
     type: "customer",
@@ -208,6 +190,23 @@ builder.mutationField("deleteCustomerById", (t) =>
         },
       });
       return deletedCustomer;
+    },
+  })
+);
+
+builder.queryField("customerByIdWeb", (t) =>
+  t.prismaField({
+    type: "customer",
+    args: {
+      id: t.arg.id(),
+    },
+    resolve: async (query, _parent, _args, _ctx, _info): Promise<any> => {
+      const { id } = _args;
+      const customer = await prisma.customer.findUnique({
+        ...query,
+        where: { id: Number(id) },
+      });
+      return customer;
     },
   })
 );
