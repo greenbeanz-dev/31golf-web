@@ -173,12 +173,20 @@ const Login = () => {
     // console.log("로그인");
     const result = await login("credentials", {
       username: "test",
-      password: "1234",
+      password: "test",
       provider: "credentials",
-      redirect: true,
+      redirect: false,
       callbackUrl: "/",
     });
-    // console.log({ result });
+    console.log({ result });
+
+    // const result = await signIn("credentials", {
+    //   // 로그인 실패 시 새로고침 여부
+    //   redirect: false,
+    //   id: body.id,
+    //   password: body.password,
+    //   // ...body
+    // });
   };
 
   console.log({ isLogin, userProfile });

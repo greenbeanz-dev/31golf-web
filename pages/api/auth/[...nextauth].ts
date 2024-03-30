@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import prisma from "../../../src/lib/prisma";
@@ -29,33 +30,38 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // CredentialsProvider({
-    //   name: "credentials",
-    //   credentials: {
-    //     username: { label: "아이디", type: "text" },
-    //     password: { label: "비밀번호", type: "password" },
-    //   },
-    //   async authorize(credentials) {
-    //     if (credentials !== undefined) {
-    //       const response = await prisma.customer.findMany({
-    //         where: {
-    //           userid: credentials.username,
-    //         },
-    //       });
-    //       if (response && response.length > 0) {
-    //         return {
-    //           user: {
-    //             id: response[0].id.toString(),
-    //             provider: response[0].provider,
-    //             name: response[0].name,
-    //             phone: response[0].phone,
-    //           },
-    //         };
-    //       }
-    //     }
-    //     return null;
-    //   },
-    // }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        username: { label: "아이디", type: "text" },
+        password: { label: "비밀번호", type: "password" },
+      },
+      async authorize(credentials) {
+        console.log("credentials", credentials);
+        if (credentials !== undefined) {
+          const response = await prisma.customer.findUnique({
+            where: {
+              userid: credentials.username,
+            },
+          });
+          console.log("response123", response);
+          if (response) {
+            return {
+              id: response.id,
+              name: response.name,
+              email: response.email,
+              image: "",
+            };
+          }
+        }
+        return {
+          id: 0,
+          name: "",
+          email: "",
+          image: "",
+        };
+      },
+    }),
     KakaoProvider({
       clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID || "",
       clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET || "",
@@ -87,7 +93,8 @@ export const authOptions: NextAuthOptions = {
     },
     // credentials일 경우 session을 타지 않음.
     async session({ session, user, token }) {
-      // console.log({ session, user, token });
+      console.log("session");
+      console.log({ session, user, token });
 
       const response = await prisma.customer.findMany({
         where: {
@@ -111,8 +118,23 @@ export const authOptions: NextAuthOptions = {
               },
       };
     },
+    async jwt({ token }) {
+      // console.log({ token });
+      return token;
+    },
+    // async jwt({ token, account, profile }) {
+    //   console.log("jwt", token, account, profile);
+    //   if (account) {
+    //     token.accessToken = account.access_token;
+    //     token.id = token.id;
+    //   }
+    //   return token;
+    // },
   },
   adapter: PrismaAdapter(prisma),
+  // session: {
+  //   jwt: true,
+  // },
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>

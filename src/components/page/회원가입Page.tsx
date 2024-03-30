@@ -39,7 +39,7 @@ export function 회원가입Page() {
         memo: "",
         fax: "",
         isVillain: false,
-        provider: provider === "local" ? null : userProfile.provider,
+        provider: provider === "local" ? "local" : userProfile.provider,
       });
     },
     {
@@ -101,6 +101,7 @@ export function 회원가입Page() {
   };
 
   const sendVerificationCode = async () => {
+    console.log("sendVerificationCode", customerId);
     if (customerId !== 0) {
       const smsData = await useSmsSend({
         phoneNumber: phone,
