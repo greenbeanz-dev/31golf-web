@@ -1,7 +1,7 @@
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -31,13 +31,18 @@ export const 상품캘린더 = () => {
   const events = [
     {
       title: "1000원",
-      start: new Date(2024, 1, 17),
-      end: new Date(2024, 1, 17),
+      start: new Date(2024, 2, 17),
+      end: new Date(2024, 2, 17),
     },
     {
       title: "2000원",
-      start: new Date(2024, 1, 18),
-      end: new Date(2024, 1, 18),
+      start: new Date(2024, 2, 18),
+      end: new Date(2024, 2, 18),
+    },
+    {
+      title: "3000원",
+      start: new Date(2024, 2, 19),
+      end: new Date(2024, 2, 19),
     },
   ];
 
@@ -65,6 +70,28 @@ export const 상품캘린더 = () => {
       },
     };
   };
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const CustomDateCellWrapper = (props) => {
+    const calendarDate = new Date(props.value).getDate();
+    const selectDate = selectedDate && new Date(selectedDate).getDate();
+
+    const isSelected = calendarDate === selectDate;
+
+    console.log("isSelected", isSelected);
+    return (
+      <div
+        // className={
+        //   isSelected
+        //     ? `${props.children.props.className}-selected`
+        //     : props.children.props.className
+        // }
+        className={props.children.props.className}
+      >
+        {props.children}
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
@@ -78,8 +105,16 @@ export const 상품캘린더 = () => {
           eventPropGetter={dayOfWeekStyleGetter}
           views={["month"]}
           formats={formats}
+          selectable={true}
+          onSelectSlot={(slot) => {
+            setSelectedDate(slot.start);
+            console.log("slot", slot.start);
+          }}
           components={{
             toolbar: CustomToolbar,
+            month: {
+              dateCellWrapper: CustomDateCellWrapper,
+            },
           }}
         />
       </div>
