@@ -29,7 +29,7 @@ export function 회원가입Page() {
 
   const { mutateAsync: createCustomer, isLoading } = useMutation(
     async () => {
-      if (!userProfile.provider) return;
+      // if (!userProfile.provider) return;
       return await gqlClient.request(CreateCustomerQueryByWeb, {
         userId: "",
         password: "",

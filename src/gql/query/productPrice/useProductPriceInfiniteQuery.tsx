@@ -12,13 +12,13 @@ const useProductPriceInfiniteQuery = () => {
   const memo = useProductPriceInfiniteQueryBody((state) => state.memo);
 
   const requestBody = {
-    productId: productId ? Number(productId) : undefined,
+    productId: "2553",
     dateDeparture: date?.toISOString(),
     memo: memo,
   };
 
   return useInfiniteQuery({
-    queryKey: ["productPriceList", productId, date?.toISOString(), memo],
+    queryKey: ["productPriceList", "2553", date?.toISOString(), memo],
     queryFn: async ({
       pageParam = {
         first: 10,
