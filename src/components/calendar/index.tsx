@@ -8,8 +8,11 @@ import { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export const 상품캘린더 = () => {
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     const elements = document.querySelectorAll(
       'span[role="columnheader"][aria-sort="none"]'
@@ -52,19 +55,79 @@ export const 상품캘린더 = () => {
 
   const events = [
     {
-      title: "1000원",
+      title: Number(972000).toLocaleString(),
       start: new Date(2024, 2, 17),
       end: new Date(2024, 2, 17),
     },
     {
-      title: "2000원",
+      title: Number(973000).toLocaleString(),
       start: new Date(2024, 2, 18),
       end: new Date(2024, 2, 18),
     },
     {
-      title: "3000원",
+      title: Number(974000).toLocaleString(),
       start: new Date(2024, 2, 19),
       end: new Date(2024, 2, 19),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 20),
+      end: new Date(2024, 2, 20),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 21),
+      end: new Date(2024, 2, 21),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 22),
+      end: new Date(2024, 2, 22),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 23),
+      end: new Date(2024, 2, 23),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 24),
+      end: new Date(2024, 2, 24),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 25),
+      end: new Date(2024, 2, 25),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 26),
+      end: new Date(2024, 2, 26),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 27),
+      end: new Date(2024, 2, 27),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 28),
+      end: new Date(2024, 2, 28),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 29),
+      end: new Date(2024, 2, 29),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 30),
+      end: new Date(2024, 2, 30),
+    },
+    {
+      title: Number(974000).toLocaleString(),
+      start: new Date(2024, 2, 31),
+      end: new Date(2024, 2, 31),
     },
   ];
 
@@ -94,27 +157,63 @@ export const 상품캘린더 = () => {
   };
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const CustomDateCellWrapper = (props) => {
-    const calendarDate = new Date(props.value).getDate();
+  const isSameDate = (date, selectedDate) => {
+    const calendarDay = new Date(date).getDay();
+    const calendarDate = new Date(date).getDate();
+
+    const selectedDay = selectedDate && new Date(selectedDate).getDay();
     const selectDate = selectedDate && new Date(selectedDate).getDate();
 
-    const isSelected = calendarDate === selectDate;
+    const isSame =
+      `${calendarDay}_${calendarDate}` === `${selectedDay}_${selectDate}`;
 
-    console.log("isSelected", isSelected);
+    return isSame;
+  };
+
+  const CustomDateCellWrapper = (props) => {
+    const isSelected = isSameDate(props.value, selectedDate);
     return (
       <div
-        // className={
-        //   isSelected
-        //     ? `${props.children.props.className}-selected`
-        //     : props.children.props.className
-        // }
-        className={props.children.props.className}
+        className={
+          isSelected
+            ? `${props.children.props.className}-selected`
+            : props.children.props.className
+        }
       >
         {props.children}
       </div>
     );
   };
 
+  const CustomDateHeader = (props) => {
+    const isSelected = isSameDate(props.date, selectedDate);
+    return (
+      <div
+        style={{
+          color: isSelected ? "white" : "black",
+        }}
+      >
+        {props.label}
+      </div>
+    );
+  };
+
+  const CustomEventContent = (props) => {
+    console.log("props", props);
+    const isSelected = isSameDate(props.event.start, selectedDate);
+
+    console.log("isMobile", isMobile);
+    return (
+      <div
+        style={{
+          color: isSelected ? "white" : "black",
+          fontSize: isMobile ? 10 : 14,
+        }}
+      >
+        {props.event.title}
+      </div>
+    );
+  };
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
       <div style={{ height: 360 }}>
@@ -130,12 +229,17 @@ export const 상품캘린더 = () => {
           selectable={true}
           onSelectSlot={(slot) => {
             setSelectedDate(slot.start);
-            console.log("slot", slot.start);
           }}
+          // onSelectEvent={(event, e) => {
+          //   console.log("event");
+          //   // 클릭 이벤트를 처리하지 않음
+          // }}
           components={{
             toolbar: CustomToolbar,
             month: {
               dateCellWrapper: CustomDateCellWrapper,
+              dateHeader: CustomDateHeader,
+              event: CustomEventContent,
             },
           }}
         />
