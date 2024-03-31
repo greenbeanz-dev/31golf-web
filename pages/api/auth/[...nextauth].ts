@@ -29,6 +29,9 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -91,11 +94,26 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user }) {
       return true;
     },
-    // credentials일 경우 session을 타지 않음.
-    async session({ session, user, token }) {
-      console.log("session");
-      console.log({ session, user, token });
 
+    async session({ session, user, token }) {
+      console.log({ session, user, token });
+      if (token) {
+        const response = await prisma.customer.findUnique({
+          where: {
+            id: token.sub,
+          },
+        });
+
+        return {
+          ...session,
+          user: {
+            id: response.id.toString(),
+            provider: response.provider,
+            name: response.name,
+            phone: response.phone,
+          },
+        };
+      }
       const response = await prisma.customer.findMany({
         where: {
           provider: user.id || null,
@@ -119,22 +137,10 @@ export const authOptions: NextAuthOptions = {
       };
     },
     async jwt({ token }) {
-      // console.log({ token });
       return token;
     },
-    // async jwt({ token, account, profile }) {
-    //   console.log("jwt", token, account, profile);
-    //   if (account) {
-    //     token.accessToken = account.access_token;
-    //     token.id = token.id;
-    //   }
-    //   return token;
-    // },
   },
   adapter: PrismaAdapter(prisma),
-  // session: {
-  //   jwt: true,
-  // },
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>

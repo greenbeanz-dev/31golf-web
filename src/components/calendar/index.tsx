@@ -1,3 +1,5 @@
+import useProductPriceInfiniteQuery from "@/gql/query/productPrice/useProductPriceInfiniteQuery";
+import dayjs from "dayjs";
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
@@ -21,6 +23,26 @@ export const 상품캘린더 = () => {
       }
     });
   }, []);
+
+  // const changeProductId = useProductPriceInfiniteQueryBody(
+  //   (state) => state.changeProductId
+  // );
+
+  // useEffect(() => {
+  //   changeProductId("2553");
+  // }, []);
+
+  const { data, fetchNextPage, hasNextPage } = useProductPriceInfiniteQuery();
+
+  let list = data?.pages
+    .map((page) => page.productPriceList.edges.map((item) => item?.node))
+    .flat()
+    .map((item, index) => {
+      return {
+        ...item,
+        date: item?.date ? dayjs(item.date).format("YYYY-MM-DD") : "",
+      };
+    });
 
   const localizer = momentLocalizer(moment);
   const formats = {
