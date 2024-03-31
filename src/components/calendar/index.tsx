@@ -1,10 +1,12 @@
-import useProductPriceInfiniteQuery from "@/gql/query/productPrice/useProductPriceInfiniteQuery";
-import dayjs from "dayjs";
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
 import { useEffect, useState } from "react";
 
+import useProductPriceInfiniteQuery, {
+  useProductPriceInfiniteQueryBody,
+} from "@/gql/query/productPrice/useProductPriceInfiniteQuery";
+import dayjs from "dayjs";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -27,13 +29,13 @@ export const 상품캘린더 = () => {
     });
   }, []);
 
-  // const changeProductId = useProductPriceInfiniteQueryBody(
-  //   (state) => state.changeProductId
-  // );
+  const changeProductId = useProductPriceInfiniteQueryBody(
+    (state) => state.changeProductId
+  );
 
-  // useEffect(() => {
-  //   changeProductId("2553");
-  // }, []);
+  useEffect(() => {
+    changeProductId("2553");
+  }, []);
 
   const { data, fetchNextPage, hasNextPage } = useProductPriceInfiniteQuery();
 

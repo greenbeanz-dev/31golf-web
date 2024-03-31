@@ -9,7 +9,14 @@ import {
   Divider,
   useDisclosure,
 } from "@nextui-org/react";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { BiSolidMinusSquare } from "react-icons/bi";
 import { BsBuildingFillCheck } from "react-icons/bs";
@@ -139,7 +146,9 @@ export function 골프상세Page() {
             해보세요!
           </div>
           <div style={{ minHeight: 10 }} />
-          <상품캘린더 />
+          <Suspense fallback={<div>Loading...</div>}>
+            <상품캘린더 />
+          </Suspense>
         </div>
       </div>
 
