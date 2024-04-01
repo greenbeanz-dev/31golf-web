@@ -1,7 +1,7 @@
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import useProductPriceCalendarInfiniteQuery, {
   useProductPriceCalendarInfiniteQueryBody,
@@ -12,7 +12,18 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
-export const 상품캘린더 = () => {
+interface I상품캘린더Props {
+  판매가: number;
+  set판매가: Dispatch<SetStateAction<number>>;
+  출발일: Date;
+  set출발일: Dispatch<SetStateAction<Date>>;
+}
+export const 상품캘린더: React.FC<I상품캘린더Props> = ({
+  판매가,
+  set판매가,
+  출발일,
+  set출발일,
+}) => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -148,6 +159,23 @@ export const 상품캘린더 = () => {
       </div>
     );
   };
+
+  const handleSlot = (slot) => {
+    setSelectedDate(slot.start);
+
+    const price = events?.find((event) =>
+      isSameDate(slot.start, event.start)
+    )?.title;
+
+    if (price) {
+      set판매가(Number(price.replace(/,/g, "")));
+      set출발일(slot.start);
+    } else {
+      set판매가(Number(0));
+      set출발일(slot.start);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
       <div style={{ height: 360 }}>
@@ -161,13 +189,11 @@ export const 상품캘린더 = () => {
           views={["month"]}
           formats={formats}
           selectable={true}
-          onSelectSlot={(slot) => {
-            setSelectedDate(slot.start);
+          onSelectSlot={handleSlot}
+          onSelectEvent={(event, e) => {
+            console.log("event");
+            // 클릭 이벤트를 처리하지 않음
           }}
-          // onSelectEvent={(event, e) => {
-          //   console.log("event");
-          //   // 클릭 이벤트를 처리하지 않음
-          // }}
           components={{
             toolbar: CustomToolbar,
             month: {
