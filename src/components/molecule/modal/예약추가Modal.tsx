@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useIsMobile } from "../../../hooks/useIsMobile";
 import CommonModal from "./CommonModal";
 
-const customerName = "김민지";
+const customerName = "최경민";
 const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
 
 const 예약추가Modal = ({
