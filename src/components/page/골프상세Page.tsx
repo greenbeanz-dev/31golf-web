@@ -41,8 +41,8 @@ const HEADER_HEIGHT = 95;
 
 // TODO 임의 값
 const productId = 2553;
-const customerId = 39761;
-const customerName = "김민지";
+const customerId = 39714;
+const customerName = "최경민";
 const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
 // const dateDeparture = new Date("2024.05.08");
 // const startDate = "2024.05.08(수)";
