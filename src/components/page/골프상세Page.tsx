@@ -39,17 +39,18 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 
 const HEADER_HEIGHT = 95;
 
-const productId = 756;
-const customerId = 39713;
+// TODO 임의 값
+const productId = 2553;
+const customerId = 39761;
 const customerName = "김민지";
 const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
-const dateDeparture = new Date("2024.05.08");
-const startDate = "2024.05.08(수)";
-const endDate = "2024.05.09(목)";
+// const dateDeparture = new Date("2024.05.08");
+// const startDate = "2024.05.08(수)";
+// const endDate = "2024.05.09(목)";
 const desc = "( 2~3인 진행 시 별도 문의 부탁드립니다)";
 const daysDay = 1;
 const daysNight = 2;
-const price = 243000;
+// const price = 0;
 const numTeam = 1;
 // const numPeople = 3;
 
@@ -92,20 +93,36 @@ export function 골프상세Page() {
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
 
+  const [판매가, set판매가] = useState<number>(0);
+  const [출발일, set출발일] = useState<Date>(new Date());
+
   const reservationInfo = {
     status: "QUOTATION",
-    dateDeparture: dateDeparture,
+    dateDeparture: new Date(출발일),
     numPeople: numPeople,
     numTeam: numTeam,
     productId: productId,
     customerId: customerId,
-    priceCustom: Number(price),
+    priceCustom: Number(판매가),
     daysDay: daysDay,
     daysNight: daysNight,
   };
 
-  const [판매가, set판매가] = useState<number>(price);
-  const 일정 = `${startDate} ~ ${endDate} (${daysDay}박 ${daysNight}일)`;
+  const endDate = new Date(출발일);
+  endDate.setDate(endDate.getDate() + daysNight - daysDay);
+
+  const year = 출발일.getFullYear();
+  const month = String(출발일.getMonth() + 1).padStart(2, "0");
+  const day = String(출발일.getDate()).padStart(2, "0");
+  const formatted출발일 = `${year}.${month}.${day}`;
+
+  const endYear = endDate.getFullYear();
+  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
+  const endDay = String(endDate.getDate()).padStart(2, "0");
+
+  const formatted도착일 = `${endYear}.${endMonth}.${endDay}`;
+
+  const 일정 = `${formatted출발일} ~ ${formatted도착일} (${daysDay}박 ${daysNight}일)`;
 
   return (
     <div className="w-full h-full">
@@ -147,7 +164,12 @@ export function 골프상세Page() {
           </div>
           <div style={{ minHeight: 10 }} />
           <Suspense fallback={<div>Loading...</div>}>
-            <상품캘린더 />
+            <상품캘린더
+              판매가={판매가}
+              set판매가={set판매가}
+              출발일={출발일}
+              set출발일={set출발일}
+            />
           </Suspense>
         </div>
       </div>
@@ -188,6 +210,7 @@ export function 골프상세Page() {
                 <GolfProductPayment
                   일정={일정}
                   판매가={판매가}
+                  출발일={출발일}
                   reservation={reservationInfo}
                   setNumPeople={setNumPeople}
                 />
@@ -232,7 +255,12 @@ export function 골프상세Page() {
               >
                 <MdKeyboardArrowDown size={24} />
               </div>
-              <상품결제정보 count={numPeople} setCount={setNumPeople} />
+              <상품결제정보
+                count={numPeople}
+                setCount={setNumPeople}
+                판매가={판매가}
+                출발일={출발일}
+              />
             </div>
           )}
           <div className="w-full h-28 p-4 flex-col justify-start items-center gap-4 inline-flex">
@@ -643,9 +671,11 @@ const GolfProductPayment = ({
   setNumPeople,
   일정,
   판매가,
+  출발일,
 }: {
   판매가: number;
   일정: string;
+  출발일: Date;
   reservation: {
     status: string;
     dateDeparture: Date;
@@ -663,7 +693,12 @@ const GolfProductPayment = ({
 
   return (
     <div>
-      <상품결제정보 count={reservation.numPeople} setCount={setNumPeople} />
+      <상품결제정보
+        count={reservation.numPeople}
+        setCount={setNumPeople}
+        판매가={판매가}
+        출발일={출발일}
+      />
       <div style={{ minHeight: 8 }} />
 
       {isOpen && (
@@ -685,18 +720,36 @@ const GolfProductPayment = ({
 const 상품결제정보 = ({
   count,
   setCount,
+  판매가,
+  출발일,
 }: {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
+  판매가: number;
+  출발일: Date;
 }) => {
+  const year = 출발일.getFullYear();
+  const month = String(출발일.getMonth() + 1).padStart(2, "0");
+  const day = String(출발일.getDate()).padStart(2, "0");
+  const formatted출발일 = `${year}.${month}.${day}`;
+
+  const endDate = new Date(출발일);
+  endDate.setDate(endDate.getDate() + daysNight - daysDay);
+
+  const endYear = endDate.getFullYear();
+  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
+  const endDay = String(endDate.getDate()).padStart(2, "0");
+
+  const formatted도착일 = `${endYear}.${endMonth}.${endDay}`;
+
   return (
     <>
       <div className="font-bold text-xl">{title}</div>
       <div className="flex">
         <div style={{ marginRight: "1rem" }}>기간</div>
-        <div>{startDate}</div>
+        <div>{formatted출발일}</div>
         <div>~</div>
-        <div style={{ marginRight: "0.5rem" }}>{endDate}</div>
+        <div style={{ marginRight: "0.5rem" }}>{formatted도착일}</div>
         <div>{daysDay}박</div>
         <div>{daysNight}일</div>
       </div>
@@ -709,8 +762,7 @@ const 상품결제정보 = ({
           <div className="flex items-center">
             성인
             <div className="text-xl font-bold" style={{ minWidth: "7rem" }}>
-              {" "}
-              {(count * price).toLocaleString()} 원
+              {(count * 판매가).toLocaleString()} 원
             </div>
           </div>
           <div style={{ minWidth: "2rem" }} />
@@ -740,7 +792,7 @@ const 상품결제정보 = ({
       <div className="w-full h-9 px-1 justify-end items-center gap-4 inline-flex">
         <div className="text-black text-sm font-normal">총 금액</div>
         <div className="text-red-500 text-2xl font-bold">
-          {(count * price).toLocaleString()} 원
+          {(count * 판매가).toLocaleString()} 원
         </div>
       </div>
     </>
