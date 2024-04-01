@@ -3,9 +3,9 @@ import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
 import { useEffect, useState } from "react";
 
-import useProductPriceInfiniteQuery, {
-  useProductPriceInfiniteQueryBody,
-} from "@/gql/query/productPrice/useProductPriceInfiniteQuery";
+import useProductPriceCalendarInfiniteQuery, {
+  useProductPriceCalendarInfiniteQueryBody,
+} from "@/gql/query/productPrice/useProductPriceCalendarInfiniteQuery";
 import dayjs from "dayjs";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -29,15 +29,17 @@ export const 상품캘린더 = () => {
     });
   }, []);
 
-  const changeProductId = useProductPriceInfiniteQueryBody(
+  const changeProductId = useProductPriceCalendarInfiniteQueryBody(
     (state) => state.changeProductId
   );
 
   useEffect(() => {
+    // TODO 임의 추후 상품 ID로 교체 예정
     changeProductId("2553");
   }, []);
 
-  const { data, fetchNextPage, hasNextPage } = useProductPriceInfiniteQuery();
+  const { data, fetchNextPage, hasNextPage } =
+    useProductPriceCalendarInfiniteQuery();
 
   let list = data?.pages
     .map((page) => page.productPriceList.edges.map((item) => item?.node))
@@ -49,89 +51,21 @@ export const 상품캘린더 = () => {
       };
     });
 
+  const events =
+    list &&
+    list.map((elem) => {
+      return {
+        title: `${(elem.price || 0).toLocaleString()}`,
+        start: new Date(elem.date),
+        end: new Date(elem.date),
+      };
+    });
+
   const localizer = momentLocalizer(moment);
   const formats = {
     monthHeaderFormat: (date, culture, localizer) =>
       localizer.format(date, "MMMM YYYY", culture),
   };
-
-  const events = [
-    {
-      title: Number(972000).toLocaleString(),
-      start: new Date(2024, 2, 17),
-      end: new Date(2024, 2, 17),
-    },
-    {
-      title: Number(973000).toLocaleString(),
-      start: new Date(2024, 2, 18),
-      end: new Date(2024, 2, 18),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 19),
-      end: new Date(2024, 2, 19),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 20),
-      end: new Date(2024, 2, 20),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 21),
-      end: new Date(2024, 2, 21),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 22),
-      end: new Date(2024, 2, 22),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 23),
-      end: new Date(2024, 2, 23),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 24),
-      end: new Date(2024, 2, 24),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 25),
-      end: new Date(2024, 2, 25),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 26),
-      end: new Date(2024, 2, 26),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 27),
-      end: new Date(2024, 2, 27),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 28),
-      end: new Date(2024, 2, 28),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 29),
-      end: new Date(2024, 2, 29),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 30),
-      end: new Date(2024, 2, 30),
-    },
-    {
-      title: Number(974000).toLocaleString(),
-      start: new Date(2024, 2, 31),
-      end: new Date(2024, 2, 31),
-    },
-  ];
 
   const dayOfWeekStyleGetter = (date) => {
     // 추후 예약 가능, 마감에 따라 색 수정
@@ -201,10 +135,8 @@ export const 상품캘린더 = () => {
   };
 
   const CustomEventContent = (props) => {
-    console.log("props", props);
     const isSelected = isSameDate(props.event.start, selectedDate);
 
-    console.log("isMobile", isMobile);
     return (
       <div
         style={{
