@@ -1,9 +1,9 @@
 import { Footer } from "@component/organism/Footer";
+import MobileTopBar from "@component/organism/MobilTopBar";
 import { MobileFooter } from "@component/organism/MobileFooter";
 import TopBar from "@component/organism/TopBar";
-import MobileTopBar from "@component/organism/MobilTopBar";
 import TopButton from "@component/organism/TopButton";
-import React from "react";
+import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useMediaQuery } from "react-responsive";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -56,39 +56,41 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
-      <div
-        className="max-w-[100vw] min-h-[100vh]"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ maxWidth: isMobile ? "100%" : "1200px" }}>
-          <div className="flex h-8 justify-start" />
-          {isMobile ? (
-            <MobileTopBar />
-          ) : (
-            <>
-              <TopButton />
-              <TopBar />
-            </>
-          )}
+      <Suspense fallback={<div>Loading...</div>}>
+        <div
+          className="max-w-[100vw] min-h-[100vh]"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ maxWidth: isMobile ? "100%" : "1200px" }}>
+            <div className="flex h-8 justify-start" />
+            {isMobile ? (
+              <MobileTopBar />
+            ) : (
+              <>
+                <TopButton />
+                <TopBar />
+              </>
+            )}
 
-          {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
-          <main
-            className="h-full"
-            style={{
-              paddingLeft: isMobile ? "3%" : "0%",
-              paddingRight: isMobile ? "3%" : "0%",
-            }}
-          >
-            {children}
-          </main>
-          <div style={{ minHeight: 72 }} />
-          {isMobile ? <MobileFooter /> : <Footer />}
+            {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
+            <main
+              className="h-full"
+              style={{
+                paddingLeft: isMobile ? "3%" : "0%",
+                paddingRight: isMobile ? "3%" : "0%",
+              }}
+            >
+              {children}
+            </main>
+            <div style={{ minHeight: 72 }} />
+            {isMobile ? <MobileFooter /> : <Footer />}
+          </div>
         </div>
-      </div>
+      </Suspense>
     </ErrorBoundary>
   );
 };

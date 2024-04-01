@@ -4,12 +4,12 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-const useProductPriceInfiniteQuery = () => {
-  const productId = useProductPriceInfiniteQueryBody(
+const useProductPriceCalendarInfiniteQuery = () => {
+  const productId = useProductPriceCalendarInfiniteQueryBody(
     (state) => state.productId
   );
-  const date = useProductPriceInfiniteQueryBody((state) => state.date);
-  const memo = useProductPriceInfiniteQueryBody((state) => state.memo);
+  const date = useProductPriceCalendarInfiniteQueryBody((state) => state.date);
+  const memo = useProductPriceCalendarInfiniteQueryBody((state) => state.memo);
 
   const requestBody = {
     productId: productId ? Number(productId) : undefined,
@@ -18,10 +18,16 @@ const useProductPriceInfiniteQuery = () => {
   };
 
   return useInfiniteQuery({
-    queryKey: ["productPriceList", productId, date?.toISOString(), memo],
+    queryKey: [
+      "productPriceList",
+      "calendar",
+      productId,
+      date?.toISOString(),
+      memo,
+    ],
     queryFn: async ({
       pageParam = {
-        first: 10,
+        first: 30,
         ...requestBody,
       },
     }) => await gqlClient.request(ProductPriceListInfinityQuery, pageParam),
@@ -35,7 +41,7 @@ const useProductPriceInfiniteQuery = () => {
   });
 };
 
-export default useProductPriceInfiniteQuery;
+export default useProductPriceCalendarInfiniteQuery;
 
 type State = {
   productId: string;
@@ -56,7 +62,7 @@ const initialState: State = {
   memo: "",
 };
 
-export const useProductPriceInfiniteQueryBody = create(
+export const useProductPriceCalendarInfiniteQueryBody = create(
   immer<State & Actions>((set) => ({
     ...initialState,
     changeProductId: (productId) => {
