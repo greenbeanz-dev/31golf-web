@@ -313,6 +313,7 @@ query ProductById($id: ID!) {
     scheduleTablePc
     courseAddress
     cancellationPolicy
+    thumbnailImage
   }
 }
 `);
