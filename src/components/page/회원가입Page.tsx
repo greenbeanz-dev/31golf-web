@@ -6,6 +6,7 @@ import {
 import { Button, Input } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSmsSend } from "../../service/sms/useSmsSend";
@@ -66,6 +67,8 @@ export function 회원가입Page() {
     }
   );
 
+  const saltRounds = 10; // 솔트의 라운드 수 설정
+
   const { mutateAsync: updateCustomer } = useMutation(
     async () => {
       if (!customerId) return;
@@ -78,7 +81,7 @@ export function 회원가입Page() {
         fax: "",
         isVillain: false,
         userId: userId,
-        password: password,
+        password: await bcrypt.hash(password, saltRounds),
       });
     },
     {
