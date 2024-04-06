@@ -170,26 +170,16 @@ const Login = () => {
   const router = useRouter();
 
   const handleSubmit = async () => {
-    // console.log("로그인");
     const result = await login("credentials", {
-      username: "test",
-      password: "test",
+      username: id,
+      password: password,
       provider: "credentials",
       redirect: false,
       callbackUrl: "/",
     });
     console.log({ result });
-
-    // const result = await signIn("credentials", {
-    //   // 로그인 실패 시 새로고침 여부
-    //   redirect: false,
-    //   id: body.id,
-    //   password: body.password,
-    //   // ...body
-    // });
   };
 
-  console.log({ isLogin, userProfile });
   useEffect(() => {
     if (isLogin && !userProfile.id) {
       window.location.href = "/signup";
@@ -206,41 +196,46 @@ const Login = () => {
         )}
         <div className="h-6" />
         <div className="flex flex-col gap-2">
-          <Input
-            classNames={{
-              mainWrapper: ["w-full"],
-              input: ["!ring-transparent", "bg-transparent"],
-            }}
-            placeholder="아이디"
-            size={"sm"}
-            value={id}
-            onChange={(e) => {
-              setId(e.target.value);
-            }}
-          />
-          <Input
-            classNames={{
-              input: ["!ring-transparent"],
-              mainWrapper: ["w-full"],
-            }}
-            placeholder="비밀번호"
-            size={"sm"}
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <Button
-            className="flex justify-center items-center h-[48px] w-full rounded-[8px]"
-            style={{
-              backgroundColor: theme.colors.primary,
-              color: "white",
-              fontWeight: "bold",
-            }}
-            onClick={handleSubmit}
-          >
-            로그인
-          </Button>
+          {!isLogin && (
+            <>
+              <Input
+                classNames={{
+                  mainWrapper: ["w-full"],
+                  input: ["!ring-transparent", "bg-transparent"],
+                }}
+                placeholder="아이디"
+                size={"sm"}
+                value={id}
+                onChange={(e) => {
+                  setId(e.target.value);
+                }}
+              />
+              <Input
+                classNames={{
+                  input: ["!ring-transparent"],
+                  mainWrapper: ["w-full"],
+                }}
+                placeholder="비밀번호"
+                size={"sm"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <Button
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px]"
+                style={{
+                  backgroundColor: theme.colors.primary,
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+                onClick={handleSubmit}
+              >
+                로그인
+              </Button>
+            </>
+          )}
+
           <div
             className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
             onClick={() => {

@@ -45,6 +45,7 @@ export const authOptions: NextAuthOptions = {
           const response = await prisma.customer.findUnique({
             where: {
               userid: credentials.username,
+              password: credentials.password,
             },
           });
           console.log("response123", response);
