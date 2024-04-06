@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -45,17 +46,30 @@ export const authOptions: NextAuthOptions = {
           const response = await prisma.customer.findUnique({
             where: {
               userid: credentials.username,
-              password: credentials.password,
             },
           });
-          console.log("response123", response);
+          console.log("response", response);
           if (response) {
-            return {
-              id: response.id,
-              name: response.name,
-              email: response.email,
-              image: "",
-            };
+            const isPasswordValid = await bcrypt.compare(
+              credentials.password,
+              response.password
+            );
+            if (isPasswordValid) {
+              return {
+                id: response.id,
+                name: response.name,
+                email: response.email,
+                image: "",
+              };
+            } else {
+              console.log("비밀번호가 일치하지 않습니다.");
+              return {
+                id: 0,
+                name: "",
+                email: "",
+                image: "",
+              };
+            }
           }
         }
         return {
