@@ -147,6 +147,10 @@ class ProductInputModel {
   @IsOptional()
   @IsString()
   cancellationPolicy?: string | null;
+
+  @IsOptional()
+  @IsString()
+  thumbnailImage?: string | null;
 }
 
 export default ProductInputModel;

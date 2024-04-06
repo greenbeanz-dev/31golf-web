@@ -75,9 +75,9 @@ const 예약추가Modal = ({
         action: async () => {
           createReservation();
           onClose();
-          alert("예약이 완료 되었습니다.");
+          alert("예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
         },
-        label: "예약 완료",
+        label: "예약 접수",
       }}
       closeAction={{
         action: () => {

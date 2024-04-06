@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import Image from "next/image";
+import { Product } from "@/gql/__generated__/graphql";
 
 export function 상품이미지Component({
   item,
@@ -10,7 +11,7 @@ export function 상품이미지Component({
   pcHeight,
   discount,
 }: {
-  item: any;
+  item: Product;
   mobileWidth?: number;
   mobileHeight?: number;
   pcWidth?: number;
@@ -30,30 +31,35 @@ export function 상품이미지Component({
       }}
     >
       <Image
-        alt={item.title}
+        alt={"product_image_" + item.id}
         className="rounded-[24px]"
-        src={item.url}
+        src={
+          item.thumbnailImage
+            ? item.thumbnailImage
+            : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
+        }
         height={isMobile ? mobileHeight : pcHeight}
         width={isMobile ? mobileWidth : pcWidth}
       />
       <div className="min-h-[16px]" />
       <div className="text-[14px] font-normal overflow-ellipsis overflow-hidden leading-6 opacity-70">
-        {item.description}
+        {item.summary}
       </div>
       <div className="min-h-1" />
-      <div className="text-[16px] font-bold leading-6">{item.title}</div>
+      <div className="text-[16px] font-bold leading-6">{`${item.name} ${item.type}`}</div>
       <div className="min-h-2" />
       {!isMobile && (
         <div className="flex gap-1">
-          {item.contents.map((content, idx) => (
-            <div key={idx} className="relative inline-block">
-              <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
-                <div className="text-[14px] font-normal text-[#17C964] leading-5">
-                  {content}
+          {item.inclusives &&
+            item.inclusives.split(",").map((content, idx) => (
+              <div key={idx} className="relative inline-block">
+                <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
+                  <div className="text-[14px] font-normal text-[#17C964] leading-5">
+                    {content.split("_@_")[0]}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
       <div className="min-h-2" />
@@ -67,7 +73,7 @@ export function 상품이미지Component({
           </>
         )}
         <div className={`text-sky-600 text-xl font-bold`}>
-          {item.price.toLocaleString()}원 ~
+          {item.price ? item.price.toLocaleString() : "0"}원 ~
         </div>
       </div>
     </div>
