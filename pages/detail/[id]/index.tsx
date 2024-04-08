@@ -1,24 +1,20 @@
 import { 골프상세Page } from "@component/page/골프상세Page";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
-function Home() {
+function Detail() {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <div className="flex flex-col items-center w-full h-full">
       <Head>
         <title>Home</title>
       </Head>
-      <div style={{ minHeight: 40 }} />
-      <골프상세Page />
+      <div className="min-h-10" />
+      <골프상세Page productId={Number(id)} />
     </div>
   );
 }
 
-export default Home;
-// export async function getServerSideProps() {
-//   // Fetch data from external API
-//   // const res = await fetch(`https://.../data`);
-//   // const data = await res.json();
-
-//   // Pass data to the page via props
-//   return { props: {} };
-// }
+export default Detail;
