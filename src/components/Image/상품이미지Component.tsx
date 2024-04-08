@@ -25,6 +25,7 @@ export function 상품이미지Component({
       style={{
         width: isMobile ? mobileWidth : pcWidth,
         marginBottom: isMobile ? "16px" : "48px",
+        cursor: "pointer",
       }}
       onClick={() => {
         router.push(`/detail/${item.id}`);

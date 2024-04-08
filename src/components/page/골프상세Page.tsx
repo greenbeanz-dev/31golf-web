@@ -9,14 +9,7 @@ import {
   Divider,
   useDisclosure,
 } from "@nextui-org/react";
-import {
-  Dispatch,
-  SetStateAction,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { BiSolidMinusSquare } from "react-icons/bi";
 import { BsBuildingFillCheck } from "react-icons/bs";
@@ -24,8 +17,6 @@ import {
   FaBed,
   FaCarSide,
   FaCheckToSlot,
-  FaCircleMinus,
-  FaCirclePlus,
   FaGolfBallTee,
   FaRegCalendarPlus,
 } from "react-icons/fa6";
@@ -37,31 +28,61 @@ import { TbFlag3Filled } from "react-icons/tb";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import Image from "next/image";
+import useProductBy from "../../service/product/useProductBy";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import gqlClient from "@/gql/gqlClient";
+import { ImageListByProductIdQuery } from "@/gql/query/productImage/crud";
+import 상품결제정보 from "@component/organism/상품결제정보";
+import 상품예약버튼 from "@component/organism/상품예약버튼";
 
 const HEADER_HEIGHT = 95;
 
 // TODO 임의 값
-const productId = 2553;
 const customerId = 39714;
-const customerName = "최경민";
-const title = "그린필드CC 당일 18홀";
-// const dateDeparture = new Date("2024.05.08");
-// const startDate = "2024.05.08(수)";
-// const endDate = "2024.05.09(목)";
-const desc = "(2~3인 진행 시 별도 문의 부탁드립니다)";
-const daysDay = 1;
-const daysNight = 2;
-// const price = 0;
-const numTeam = 1;
-// const numPeople = 3;
 
-export function 골프상세Page() {
+export function 골프상세Page({ productId }: { productId: number }) {
   const productRef = useRef(null);
 
   const 예약가이드Ref = useRef(null);
   const scrollYRef = useRef(0);
   const [fixed, setFixed] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { data } = useProductBy({
+    id: productId,
+  });
+
+  // 상품 이미지 데이터 fetch
+  const { data: productImageData } = useInfiniteQuery({
+    queryKey: ["imageListByProductId", productId],
+    enabled: !!productId,
+    queryFn: async ({
+      pageParam = {
+        first: 20,
+        productId: productId?.toString(),
+      },
+    }) => await gqlClient.request(ImageListByProductIdQuery, pageParam),
+    getNextPageParam: (lastPage, pages) => {
+      if (!lastPage.imageListByProductId.pageInfo.hasNextPage) return false;
+
+      return {
+        after: lastPage.imageListByProductId.pageInfo.endCursor,
+      };
+    },
+  });
+
+  // TODO: 상품 이미지 Carousel
+  let productImageList = productImageData?.pages
+    .map((page) => page.imageListByProductId.edges.map((item) => item?.node))
+    .flat()
+    .map((item, index) => {
+      return {
+        id: item?.id || 0,
+        productId: item?.productId || 0,
+        name: item?.name || "",
+        url: item?.url || "",
+      };
+    });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,9 +108,18 @@ export function 골프상세Page() {
   }, []);
 
   const isMobile = useIsMobile();
-  const PC_MESSAGE = "그린필드CC 당일 18홀";
-  const MOBILE_MESSAGE = "그린필드 CC";
-  const MOBILE_CONTENT = ["18홀", "당일"];
+
+  const PC_MESSAGE = data?.name + " " + data?.type;
+  const MOBILE_MESSAGE = data?.name;
+  // make list from a list except for the last element
+  // const MOBILE_CONTENT_NIGHTS = data?.type?.split(" ").slice(0, -1).join(" ");
+  // const MOBILE_CONTENT_ROUNDS =
+  //   data?.type?.split(" ").pop()?.replace("(", "").replace(")", "") || "";
+  const MOBILE_CONTENT = [data?.type];
+  const DAYS_DAY =
+    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[0]);
+  const DAYS_NIGHT =
+    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[1][0]);
 
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
@@ -101,16 +131,16 @@ export function 골프상세Page() {
     status: "QUOTATION",
     dateDeparture: new Date(출발일),
     numPeople: numPeople,
-    numTeam: numTeam,
+    numTeam: Math.floor(numPeople / 4),
     productId: productId,
     customerId: customerId,
     priceCustom: Number(판매가),
-    daysDay: daysDay,
-    daysNight: daysNight,
+    daysDay: DAYS_DAY,
+    daysNight: DAYS_NIGHT,
   };
 
   const endDate = new Date(출발일);
-  endDate.setDate(endDate.getDate() + daysNight - daysDay);
+  endDate.setDate(endDate.getDate() + DAYS_NIGHT - DAYS_DAY);
 
   const year = 출발일.getFullYear();
   const month = String(출발일.getMonth() + 1).padStart(2, "0");
@@ -123,15 +153,17 @@ export function 골프상세Page() {
 
   const formatted도착일 = `${endYear}.${endMonth}.${endDay}`;
 
-  const 일정 = `${formatted출발일} ~ ${formatted도착일} (${daysDay}박 ${daysNight}일)`;
+  const schedule = `${formatted출발일} ~ ${formatted도착일} (${DAYS_DAY}박 ${DAYS_NIGHT}일)`;
 
   return (
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex-1">
           <Image
+            className="rounded-[24px]"
             alt="detail_image"
             src={
+              // data?.thumbnailImage ||
               "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
             }
             width={640}
@@ -142,8 +174,19 @@ export function 골프상세Page() {
         <div style={{ minHeight: isMobile ? 16 : 0 }} />
         <div className="flex-1">
           <Breadcrumbs size="lg">
-            <BreadcrumbItem>국내골프</BreadcrumbItem>
-            <BreadcrumbItem>남해</BreadcrumbItem>
+            {data?.category1 && (
+              <BreadcrumbItem className="text-black text-opacity-70">{`${data?.category1}골프`}</BreadcrumbItem>
+            )}
+            {data?.category2 && (
+              <BreadcrumbItem className="text-black text-opacity-70">
+                {data?.category2}
+              </BreadcrumbItem>
+            )}
+            {data?.category3 && (
+              <BreadcrumbItem className="text-black text-opacity-70">
+                {data?.category3}
+              </BreadcrumbItem>
+            )}
           </Breadcrumbs>
           <div style={{ minHeight: 8 }} />
           <div className={`font-bold ${isMobile ? "text-xl" : "text-4xl"}`}>
@@ -166,10 +209,7 @@ export function 골프상세Page() {
             </>
           )}
           <div style={{ minHeight: 8 }} />
-          <div className="text-base font-normal">
-            크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을
-            해보세요!
-          </div>
+          <div className="text-base font-normal">{data?.summary}</div>
           <div style={{ minHeight: 10 }} />
           <Suspense fallback={<div>Loading...</div>}>
             <상품캘린더
@@ -181,7 +221,6 @@ export function 골프상세Page() {
           </Suspense>
         </div>
       </div>
-
       <div style={{ minHeight: 32 }} />
       {/* 예약 가이드  */}
       <div className="flex">
@@ -198,13 +237,12 @@ export function 골프상세Page() {
             <Divider />
             <div style={{ minHeight: 40 }} />
             <유의사항 />
-            <div style={{ minHeight: 40 }} />
-            <ButtonList />
+            {/* <div style={{ minHeight: 40 }} />
+            <ButtonList /> */}
             <div style={{ minHeight: 24 }} />
             <GolfDetail />
           </div>
         </div>
-
         {!isMobile && (
           <>
             <div style={{ minWidth: 16 }} />
@@ -215,10 +253,11 @@ export function 골프상세Page() {
                   top: fixed ? `${HEADER_HEIGHT}px` : "0px", // header height만큼 넣어줘야 이쁘게 스크롤 됨
                 }}
               >
-                <GolfProductPayment
-                  일정={일정}
-                  판매가={판매가}
-                  출발일={출발일}
+                <상품예약버튼
+                  product={{
+                    name: data?.name + " " + data?.type,
+                    schedule: schedule,
+                  }}
                   reservation={reservationInfo}
                   setNumPeople={setNumPeople}
                 />
@@ -231,7 +270,7 @@ export function 골프상세Page() {
         <예약추가Modal
           reservation={reservationInfo}
           setNumPeople={setNumPeople}
-          일정={일정}
+          일정={schedule}
           판매가={판매가}
           isOpen={isOpen}
           onClose={() => {
@@ -266,8 +305,12 @@ export function 골프상세Page() {
               <상품결제정보
                 count={numPeople}
                 setCount={setNumPeople}
-                판매가={판매가}
-                출발일={출발일}
+                name={data?.name + " " + data?.type}
+                price={판매가}
+                dateDeparture={출발일}
+                daysDay={DAYS_DAY}
+                daysNight={DAYS_NIGHT}
+                note="(2~3인 진행 시 별도 문의 부탁드립니다)"
               />
             </div>
           )}
@@ -282,7 +325,21 @@ export function 골프상세Page() {
                 <MdKeyboardArrowUp size={24} />
               </div>
             )}
-            <투어예약하기Button onOpen={onOpen} />
+            <Button
+              size="lg"
+              style={{
+                width: "100%",
+                height: 48,
+                backgroundColor: theme.colors.primary,
+                color: "white",
+                fontWeight: "bold",
+              }}
+              onClick={() => {
+                onOpen();
+              }}
+            >
+              투어 예약하기
+            </Button>
           </div>
         </div>
       )}
@@ -591,45 +648,6 @@ const 유의사항 = () => {
   );
 };
 
-const ButtonList = () => {
-  const labelList = [
-    "일정표",
-    "친구에게 상품 공유",
-    "골프장 정보",
-    "숙박 정보",
-    "골프장 가는길",
-    "숙소 가는길",
-    "취소 및 위약 규정",
-    "우천 취소 안내",
-    "이용 후기",
-    "이 상품 찜하기",
-  ];
-  const isMobile = useIsMobile();
-  return (
-    <div
-      className="flex gap-2 w-full"
-      style={{
-        flexWrap: "wrap",
-        justifyContent: "center",
-      }}
-    >
-      {labelList.map((data, idx) => (
-        <Button
-          key={idx}
-          style={{
-            minWidth: isMobile ? 328 : 350,
-            height: 56,
-            borderColor: "gray",
-          }}
-          variant="bordered"
-        >
-          {data}
-        </Button>
-      ))}
-    </div>
-  );
-};
-
 const GolfDetail = () => {
   const detailList = [
     { label: "골프장명", value: "영광CC" },
@@ -671,159 +689,6 @@ const GolfDetail = () => {
         </>
       ))}
     </div>
-  );
-};
-
-const GolfProductPayment = ({
-  reservation,
-  setNumPeople,
-  일정,
-  판매가,
-  출발일,
-}: {
-  판매가: number;
-  일정: string;
-  출발일: Date;
-  reservation: {
-    status: string;
-    dateDeparture: Date;
-    numPeople: number;
-    numTeam: number;
-    productId: number;
-    customerId: number;
-    priceCustom: number;
-    daysDay: number;
-    daysNight: number;
-  };
-  setNumPeople: Dispatch<SetStateAction<number>>;
-}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  return (
-    <div>
-      <상품결제정보
-        count={reservation.numPeople}
-        setCount={setNumPeople}
-        판매가={판매가}
-        출발일={출발일}
-      />
-      <div style={{ minHeight: 8 }} />
-
-      {isOpen && (
-        <예약추가Modal
-          reservation={reservation}
-          setNumPeople={setNumPeople}
-          일정={일정}
-          판매가={판매가}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      )}
-
-      <투어예약하기Button onOpen={onOpen} />
-    </div>
-  );
-};
-
-const 상품결제정보 = ({
-  count,
-  setCount,
-  판매가,
-  출발일,
-}: {
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
-  판매가: number;
-  출발일: Date;
-}) => {
-  const year = 출발일.getFullYear();
-  const month = String(출발일.getMonth() + 1).padStart(2, "0");
-  const day = String(출발일.getDate()).padStart(2, "0");
-  const formatted출발일 = `${year}.${month}.${day}`;
-
-  const endDate = new Date(출발일);
-  endDate.setDate(endDate.getDate() + daysNight - daysDay);
-
-  const endYear = endDate.getFullYear();
-  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
-  const endDay = String(endDate.getDate()).padStart(2, "0");
-
-  const formatted도착일 = `${endYear}.${endMonth}.${endDay}`;
-
-  return (
-    <>
-      <div className="font-bold text-xl">{title}</div>
-      <div className="flex">
-        <div style={{ marginRight: "1rem" }}>기간</div>
-        <div>{formatted출발일}</div>
-        <div>~</div>
-        <div style={{ marginRight: "0.5rem" }}>{formatted도착일}</div>
-        <div>{daysDay}박</div>
-        <div>{daysNight}일</div>
-      </div>
-      <div className="text-red-500 text-sm font-normal">{desc}</div>
-      <div style={{ minHeight: 8 }} />
-
-      {/* 박스 */}
-      <div className="w-full h-20 px-4 py-6 rounded-2xl border border-black border-opacity-10 justify-between items-center inline-flex">
-        <div className="justify-start items-center gap-1 flex">
-          <div className="flex items-center">
-            성인
-            <div className="text-xl font-bold" style={{ minWidth: "7rem" }}>
-              {(count * 판매가).toLocaleString()} 원
-            </div>
-          </div>
-          <div style={{ minWidth: "2rem" }} />
-          <div className="flex">
-            <FaCircleMinus
-              size={24}
-              color={theme.colors.primary}
-              onClick={() => {
-                if (count > 4) setCount(count - 1);
-              }}
-            />
-            <div className="text-xl font-bold" style={{ minWidth: "1rem" }} />
-            {count}명
-            <div style={{ minWidth: "1rem" }} />
-            <FaCirclePlus
-              size={24}
-              color="004964"
-              onClick={() => {
-                setCount(count + 1);
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <div style={{ minHeight: 8 }} />
-      {/* 총 금액  */}
-      <div className="w-full h-9 px-1 justify-end items-center gap-4 inline-flex">
-        <div className="text-black text-sm font-normal">총 금액</div>
-        <div className="text-red-500 text-2xl font-bold">
-          {(count * 판매가).toLocaleString()} 원
-        </div>
-      </div>
-    </>
-  );
-};
-
-const 투어예약하기Button = ({ onOpen }: { onOpen: () => void }) => {
-  return (
-    <Button
-      size="lg"
-      style={{
-        width: "100%",
-        height: 48,
-        backgroundColor: theme.colors.primary,
-        color: "white",
-        fontWeight: "bold",
-      }}
-      onClick={() => {
-        onOpen();
-      }}
-    >
-      투어 예약하기
-    </Button>
   );
 };
 
@@ -879,3 +744,42 @@ const Step = ({ number, description1, description2, icon }) => (
     </div>
   </div>
 );
+
+// const ButtonList = () => {
+//   const labelList = [
+//     "일정표",
+//     "친구에게 상품 공유",
+//     "골프장 정보",
+//     "숙박 정보",
+//     "골프장 가는길",
+//     "숙소 가는길",
+//     "취소 및 위약 규정",
+//     "우천 취소 안내",
+//     "이용 후기",
+//     "이 상품 찜하기",
+//   ];
+//   const isMobile = useIsMobile();
+//   return (
+//     <div
+//       className="flex gap-2 w-full"
+//       style={{
+//         flexWrap: "wrap",
+//         justifyContent: "center",
+//       }}
+//     >
+//       {labelList.map((data, idx) => (
+//         <Button
+//           key={idx}
+//           style={{
+//             minWidth: isMobile ? 328 : 350,
+//             height: 56,
+//             borderColor: "gray",
+//           }}
+//           variant="bordered"
+//         >
+//           {data}
+//         </Button>
+//       ))}
+//     </div>
+//   );
+// };
