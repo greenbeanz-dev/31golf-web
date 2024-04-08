@@ -110,7 +110,7 @@ const 메인Page = () => {
           <div className={isMobile ? "min-h-[48px]" : "min-h-[36px]"} />
           {/* 투어 전체보기 */}
           <div
-            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
+            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-6 ${isMobile ? "" : "items-end"}`}
           >
             <div className="text-xl font-bold">투어 전체보기</div>
             <div className="text-[16px] leading-6 opacity-70">

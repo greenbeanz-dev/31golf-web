@@ -1,29 +1,36 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
-import { useState } from "react";
-import ProductListMain from "./ProductListMain";
+import { useEffect, useState } from "react";
+import ProductListDetail from "./ProductListDetail";
 
-const ProdudctTabBarMain = () => {
+const ProductTabBarOverseas = () => {
   const navItem = [
     {
-      label: "국내골프",
-      name: "domestic",
+      label: "동남아",
     },
     {
-      label: "제주골프",
-      name: "jeju",
+      label: "일본",
     },
     {
-      label: "해외골프",
-      name: "overseas",
+      label: "중국/대만",
+    },
+    {
+      label: "괌/사이판",
     },
   ];
-  const [tab, setTab] = useState("domestic");
+  const [tab, setTab] = useState("동남아");
+  useEffect(() => {
+    console.log(tab);
+  }, [tab]);
   return (
     <>
       <Navbar
-        // isBordered
+        style={{
+          width: "100%",
+          justifyContent: "flex-start", // 탭 왼쪽 정렬
+          overflowX: "auto",
+        }}
         classNames={{
-          wrapper: ["px-0", "cursor-pointer", "max-w-[1200px]"],
+          wrapper: ["px-0", "cursor-pointer", "w-full"],
           item: [
             "flex",
             "relative",
@@ -44,15 +51,15 @@ const ProdudctTabBarMain = () => {
           menu: ["px-0"],
         }}
       >
-        <NavbarContent className="flex px-0">
+        <NavbarContent>
           {navItem.map((item) => {
             return (
               <NavbarItem
                 className={`px-4 ${tab === item.label ? "text-[#004964] font-bold" : ""}`}
                 key={item.label}
-                isActive={tab === item.name}
+                isActive={tab === item.label}
                 onClick={() => {
-                  setTab(item.name);
+                  setTab(item.label);
                 }}
               >
                 {item.label}
@@ -61,24 +68,9 @@ const ProdudctTabBarMain = () => {
           })}
         </NavbarContent>
       </Navbar>
-      <div className="min-h-[12px]" />
-      {tab == "domestic" && (
-        <div>
-          <ProductListMain category1="국내" />
-        </div>
-      )}
-      {tab == "jeju" && (
-        <div>
-          <ProductListMain category1="국내" category2="제주도" />
-        </div>
-      )}
-      {tab == "overseas" && (
-        <div>
-          <ProductListMain category1="해외" />
-        </div>
-      )}
+      <ProductListDetail category1="해외" category2={tab} />
     </>
   );
 };
 
-export default ProdudctTabBarMain;
+export default ProductTabBarOverseas;

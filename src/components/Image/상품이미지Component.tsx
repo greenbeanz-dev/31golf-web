@@ -41,11 +41,11 @@ export function 상품이미지Component({
         height={isMobile ? mobileHeight : pcHeight}
         width={isMobile ? mobileWidth : pcWidth}
       />
-      <div className="min-h-[16px]" />
+      <div className="pt-4" />
       <div className="text-[14px] font-normal overflow-ellipsis overflow-hidden leading-6 opacity-70">
         {item.summary}
       </div>
-      <div className="min-h-1" />
+      <div className="pt-1" />
       <div className="text-[16px] font-bold leading-6">{`${item.name} ${item.type}`}</div>
       <div className="min-h-2" />
       {!isMobile && (

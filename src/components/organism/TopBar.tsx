@@ -15,10 +15,6 @@ const navItem = [
     label: "해외골프",
     href: "overseas",
   },
-  {
-    label: "추가메뉴",
-    href: "addMenu",
-  },
 ];
 
 export default function Topbar() {
@@ -44,7 +40,7 @@ export default function Topbar() {
           "data-[active=true]:after:right-0",
           "data-[active=true]:after:h-[2px]",
           "data-[active=true]:after:rounded-[2px]",
-          "data-[active=true]:after:bg-sky-900",
+          "data-[active=true]:after:bg-[#004964]",
         ],
       }}
     >

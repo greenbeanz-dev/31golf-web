@@ -829,7 +829,7 @@ const 투어예약하기Button = ({ onOpen }: { onOpen: () => void }) => {
 
 const GuideInfo = ({ icon, label, value }) => (
   <>
-    <div className="h-9 px-4 py-2 bg-sky-900 bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
+    <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
       <div className="w-4 h-3 relative">{icon}</div>
       <div className="text-black text-opacity-70 text-sm font-normal">
         {label}

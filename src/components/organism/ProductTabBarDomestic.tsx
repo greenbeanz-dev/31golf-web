@@ -1,6 +1,6 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import ProductList from "./ProductList";
+import ProductListDetail from "./ProductListDetail";
 
 const ProductTabBarDomestic = () => {
   const navItem = [
@@ -37,10 +37,11 @@ const ProductTabBarDomestic = () => {
           item: [
             "flex",
             "relative",
-            "h-full",
+            "h-[30px]",
+            "w-[60px]",
             "cursor-pointer",
             "items-center",
-            "justify-start",
+            "justify-center",
             "data-[active=true]:after:content-['']",
             "data-[active=true]:after:absolute",
             "data-[active=true]:after:bottom-0",
@@ -48,7 +49,7 @@ const ProductTabBarDomestic = () => {
             "data-[active=true]:after:right-0",
             "data-[active=true]:after:h-[2px]",
             "data-[active=true]:after:rounded-[2px]",
-            "data-[active=true]:after:bg-sky-900",
+            "data-[active=true]:after:bg-[#004964]",
           ],
           menu: ["px-0"],
         }}
@@ -57,7 +58,7 @@ const ProductTabBarDomestic = () => {
           {navItem.map((item) => {
             return (
               <NavbarItem
-                className="px-4"
+                className={`px-4 ${tab === item.label ? "text-[#004964] font-bold" : ""}`}
                 key={item.label}
                 isActive={tab === item.label}
                 onClick={() => {
@@ -70,8 +71,7 @@ const ProductTabBarDomestic = () => {
           })}
         </NavbarContent>
       </Navbar>
-      <div style={{ minHeight: 24 }} />
-      <ProductList type="detail" category1="국내" category2={tab} />
+      <ProductListDetail category1="국내" category2={tab} />
     </>
   );
 };

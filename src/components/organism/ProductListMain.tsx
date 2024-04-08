@@ -8,19 +8,17 @@ import useProductInfiniteQuery, {
 import { Product } from "@/gql/__generated__/graphql";
 import { useEffect } from "react";
 
-interface ProductListProps {
-  type?: "main" | "detail";
+interface ProductListMainProps {
   category1?: string;
   category2?: string;
   category3?: string;
 }
 
-const ProductList = ({
-  type = "main",
+const ProductListMain = ({
   category1,
   category2,
   category3,
-}: ProductListProps) => {
+}: ProductListMainProps) => {
   const isMobile = useIsMobile();
   const { data, fetchNextPage, hasNextPage } = useProductInfiniteQuery();
 
@@ -36,6 +34,7 @@ const ProductList = ({
     (state) => state.changeCategory3
   );
 
+  // w
   let list = data?.pages
     .map((page) => page.productList.edges.map((item) => item?.node))
     .flat()
@@ -43,7 +42,8 @@ const ProductList = ({
       return {
         ...item,
       };
-    });
+    })
+    .slice(0, 4);
 
   useEffect(() => {
     changeCategory1(category1);
@@ -59,15 +59,15 @@ const ProductList = ({
     <div className="w-full">
       {/* 반응형 여기 수정  */}
       <div className="w-full flex flex-wrap justify-between">
-        {list.slice(0, 4).map((item, idx) => {
+        {list.map((item, idx) => {
           return (
             <상품이미지Component
               key={idx}
               item={item as Product}
               mobileWidth={160}
               mobileHeight={160}
-              pcWidth={type === "main" ? 448 : 384}
-              pcHeight={type === "main" ? 345 : 295}
+              pcWidth={448}
+              pcHeight={345}
             />
           );
         })}
@@ -85,4 +85,4 @@ const ProductList = ({
   );
 };
 
-export default ProductList;
+export default ProductListMain;

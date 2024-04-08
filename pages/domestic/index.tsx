@@ -3,11 +3,11 @@ import Head from "next/head";
 
 function Home() {
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col items-start w-full h-full">
       <Head>
         <title>Home</title>
       </Head>
-      <div style={{ minHeight: 40 }} />
+      <div className="min-h-10" />
       <국내골프Page />
     </div>
   );
