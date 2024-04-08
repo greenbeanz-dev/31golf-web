@@ -1,12 +1,14 @@
+import { 제주골프Page } from "@component/page/제주골프Page";
 import Head from "next/head";
 
 function Home() {
   return (
-    <div className="flex flex-col items-center w-full h-full">
+    <div className="flex flex-col items-start w-full h-full">
       <Head>
         <title>Home</title>
       </Head>
-      <div>hihi2</div>
+      <div className="min-h-10" />
+      <제주골프Page />
     </div>
   );
 }

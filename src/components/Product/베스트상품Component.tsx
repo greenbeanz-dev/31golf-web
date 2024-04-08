@@ -12,12 +12,10 @@ const mainImageList = [
     price: 246000,
   },
   {
-    id: 11,
-    url: "/images/logo/golf_img2.png",
-    title: "남해 사우스케이프 C.C 1박 2일 (36홀)",
-    description:
-      "크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을 해보세요.",
-    price: 775000,
+    url: "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f",
+    title: "그린필드CC 당일 18홀",
+    description: "새로운 이름 새로운 느낌",
+    price: 500000,
   },
   {
     id: 12,

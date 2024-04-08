@@ -171,6 +171,11 @@ builder.prismaObject("product", {
       nullable: true,
       resolve: (product) => product.cancellation_policy,
     }),
+    thumbnailImage: t.field({
+      type: "String",
+      nullable: true,
+      resolve: (product) => product.thumbnail_image,
+    }),
   }),
 });
 
@@ -201,6 +206,7 @@ builder.queryField("productList", (t) =>
         where: {
           AND: [
             { is_block: false },
+            { is_active: true },
             _args.isActive !== null && _args.isActive !== undefined
               ? { is_active: _args.isActive }
               : {},
@@ -426,6 +432,7 @@ builder.mutationField("createProduct", (t) =>
       scheduleTablePc: t.arg.string(),
       courseAddress: t.arg.string(),
       cancellationPolicy: t.arg.string(),
+      thumbnailImage: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.product.create({
@@ -463,6 +470,7 @@ builder.mutationField("createProduct", (t) =>
           schedule_table_pc: _args.scheduleTablePc,
           course_address: _args.courseAddress,
           cancellation_policy: _args.cancellationPolicy,
+          thumbnail_image: _args.thumbnailImage,
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
         },
@@ -509,6 +517,7 @@ builder.mutationField("updateProductById", (t) =>
       scheduleTablePc: t.arg.string(),
       courseAddress: t.arg.string(),
       cancellationPolicy: t.arg.string(),
+      thumbnailImage: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.product.update({
@@ -548,6 +557,7 @@ builder.mutationField("updateProductById", (t) =>
           schedule_table_pc: _args.scheduleTablePc,
           course_address: _args.courseAddress,
           cancellation_policy: _args.cancellationPolicy,
+          thumbnail_image: _args.thumbnailImage,
           updated_at: new Date(Date.now()).toISOString(),
         },
       });
