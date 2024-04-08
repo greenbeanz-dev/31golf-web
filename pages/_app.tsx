@@ -24,7 +24,6 @@ export const theme = {
     secondary: "#FF502A",
   },
 };
-
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>

@@ -1,13 +1,5 @@
-import { 상품이미지Component } from "@component/Image/상품이미지Component";
 import { 베스트상품Component } from "@component/Product/베스트상품Component";
-import {
-  Button,
-  Divider,
-  Input,
-  Navbar,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/react";
+import { Button, Divider, Input } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -20,6 +12,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useLogin from "../../utils/login/useLogin";
+import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -32,11 +25,10 @@ const 메인Page = () => {
       price: 246000,
     },
     {
-      url: "/images/logo/golf_img2.png",
-      title: "남해 사우스케이프 C.C 1박 2일 (36홀)",
-      description:
-        "크고 작은 섬들로 장식되어 있는 바다를 계속 조망하면서 라운딩을 해보세요.",
-      price: 775000,
+      url: "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f",
+      title: "그린필드CC 당일 18홀",
+      description: "새로운 이름 새로운 느낌",
+      price: 500000,
     },
     {
       url: "/images/logo/golf_img3.png",
@@ -118,14 +110,14 @@ const 메인Page = () => {
           <div className={isMobile ? "min-h-[48px]" : "min-h-[36px]"} />
           {/* 투어 전체보기 */}
           <div
-            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
+            className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-6 ${isMobile ? "" : "items-end"}`}
           >
             <div className="text-xl font-bold">투어 전체보기</div>
             <div className="text-[16px] leading-6 opacity-70">
               삼일골프의 다양한 투어 상품을 만나보세요!
             </div>
           </div>
-          <TabBar />
+          <ProdudctTabBarMain />
         </div>
       </div>
       {/* </Suspense> */}
@@ -394,144 +386,4 @@ const MobileMenu = () => {
   );
 };
 
-const TabBar = () => {
-  const navItem = [
-    {
-      label: "국내골프",
-      name: "domestic",
-    },
-    {
-      label: "제주골프",
-      name: "jeju",
-    },
-    {
-      label: "해외골프",
-      name: "overseas",
-    },
-  ];
-  const [tab, setTab] = useState("domestic");
-  return (
-    <>
-      <Navbar
-        // isBordered
-        classNames={{
-          wrapper: ["px-0", "cursor-pointer", "max-w-[1200px]"],
-          item: [
-            "flex",
-            "relative",
-            "h-[30px]",
-            "cursor-pointer",
-            "items-end",
-            "justify-end",
-            "data-[active=true]:after:content-['']",
-            "data-[active=true]:after:absolute",
-            "data-[active=true]:after:bottom-0",
-            "data-[active=true]:after:left-0",
-            "data-[active=true]:after:right-0",
-            "data-[active=true]:after:h-[2px]",
-            "data-[active=true]:after:rounded-[2px]",
-            "data-[active=true]:after:bg-sky-900",
-          ],
-          menu: ["px-0"],
-        }}
-      >
-        <NavbarContent className="flex px-0">
-          {navItem.map((item) => {
-            return (
-              <NavbarItem
-                className="px-4"
-                key={item.label}
-                isActive={tab === item.name}
-                onClick={() => {
-                  setTab(item.name);
-                }}
-              >
-                {item.label}
-              </NavbarItem>
-            );
-          })}
-        </NavbarContent>
-      </Navbar>
-      <div className="min-h-[12px]" />
-      {tab == "domestic" && (
-        <div>
-          <DomesticTab />
-        </div>
-      )}
-      {tab == "jeju" && (
-        <div>
-          <DomesticTab />
-        </div>
-      )}
-      {tab == "overseas" && (
-        <div>
-          <DomesticTab />
-        </div>
-      )}
-    </>
-  );
-};
-
-const DomesticTab = () => {
-  const isMobile = useIsMobile();
-
-  const ImageList = [
-    {
-      url: "/images/logo/golf_img1.png",
-      title: "여수 디오션 C.C 1박 2일 (36홀)1",
-      description: "바다를 품은 골프장1!",
-      price: 246000,
-      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
-    },
-    {
-      url: "/images/logo/golf_img2.png",
-      title: "여수 디오션 C.C 1박 2일 (36홀)2",
-      description: "바다를 품은 골프장2!",
-      price: 246001,
-      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
-    },
-    {
-      url: "/images/logo/golf_img1.png",
-      title: "여수 디오션 C.C 1박 2일 (36홀)3",
-      description: "바다를 품은 골프장3!",
-      price: 246003,
-      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
-    },
-    {
-      url: "/images/logo/golf_img2.png",
-      title: "여수 디오션 C.C 1박 2일 (36홀)4",
-      description: "바다를 품은 골프장4!",
-      price: 246004,
-      contents: ["36홀", "1박 2일", "조식/중식/석식 포함", "교통편 포함"],
-    },
-  ];
-  return (
-    <div className="w-full">
-      {/* 반응형 여기 수정  */}
-      <div className="w-full flex flex-wrap justify-between">
-        {ImageList.map((item, idx) => {
-          return (
-            <상품이미지Component
-              key={idx}
-              item={item}
-              mobileWidth={160}
-              mobileHeight={160}
-              pcWidth={448}
-              pcHeight={345}
-            />
-          );
-        })}
-      </div>
-      <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
-        <Image
-          alt="circle"
-          src={"/images/logo/add-circle.png"}
-          width={24}
-          height={24}
-        />
-        투어 상품 더보기
-      </Button>
-    </div>
-  );
-};
 export default 메인Page;

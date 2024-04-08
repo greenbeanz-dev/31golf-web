@@ -36,6 +36,7 @@ import { PiForkKnifeFill } from "react-icons/pi";
 import { TbFlag3Filled } from "react-icons/tb";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import Image from "next/image";
 
 const HEADER_HEIGHT = 95;
 
@@ -43,11 +44,11 @@ const HEADER_HEIGHT = 95;
 const productId = 2553;
 const customerId = 39714;
 const customerName = "최경민";
-const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
+const title = "그린필드CC 당일 18홀";
 // const dateDeparture = new Date("2024.05.08");
 // const startDate = "2024.05.08(수)";
 // const endDate = "2024.05.09(목)";
-const desc = "( 2~3인 진행 시 별도 문의 부탁드립니다)";
+const desc = "(2~3인 진행 시 별도 문의 부탁드립니다)";
 const daysDay = 1;
 const daysNight = 2;
 // const price = 0;
@@ -86,9 +87,9 @@ export function 골프상세Page() {
   }, []);
 
   const isMobile = useIsMobile();
-  const PC_MESSAGE = "남해 사우스케이프 C.C 1박 2일 (36홀)";
-  const MOBILE_MESSAGE = "남해 사우스케이프 C.C ";
-  const MOBILE_CONTENT = ["36홀", "1박 2일"];
+  const PC_MESSAGE = "그린필드CC 당일 18홀";
+  const MOBILE_MESSAGE = "그린필드 CC";
+  const MOBILE_CONTENT = ["18홀", "당일"];
 
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
@@ -128,7 +129,14 @@ export function 골프상세Page() {
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex-1">
-          <img src={"/images/logo/detail_image.png"} width={640} height={492} />
+          <Image
+            alt="detail_image"
+            src={
+              "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
+            }
+            width={640}
+            height={492}
+          />
         </div>
         <div style={{ minWidth: 24 }} />
         <div style={{ minHeight: isMobile ? 16 : 0 }} />
@@ -821,7 +829,7 @@ const 투어예약하기Button = ({ onOpen }: { onOpen: () => void }) => {
 
 const GuideInfo = ({ icon, label, value }) => (
   <>
-    <div className="h-9 px-4 py-2 bg-sky-900 bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
+    <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
       <div className="w-4 h-3 relative">{icon}</div>
       <div className="text-black text-opacity-70 text-sm font-normal">
         {label}
