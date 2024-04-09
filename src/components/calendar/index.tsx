@@ -12,6 +12,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
+// TODO: 달력 date: M 형식으로 변경
+// TODO: 달력 내 date 컴포넌트 스타일
+// TODO: 달력 내 date 컴포넌트 전체 선택 가능하도록 수정
 interface I상품캘린더Props {
   판매가: number;
   set판매가: Dispatch<SetStateAction<number>>;
@@ -178,7 +181,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
-      <div style={{ height: 360 }}>
+      <div style={{ height: 354 }}>
         <Calendar
           backgroundColor={"#fff"}
           localizer={localizer}

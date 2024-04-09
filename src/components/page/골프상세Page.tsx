@@ -34,6 +34,8 @@ import gqlClient from "@/gql/gqlClient";
 import { ImageListByProductIdQuery } from "@/gql/query/productImage/crud";
 import 상품결제정보 from "@component/organism/상품결제정보";
 import 상품예약버튼 from "@component/organism/상품예약버튼";
+import dayjs from "dayjs";
+import 상품일정상세 from "@component/organism/상품일정상세";
 
 const HEADER_HEIGHT = 95;
 
@@ -44,6 +46,7 @@ export function 골프상세Page({ productId }: { productId: number }) {
   const productRef = useRef(null);
 
   const 예약가이드Ref = useRef(null);
+  // TODO: 스크롤 내릴 때 page의 width가 변경됨
   const scrollYRef = useRef(0);
   const [fixed, setFixed] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -116,9 +119,9 @@ export function 골프상세Page({ productId }: { productId: number }) {
   // const MOBILE_CONTENT_ROUNDS =
   //   data?.type?.split(" ").pop()?.replace("(", "").replace(")", "") || "";
   const MOBILE_CONTENT = [data?.type];
-  const DAYS_DAY =
-    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[0]);
   const DAYS_NIGHT =
+    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[0]);
+  const DAYS_DAY =
     data?.type === "당일" ? 1 : Number(data?.type?.split("박")[1][0]);
 
   const [showDetail, setShowDetail] = useState(false);
@@ -140,35 +143,48 @@ export function 골프상세Page({ productId }: { productId: number }) {
   };
 
   const endDate = new Date(출발일);
-  endDate.setDate(endDate.getDate() + DAYS_NIGHT - DAYS_DAY);
+  endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
 
-  const year = 출발일.getFullYear();
-  const month = String(출발일.getMonth() + 1).padStart(2, "0");
-  const day = String(출발일.getDate()).padStart(2, "0");
-  const formatted출발일 = `${year}.${month}.${day}`;
+  const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
+  const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
 
-  const endYear = endDate.getFullYear();
-  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
-  const endDay = String(endDate.getDate()).padStart(2, "0");
+  const schedule = `${formatted출발일} ~ ${formatted도착일} (${DAYS_NIGHT}박 ${DAYS_DAY}일)`;
 
-  const formatted도착일 = `${endYear}.${endMonth}.${endDay}`;
-
-  const schedule = `${formatted출발일} ~ ${formatted도착일} (${DAYS_DAY}박 ${DAYS_NIGHT}일)`;
+  const inclusiveList = data?.inclusives
+    ? data.inclusives
+        .split(",")
+        .map((item) =>
+          item.split("_@_").length === 2
+            ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+            : item.split("_@_")[0]
+        )
+    : [];
+  const exclusiveList = data?.exclusives
+    ? data.exclusives
+        .split(",")
+        .map((item) =>
+          item.split("_@_").length === 2
+            ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+            : item.split("_@_")[0]
+        )
+    : [];
 
   return (
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex-1">
-          <Image
-            className="rounded-[24px]"
-            alt="detail_image"
-            src={
-              // data?.thumbnailImage ||
-              "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
-            }
-            width={640}
-            height={492}
-          />
+          <div className="min-w-[640px] min-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
+            <Image
+              className="rounded-[24px]"
+              alt="detail_image"
+              src={
+                // data?.thumbnailImage ||
+                "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
+              }
+              width={640}
+              height={492}
+            />
+          </div>
         </div>
         <div style={{ minWidth: 24 }} />
         <div style={{ minHeight: isMobile ? 16 : 0 }} />
@@ -188,29 +204,29 @@ export function 골프상세Page({ productId }: { productId: number }) {
               </BreadcrumbItem>
             )}
           </Breadcrumbs>
-          <div style={{ minHeight: 8 }} />
-          <div className={`font-bold ${isMobile ? "text-xl" : "text-4xl"}`}>
+          <div className="pt-2" />
+          <div
+            className={`font-bold ${isMobile ? "text-[20px]" : "text-[28px]"}`}
+          >
             {isMobile ? `${MOBILE_MESSAGE}` : `${PC_MESSAGE}`}
           </div>
           {isMobile && (
             <>
-              <div style={{ minHeight: 8 }} />
+              <div className="pt-2" />
               <div className="flex gap-1">
                 {MOBILE_CONTENT.map((content, idx) => (
                   <div key={idx} className="relative inline-block">
                     <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
-                      <div className="text-green-500 text-sm font-normal">
-                        {content}
-                      </div>
+                      <div className="text-green-500 text-sm">{content}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </>
           )}
-          <div style={{ minHeight: 8 }} />
-          <div className="text-base font-normal">{data?.summary}</div>
-          <div style={{ minHeight: 10 }} />
+          <div className="pt-2" />
+          <div className="text-[16px] opacity-70">{data?.summary}</div>
+          <div className="pt-[10px]" />
           <Suspense fallback={<div>Loading...</div>}>
             <상품캘린더
               판매가={판매가}
@@ -228,7 +244,10 @@ export function 골프상세Page({ productId }: { productId: number }) {
           <div className="w-full">
             {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
             <div style={{ minHeight: 40 }} />
-            <일정상세 />
+            <상품일정상세
+              inclusiveList={inclusiveList}
+              exclusiveList={exclusiveList}
+            />
             <div style={{ minHeight: 24 }} />
             <Divider />
             <div style={{ minHeight: 40 }} />
@@ -387,159 +406,6 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
   );
 };
 
-const 일정상세 = () => {
-  const planList = [
-    {
-      day: 1,
-      item: [
-        {
-          title: "개인출발",
-          time: 9,
-          icon: <FaCarSide size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "골프장 도착",
-          time: 11,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "오후-남해사우스케이프오너스 C.C",
-          time: 13,
-          icon: <FaGolfBallTee size={24} color={theme.colors.primary} />,
-        },
-      ],
-      hotel: "가든스위트 리조트(2인 1실)",
-      meal: "조식/중식/석식",
-    },
-    {
-      day: 2,
-      item: [
-        {
-          title: "체크아웃/골프장이동",
-          time: 0,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "조식",
-          time: 11,
-          icon: <PiForkKnifeFill size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "골프장 출발",
-          time: 13,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-      ],
-      hotel: "가든스위트 리조트(2인 1실)",
-      meal: "조식/중식/석식",
-    },
-  ];
-  const includeList = [
-    "가든스위트리조트(2인실)",
-    "조식 1회 / 석식 1회",
-    "그린피 36홀",
-    "와인바크레딧 5만 원(2인 기준)",
-  ];
-  const excludeList = [
-    "중식",
-    "캐디피",
-    "전동카",
-    "교통편",
-    "개별소비세(19홀 당 21,120원)",
-  ];
-  const isMobile = useIsMobile();
-  return (
-    <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
-      <div
-        className="flex"
-        // style={{ flex: 2 }}
-        style={{
-          flex: 2,
-          alignItems: "flex-start",
-        }}
-      >
-        <div className="w-full">
-          <div className="text-xl font-bold">일정 상세</div>
-          {isMobile && <div style={{ minHeight: 24 }} />}
-          <Accordion variant="light" selectionMode="multiple">
-            {planList.map((data, index) => (
-              <AccordionItem
-                key={index}
-                title={`${data.day}일차`}
-                indicator={
-                  <IoIosArrowDown size={24} color={theme.colors.primary} />
-                }
-              >
-                <>
-                  {data.item.map((item, idx) => (
-                    <div key={idx}>
-                      <PlanItem
-                        icon={item.icon}
-                        title={item.title}
-                        time={item.time}
-                      />
-                      {idx !== data.item.length - 1 && (
-                        <div style={{ minHeight: 8 }} />
-                      )}
-                    </div>
-                  ))}
-                  <div style={{ minHeight: 16 }} />
-                  <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
-                    <GuideInfo
-                      icon={<FaBed size={16} color={theme.colors.primary} />}
-                      label="호텔"
-                      value={data.hotel}
-                    />
-                  </div>
-                  <div style={{ minHeight: 8 }} />
-                  <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
-                    <GuideInfo
-                      icon={
-                        <GiHotMeal size={16} color={theme.colors.primary} />
-                      }
-                      label="식사"
-                      value={data.meal}
-                    />
-                  </div>
-                </>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </div>
-      <div style={{ minWidth: 32 }} />
-      <div className="flex" style={{ flex: 1 }}>
-        <div className="w-full">
-          {isMobile && <div style={{ minHeight: 24 }} />}
-          <div className="text-xl font-bold">포함 사항</div>
-          <div style={{ minHeight: 24 }} />
-          {includeList.map((item, idx) => (
-            <div key={idx} className="flex items-center gap-2">
-              <AiFillPlusSquare size={16} color={theme.colors.primary} />
-              {item}
-            </div>
-          ))}
-          <div style={{ minHeight: 40 }} />
-          {isMobile && (
-            <>
-              <Divider />
-              <div style={{ minHeight: 40 }} />
-            </>
-          )}
-          <div className="text-xl font-bold">불포함 사항</div>
-          <div style={{ minHeight: 24 }} />
-          {excludeList.map((item, idx) => (
-            <div key={idx} className="flex items-center gap-2">
-              <BiSolidMinusSquare size={16} color={theme.colors.secondary} />
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const 이용특정및참고사항 = () => {
   const 참고사항 = [
     "진행 시 패키지 2인 요금 입금 확인 후 진행 확정입니다.",
@@ -691,36 +557,6 @@ const GolfDetail = () => {
     </div>
   );
 };
-
-const GuideInfo = ({ icon, label, value }) => (
-  <>
-    <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
-      <div className="w-4 h-3 relative">{icon}</div>
-      <div className="text-black text-opacity-70 text-sm font-normal">
-        {label}
-      </div>
-    </div>
-    <div className="grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
-      {value}
-    </div>
-  </>
-);
-
-const PlanItem = ({ icon, title, time }) => (
-  <div className="h-14 p-2 bg-black bg-opacity-5 rounded-xl justify-between items-center inline-flex w-full">
-    <div className="h-10 justify-start items-center gap-2 flex">
-      <div className="w-10 h-10 bg-white rounded-xl justify-center items-center gap-2.5 flex">
-        <div className="w-6 h-5 relative">{icon}</div>
-      </div>
-      <div className="text-black text-base">{title}</div>
-    </div>
-    {/* <div className="h-5 pr-2 justify-between items-center flex">
-      <div className="w-12 text-right text-black text-opacity-70 text-sm font-normal">
-        {time}:00
-      </div>
-    </div> */}
-  </div>
-);
 
 const Step = ({ number, description1, description2, icon }) => (
   <div
