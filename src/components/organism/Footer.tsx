@@ -1,4 +1,5 @@
 import { Divider } from "@nextui-org/react";
+import Image from "next/image";
 
 export const Footer = () => {
   const list = [
@@ -53,14 +54,13 @@ export const Footer = () => {
         </div>
       </div>
       <div className="h-4" />
-      <div
-        style={{
-          marginLeft: "32px",
-          paddingLeft: "5%",
-          paddingRight: "5%",
-        }}
-      >
-        <img src={"/images/logo/31Logo.png"} />
+      <div className="pl-8">
+        <Image
+          alt="footer_logo"
+          src={"/images/logo/31Logo.png"}
+          width={180}
+          height={78.96}
+        />
         <div className="h-4" />
         <div className="flex gap-4">
           {firstRow.map((item, idx) => (

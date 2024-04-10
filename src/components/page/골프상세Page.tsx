@@ -36,6 +36,8 @@ import 상품결제정보 from "@component/organism/상품결제정보";
 import 상품예약버튼 from "@component/organism/상품예약버튼";
 import dayjs from "dayjs";
 import 상품일정상세 from "@component/organism/상품일정상세";
+import 상품이용특전 from "@component/organism/상품이용특전";
+import 상품유의사항 from "@component/organism/상품유의사항";
 
 const HEADER_HEIGHT = 95;
 
@@ -237,29 +239,29 @@ export function 골프상세Page({ productId }: { productId: number }) {
           </Suspense>
         </div>
       </div>
-      <div style={{ minHeight: 32 }} />
+      <div className="pt-8" />
       {/* 예약 가이드  */}
       <div className="flex">
-        <div className="flex" style={{ flex: 2 }}>
+        <div className="flex flex-2">
           <div className="w-full">
             {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
-            <div style={{ minHeight: 40 }} />
+            <div className="pt-10" />
             <상품일정상세
               inclusiveList={inclusiveList}
               exclusiveList={exclusiveList}
             />
-            <div style={{ minHeight: 24 }} />
+            <div className="pt-6" />
             <Divider />
-            <div style={{ minHeight: 40 }} />
-            <이용특정및참고사항 />
-            <div style={{ minHeight: 40 }} />
+            <div className="pt-10" />
+            <상품이용특전 benefit={data?.benefit || ""} />
+            <div className="pt-10" />
             <Divider />
-            <div style={{ minHeight: 40 }} />
-            <유의사항 />
+            <div className="pt-10" />
+            <상품유의사항 notice={data?.notice || ""} />
             {/* <div style={{ minHeight: 40 }} />
             <ButtonList /> */}
-            <div style={{ minHeight: 24 }} />
-            <GolfDetail />
+            <div className="pt-6" />
+            {/* <GolfDetail /> */}
           </div>
         </div>
         {!isMobile && (
@@ -403,114 +405,6 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
         />
       </div>
     </div>
-  );
-};
-
-const 이용특정및참고사항 = () => {
-  const 참고사항 = [
-    "진행 시 패키지 2인 요금 입금 확인 후 진행 확정입니다.",
-    "객실 업그레이드 / 타입 변경 시 요금이 추가됩니다.",
-    "팀수 변동이나 취소는 1팀 ~ 2팀의 경우 15일 전 / 3팀 이상은 22일 전 / 5팀 이상은 31일 전까지만 가능합니다. (이후 변경 시 위약금 발생)",
-    "기상 악화로 인하여 골프장이 크로스되어도, 숙소 요금은 환불이 불가능합니다.",
-    "석식 메뉴 : 남해 심해 통발 장어구이, 남해 자연산 활어회, 남해우 한식스테이크 중 1개 메뉴 선택",
-    "9홀 라운딩 후 최소 20분, 최대 50분의 휴식시간이 있습니다.",
-    "게스트하우스(골프스테이) 이용 시 골프매니아 PKG 적용, 별도 요금 할인됩니다.",
-    "모든 삼일골프 회원님들이 VIP 입니다. 사우스케이프로 초대합니다.",
-    "남해를 골프투어하는 2박 3일, 3박 4일 맞춤 패키지 진행 가능합니다.",
-  ];
-  return (
-    <>
-      <div className="text-xl font-bold">이용특전 및 참조사항</div>
-      <div style={{ minHeight: 16 }} />
-      {참고사항.map((data, idx) => (
-        <>
-          <li>{data}</li>
-          {idx === 4 && (
-            <div style={{ marginLeft: "1rem" }}>
-              (남해우 한식스테이크 주문 시 1인당 20,000원 별도 추가, 현장결제
-              또는 선결제 가능)
-            </div>
-          )}
-        </>
-      ))}
-    </>
-  );
-};
-
-const 유의사항 = () => {
-  const 계약안내 = [
-    "예약금 입금 후에 행사 진행됩니다. (잔금은 출발 15일 전까지)",
-    "예약자명이 아닌 다른 이름으로 입금 시 꼭 확인 전화 부탁드립니다.",
-  ];
-  const 환불규정 = [
-    {
-      title: "패키지 티업시간 확정 후 취소 시 1인 2만 원 위약금이 적용됩니다.",
-    },
-    {
-      title:
-        "다만, 골프장 룰 기준에 따라 위약금과 환불 기간이 달라질 수 있습니다.",
-    },
-    {
-      title:
-        "1~2팀 : 행사 30~22일 전 취소 - 계약금 및 입금액 전액 환불 (단, 예약 확정 시 1인 2만 원 취소 수수료 부과)",
-      subTitle: [
-        "행사 21~15일 전 취소 : 상품가의 30%를 취소료로 부과",
-        "행사 14~8일 전 취소 : 상품가의 40%를 취소료로 부과",
-        "행사 7~14일 전 취소 : 상품가의 100%를 취소료로 부과 (환불 불가)",
-      ],
-    },
-    {
-      title:
-        "단, 주말(금/토) 출발 상품 또는 3팀 이상의 단체는 추가로 별도의 취소 수수료 부과",
-    },
-    {
-      title: "패키지 티업 시간 확정 후 취소 시 1인 2만 원 위약금 적용됩니다.",
-      subTitle: [
-        "행사 20~8일 전 취소 : 예약금 환불 불가",
-        "행사 7일 전 ~ 당일 취소 : 패키지 상품 가격 기준 총 경비 전액 환불 불가",
-      ],
-    },
-  ];
-  return (
-    <>
-      <div className="text-xl font-bold">유의사항</div>
-      <div style={{ minHeight: 16 }} />
-      <div
-        style={{
-          fontSize: 14,
-          fontWeight: "bold",
-        }}
-      >
-        [계약 및 입금 안내]
-      </div>
-      {계약안내.map((data, idx) => (
-        <li key={idx}>{data}</li>
-      ))}
-      <div
-        style={{
-          fontSize: 14,
-          fontWeight: "bold",
-        }}
-      >
-        [여행자의 계약해지 요청 시 환불 규정]
-      </div>
-      {환불규정.map((data) => (
-        <>
-          <li>{data.title}</li>
-          {data.subTitle &&
-            data.subTitle.map((item, idx) => (
-              <li
-                key={idx}
-                style={{
-                  marginLeft: "1rem",
-                }}
-              >
-                {item}
-              </li>
-            ))}
-        </>
-      ))}
-    </>
   );
 };
 
