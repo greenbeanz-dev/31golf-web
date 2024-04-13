@@ -1,43 +1,34 @@
+import gqlClient from "@/gql/gqlClient";
+import { ImageListByProductIdQuery } from "@/gql/query/productImage/crud";
 import { 상품캘린더 } from "@component/calendar";
 import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
+import 상품결제정보 from "@component/organism/상품결제정보";
+import 상품예약버튼 from "@component/organism/상품예약버튼";
+import 상품유의사항 from "@component/organism/상품유의사항";
+import 상품이용특전 from "@component/organism/상품이용특전";
+import 상품일정상세 from "@component/organism/상품일정상세";
 import {
-  Accordion,
-  AccordionItem,
   BreadcrumbItem,
   Breadcrumbs,
   Button,
   Divider,
   useDisclosure,
 } from "@nextui-org/react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { AiFillPlusSquare } from "react-icons/ai";
-import { BiSolidMinusSquare } from "react-icons/bi";
 import { BsBuildingFillCheck } from "react-icons/bs";
 import {
-  FaBed,
-  FaCarSide,
   FaCheckToSlot,
   FaGolfBallTee,
   FaRegCalendarPlus,
 } from "react-icons/fa6";
-import { GiHotMeal } from "react-icons/gi";
-import { IoIosArrowDown, IoIosArrowRoundForward } from "react-icons/io";
+import { IoIosArrowRoundForward } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { PiForkKnifeFill } from "react-icons/pi";
-import { TbFlag3Filled } from "react-icons/tb";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import Image from "next/image";
 import useProductBy from "../../service/product/useProductBy";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import gqlClient from "@/gql/gqlClient";
-import { ImageListByProductIdQuery } from "@/gql/query/productImage/crud";
-import 상품결제정보 from "@component/organism/상품결제정보";
-import 상품예약버튼 from "@component/organism/상품예약버튼";
-import dayjs from "dayjs";
-import 상품일정상세 from "@component/organism/상품일정상세";
-import 상품이용특전 from "@component/organism/상품이용특전";
-import 상품유의사항 from "@component/organism/상품유의사항";
 
 const HEADER_HEIGHT = 95;
 
@@ -122,9 +113,12 @@ export function 골프상세Page({ productId }: { productId: number }) {
   //   data?.type?.split(" ").pop()?.replace("(", "").replace(")", "") || "";
   const MOBILE_CONTENT = [data?.type];
   const DAYS_NIGHT =
-    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[0]);
-  const DAYS_DAY =
-    data?.type === "당일" ? 1 : Number(data?.type?.split("박")[1][0]);
+    data?.type === data?.type?.includes("당일")
+      ? 1
+      : Number(data?.type?.split("박")[0]);
+  const DAYS_DAY = data?.type?.includes("당일")
+    ? 1
+    : Number(data?.type?.split("박")[1][0]);
 
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
