@@ -13,6 +13,14 @@
   color: white !important;
 }
 
+.rbc-day-bg-deadline {
+  flex: 1 0 0% !important;
+  border: 1px solid white !important;
+  border-radius: 5px !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+
 .rbc-off-range-bg {
   background-color: #e6e6e6 !important;
   border-radius: 5px !important;
@@ -33,6 +41,8 @@
 
 .rbc-header {
   border-bottom: 1px solid white !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
 }
 
 .rbc-header + .rbc-header {
