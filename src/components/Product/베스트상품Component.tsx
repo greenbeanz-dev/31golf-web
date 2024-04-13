@@ -1,10 +1,10 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import Image from "next/image";
 
 const mainImageList = [
   {
-    id: 10,
+    id: 2553,
     url: "/images/logo/golf_img1.png",
     title: "여수 디오션 C.C 1박 2일 (36홀)",
     description:
@@ -12,13 +12,14 @@ const mainImageList = [
     price: 246000,
   },
   {
+    id: 2553,
     url: "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f",
     title: "그린필드CC 당일 18홀",
     description: "새로운 이름 새로운 느낌",
     price: 500000,
   },
   {
-    id: 12,
+    id: 2553,
     url: "/images/logo/golf_img3.png",
     title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
     description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
