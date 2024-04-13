@@ -1,4 +1,5 @@
 import { 베스트상품Component } from "@component/Product/베스트상품Component";
+import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
 import { Button, Divider, Input } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -12,7 +13,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useLogin from "../../utils/login/useLogin";
-import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -358,7 +358,7 @@ const MobileMenu = () => {
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {
-              router.push(item.herf as string);
+              router.push(`/${item.herf as string}`);
             }}
           >
             {item.icon}
@@ -374,7 +374,7 @@ const MobileMenu = () => {
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {
-              router.push(item.herf as string);
+              router.push(`/${item.herf as string}`);
             }}
           >
             {item.icon}

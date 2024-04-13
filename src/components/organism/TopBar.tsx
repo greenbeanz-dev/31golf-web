@@ -1,6 +1,6 @@
 import { Link, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
-import { useRouter } from "next/router";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const navItem = [
   {
@@ -65,7 +65,7 @@ export default function Topbar() {
               key={item.label}
               isActive={pathname === item.href}
             >
-              <Link color="foreground" href={item.href}>
+              <Link color="foreground" href={`/${item.href}`}>
                 {item.label}
               </Link>
             </NavbarItem>

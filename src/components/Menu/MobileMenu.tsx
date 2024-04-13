@@ -66,7 +66,7 @@ export function MobileMenu() {
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {
-              router.push(item.herf as string);
+              router.push(`/${item.herf as string}`);
             }}
           >
             {item.icon}
@@ -82,7 +82,7 @@ export function MobileMenu() {
             className="flex flex-col items-center gap-2"
             style={{ width: 72 }}
             onClick={() => {
-              router.push(item.herf as string);
+              router.push(`/${item.herf as string}`);
             }}
           >
             {item.icon}
