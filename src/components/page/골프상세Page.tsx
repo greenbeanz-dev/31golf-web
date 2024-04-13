@@ -264,8 +264,9 @@ export function 골프상세Page({ productId }: { productId: number }) {
             <div className="flex h-full" ref={productRef} style={{ flex: 1 }}>
               <div
                 style={{
-                  position: fixed ? "fixed" : "relative",
-                  top: fixed ? `${HEADER_HEIGHT}px` : "0px", // header height만큼 넣어줘야 이쁘게 스크롤 됨
+                  position: fixed ? "fixed" : "absolute",
+                  top: fixed ? `${HEADER_HEIGHT}px` : `700px`, // header height만큼 넣어줘야 이쁘게 스크롤 됨
+                  width: "354px",
                 }}
               >
                 <상품예약버튼
