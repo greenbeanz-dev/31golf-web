@@ -186,7 +186,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const handleSlot = (slot) => {
-    console.log("slot", slot);
     const calendarDate = new Date(slot.start).getDate();
     if (임시예약마감일.includes(calendarDate) || slot.extendedProps?.offDay)
       return;
