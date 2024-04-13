@@ -12,9 +12,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
-// TODO: 달력 date: M 형식으로 변경
-// TODO: 달력 내 date 컴포넌트 스타일
-// TODO: 달력 내 date 컴포넌트 전체 선택 가능하도록 수정
+const 임시예약마감일 = [1, 2];
 interface I상품캘린더Props {
   판매가: number;
   set판매가: Dispatch<SetStateAction<number>>;
@@ -65,13 +63,22 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       };
     });
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+
   const events =
     list &&
     list.map((elem) => {
+      const eventDate = new Date(elem.date);
+      const eventMonth = eventDate.getMonth(); // 이벤트의 월 가져오기
+      const offDay = eventMonth !== currentMonth;
       return {
         title: `${(elem.price || 0).toLocaleString()}`,
         start: new Date(elem.date),
         end: new Date(elem.date),
+        extendedProps: {
+          offDay: offDay,
+        },
       };
     });
 
@@ -122,12 +129,15 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const CustomDateCellWrapper = (props) => {
     const isSelected = isSameDate(props.value, selectedDate);
+    const calendarDate = new Date(props.value).getDate();
     return (
       <div
         className={
           isSelected
             ? `${props.children.props.className}-selected`
-            : props.children.props.className
+            : 임시예약마감일.includes(calendarDate)
+              ? `${props.children.props.className}-deadline`
+              : props.children.props.className
         }
       >
         {props.children}
@@ -137,25 +147,37 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const CustomDateHeader = (props) => {
     const isSelected = isSameDate(props.date, selectedDate);
+    const isOffday = props.isOffRange;
+
     return (
       <div
         style={{
+          padding: 5,
+          fontSize: "12px",
+          fontWeight: "700",
           color: isSelected ? "white" : "black",
+          opacity: isOffday ? 0.2 : 1,
         }}
       >
-        {props.label}
+        {props.label.startsWith("0")
+          ? props.label.replace("0", "")
+          : props.label}
       </div>
     );
   };
 
   const CustomEventContent = (props) => {
     const isSelected = isSameDate(props.event.start, selectedDate);
+    const ifOffday = props.event.extendedProps.offDay;
 
     return (
       <div
         style={{
           color: isSelected ? "white" : "black",
-          fontSize: isMobile ? 10 : 14,
+          fontSize: isMobile ? 10 : 12,
+          fontWeight: "400",
+          textAlign: "end",
+          opacity: ifOffday ? 0.2 : 1,
         }}
       >
         {props.event.title}
@@ -164,6 +186,10 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const handleSlot = (slot) => {
+    console.log("slot", slot);
+    const calendarDate = new Date(slot.start).getDate();
+    if (임시예약마감일.includes(calendarDate) || slot.extendedProps?.offDay)
+      return;
     setSelectedDate(slot.start);
 
     const price = events?.find((event) =>
@@ -194,8 +220,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           selectable={true}
           onSelectSlot={handleSlot}
           onSelectEvent={(event, e) => {
-            console.log("event");
-            // 클릭 이벤트를 처리하지 않음
+            handleSlot(event);
           }}
           components={{
             toolbar: CustomToolbar,
@@ -217,6 +242,7 @@ const CustomToolbar = (toolbar) => {
   };
 
   const goToNext = () => {
+    console.log("NEXT");
     toolbar.onNavigate("NEXT");
   };
 
@@ -244,6 +270,7 @@ const CustomToolbar = (toolbar) => {
           className="rbc-toolbar-label text-opacity-70"
           style={{
             fontSize: 20,
+            fontWeight: 700,
           }}
         >
           {label}
@@ -251,7 +278,7 @@ const CustomToolbar = (toolbar) => {
         <IoIosArrowForward size={24} color="#000000" onClick={goToNext} />
       </div>
       <div className="w-28 h-4 justify-start items-start gap-2 inline-flex">
-        <StatusIcon color="#004964 bg-opacity-10" label="예약 가능" />
+        <StatusIcon color="sky-900 bg-opacity-10" label="예약 가능" />
         <StatusIcon color="black bg-opacity-20" label="마감" />
       </div>
     </div>
