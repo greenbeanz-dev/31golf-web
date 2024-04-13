@@ -277,8 +277,8 @@ const CustomToolbar = (toolbar) => {
         <IoIosArrowForward size={24} color="#000000" onClick={goToNext} />
       </div>
       <div className="w-28 h-4 justify-start items-start gap-2 inline-flex">
-        <StatusIcon color="sky-900 bg-opacity-10" label="예약 가능" />
-        <StatusIcon color="black bg-opacity-20" label="마감" />
+        <StatusIcon color="bg-sky-900 bg-opacity-10" label="예약 가능" />
+        <StatusIcon color="bg-black bg-opacity-20" label="마감" />
       </div>
     </div>
   );
@@ -286,7 +286,7 @@ const CustomToolbar = (toolbar) => {
 
 const StatusIcon = ({ color, label }) => (
   <div className="justify-start items-center gap-1 flex">
-    <div className={`w-3 h-3 bg-${color} rounded-full`}></div>
+    <div className={`w-3 h-3 ${color} rounded-full`}></div>
     <div className="text-black text-opacity-70 text-xs font-bold">{label}</div>
   </div>
 );

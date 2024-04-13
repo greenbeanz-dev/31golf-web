@@ -65,7 +65,12 @@ const Layout: React.FC<Props> = ({ children }) => {
             alignItems: "center",
           }}
         >
-          <div style={{ maxWidth: isMobile ? "100%" : "1200px" }}>
+          <div
+            style={{
+              maxWidth: isMobile ? "100%" : "1200px",
+              minWidth: isMobile ? "100%" : "1200px",
+            }}
+          >
             <div className="flex h-8 justify-start" />
             {isMobile ? (
               <MobileTopBar />
