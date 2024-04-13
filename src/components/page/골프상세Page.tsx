@@ -26,6 +26,7 @@ import {
 } from "react-icons/fa6";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { Carousel } from "react-responsive-carousel";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useProductBy from "../../service/product/useProductBy";
@@ -67,7 +68,6 @@ export function 골프상세Page({ productId }: { productId: number }) {
     },
   });
 
-  // TODO: 상품 이미지 Carousel
   let productImageList = productImageData?.pages
     .map((page) => page.imageListByProductId.edges.map((item) => item?.node))
     .flat()
@@ -169,17 +169,33 @@ export function 골프상세Page({ productId }: { productId: number }) {
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
         <div className="flex-1">
-          <div className="min-w-[640px] min-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
-            <Image
-              className="rounded-[24px]"
-              alt="detail_image"
-              src={
-                // data?.thumbnailImage ||
-                "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
-              }
-              width={640}
-              height={492}
-            />
+          <div className="min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
+            <Carousel
+              showArrows={true}
+              showThumbs={false}
+              showStatus={false}
+              infiniteLoop={true}
+            >
+              {/*  썸네일을 가장 앞으로 넣어줌  */}
+              {productImageList &&
+                [
+                  ...(data?.thumbnailImage
+                    ? [{ url: data.thumbnailImage }, ...productImageList]
+                    : [...productImageList]),
+                ].map((image, idx) => {
+                  return (
+                    <Image
+                      alt="detail_image"
+                      key={idx}
+                      src={image.url}
+                      width={640}
+                      height={492}
+                      className="rounded-[24px] max-h-[492px]"
+                      layout="fixed"
+                    />
+                  );
+                })}
+            </Carousel>
           </div>
         </div>
         <div style={{ minWidth: 24 }} />
