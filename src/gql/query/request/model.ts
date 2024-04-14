@@ -66,6 +66,9 @@ class RequestInputModel {
   // @IsOptional()
   // @IsString()
   // rowStyle?: string | null;
+  @IsOptional()
+  @IsString()
+  schedule?: string | null;
 }
 
 export default RequestInputModel;
