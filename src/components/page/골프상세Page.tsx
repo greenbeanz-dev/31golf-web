@@ -165,6 +165,8 @@ export function 골프상세Page({ productId }: { productId: number }) {
         )
     : [];
 
+  const scheduleList = data?.schedulePc ? JSON.parse(data.schedulePc) : [];
+
   return (
     <div className="w-full h-full">
       <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
@@ -257,6 +259,7 @@ export function 골프상세Page({ productId }: { productId: number }) {
             {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
             <div className="pt-10" />
             <상품일정상세
+              scheduleList={scheduleList}
               inclusiveList={inclusiveList}
               exclusiveList={exclusiveList}
             />

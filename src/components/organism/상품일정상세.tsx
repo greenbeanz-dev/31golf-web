@@ -13,63 +13,33 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GiHotMeal } from "react-icons/gi";
 
 interface 상품일정상세Props {
+  scheduleList: {
+    title: string;
+    detailedSchedule: {
+      icon: string;
+      description: string;
+    }[];
+    basicItems: {
+      icon: string;
+      description: string;
+    }[];
+  }[];
   inclusiveList: string[];
   exclusiveList: string[];
 }
 
-const 상품일정상세 = ({ inclusiveList, exclusiveList }: 상품일정상세Props) => {
-  const planList = [
-    {
-      day: 1,
-      item: [
-        {
-          title: "개인출발",
-          time: 9,
-          icon: <FaCarSide size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "골프장 도착",
-          time: 11,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "오후-남해사우스케이프오너스 C.C",
-          time: 13,
-          icon: <FaGolfBallTee size={24} color={theme.colors.primary} />,
-        },
-      ],
-      hotel: "가든스위트 리조트(2인 1실)",
-      meal: "조식/중식/석식",
-    },
-    {
-      day: 2,
-      item: [
-        {
-          title: "체크아웃/골프장이동",
-          time: 0,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "조식",
-          time: 11,
-          icon: <PiForkKnifeFill size={24} color={theme.colors.primary} />,
-        },
-        {
-          title: "골프장 출발",
-          time: 13,
-          icon: <TbFlag3Filled size={24} color={theme.colors.primary} />,
-        },
-      ],
-      hotel: "가든스위트 리조트(2인 1실)",
-      meal: "조식/중식/석식",
-    },
-  ];
+const 상품일정상세 = ({
+  scheduleList,
+  inclusiveList,
+  exclusiveList,
+}: 상품일정상세Props) => {
+  console.log(scheduleList);
+
   const isMobile = useIsMobile();
   return (
     <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
       <div
-        className="flex"
-        // style={{ flex: 2 }}
+        className="flex flex-2 items-start"
         style={{
           flex: 2,
           alignItems: "flex-start",
@@ -77,57 +47,47 @@ const 상품일정상세 = ({ inclusiveList, exclusiveList }: 상품일정상세
       >
         <div className="w-full">
           <div className="text-xl font-bold">일정 상세</div>
-          {isMobile && <div style={{ minHeight: 24 }} />}
+          {isMobile && <div className="pt-6" />}
           <Accordion variant="light" selectionMode="multiple">
-            {planList.map((data, index) => (
+            {scheduleList.map((data, index) => (
               <AccordionItem
                 key={index}
-                title={`${data.day}일차`}
+                title={`${data.title}일차`}
                 indicator={
                   <IoIosArrowDown size={24} color={theme.colors.primary} />
                 }
               >
-                <>
-                  {data.item.map((item, idx) => (
+                <div className="flex flex-col gap-2">
+                  {data.detailedSchedule.map((item, idx) => (
                     <div key={idx}>
                       <PlanItem
+                        key={idx}
                         icon={item.icon}
-                        title={item.title}
-                        time={item.time}
+                        description={item.description}
                       />
-                      {idx !== data.item.length - 1 && (
-                        <div style={{ minHeight: 8 }} />
-                      )}
                     </div>
                   ))}
-                  <div style={{ minHeight: 16 }} />
-                  <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
-                    <GuideInfo
-                      icon={<FaBed size={16} color={theme.colors.primary} />}
-                      label="호텔"
-                      value={data.hotel}
-                    />
-                  </div>
-                  <div style={{ minHeight: 8 }} />
-                  <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
-                    <GuideInfo
-                      icon={
-                        <GiHotMeal size={16} color={theme.colors.primary} />
-                      }
-                      label="식사"
-                      value={data.meal}
-                    />
-                  </div>
-                </>
+                </div>
+                <div className="pt-4" />
+                <div className="flex flex-col gap-2">
+                  {data.basicItems.map((item, idx) => (
+                    <div key={idx}>
+                      <GuideInfo
+                        icon={item.icon}
+                        description={item.description}
+                      />
+                    </div>
+                  ))}
+                </div>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </div>
-      <div style={{ minWidth: 32 }} />
-      <div className="flex" style={{ flex: 1 }}>
+      <div className="pl-8" />
+      <div className="flex flex-1">
         <div className="w-full">
-          {isMobile && <div style={{ minHeight: 24 }} />}
+          {isMobile && <div className="pt-6" />}
           <div className="text-[20px] font-bold">포함 사항</div>
           <div className="pt-6" />
           <div className="flex flex-col gap-1">
@@ -160,27 +120,45 @@ const 상품일정상세 = ({ inclusiveList, exclusiveList }: 상품일정상세
   );
 };
 
-const GuideInfo = ({ icon, label, value }) => (
-  <>
-    <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
-      <div className="w-4 h-3 relative">{icon}</div>
-      <div className="text-black text-opacity-70 text-sm font-normal">
-        {label}
+const GuideInfo = ({ icon, description }) => {
+  return (
+    <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
+      <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
+        <div className="w-4 h-3 relative">
+          {icon === "hotel" ? (
+            <FaBed size={16} color={theme.colors.primary} />
+          ) : (
+            <GiHotMeal size={16} color={theme.colors.primary} />
+          )}
+        </div>
+        <div className="text-black text-opacity-70 text-sm font-normal">
+          {icon === "hotel" ? "숙소" : "식사"}
+        </div>
+      </div>
+      <div className="grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
+        {description}
       </div>
     </div>
-    <div className="grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
-      {value}
-    </div>
-  </>
-);
+  );
+};
 
-const PlanItem = ({ icon, title, time }) => (
+const PlanItem = ({ icon, description }) => (
   <div className="h-14 p-2 bg-black bg-opacity-5 rounded-xl justify-between items-center inline-flex w-full">
     <div className="h-10 justify-start items-center gap-2 flex">
       <div className="w-10 h-10 bg-white rounded-xl justify-center items-center gap-2.5 flex">
-        <div className="w-6 h-5 relative">{icon}</div>
+        <div className="w-6 h-5 relative">
+          {icon === "car" ? (
+            <FaCarSide size={16} color={theme.colors.primary} />
+          ) : icon === "golf" ? (
+            <FaGolfBallTee size={16} color={theme.colors.primary} />
+          ) : icon === "flag" ? (
+            <TbFlag3Filled size={16} color={theme.colors.primary} />
+          ) : (
+            <PiForkKnifeFill size={16} color={theme.colors.primary} />
+          )}
+        </div>
       </div>
-      <div className="text-black text-base">{title}</div>
+      <div className="text-black text-base">{description}</div>
     </div>
     {/* <div className="h-5 pr-2 justify-between items-center flex">
       <div className="w-12 text-right text-black text-opacity-70 text-sm font-normal">

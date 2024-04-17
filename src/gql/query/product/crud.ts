@@ -72,6 +72,7 @@ query productListInfinityQuery(
         scheduleTablePc
         courseAddress
         cancellationPolicy
+        thumbnailImage
       }
     }
   }
