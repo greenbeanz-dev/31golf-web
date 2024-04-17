@@ -42,6 +42,18 @@ const useReservationInfiniteQuery = () => {
 
   const managerId = useReservationInfiniteQueryBody((state) => state.managerId);
 
+  const doneReceipt = useReservationInfiniteQueryBody(
+    (state) => state.doneReceipt
+  );
+
+  const doneInvoice = useReservationInfiniteQueryBody(
+    (state) => state.doneInvoice
+  );
+
+  const isCard = useReservationInfiniteQueryBody((state) => state.isCard);
+
+  const isWeb = useReservationInfiniteQueryBody((state) => state.isWeb);
+
   const requestBody = {
     customerName: customerName,
     customerPhone: customerPhone,
@@ -55,27 +67,18 @@ const useReservationInfiniteQuery = () => {
     createdAtEndAt: createdAtEndAt?.toISOString(),
     sortColumn: sortColumn,
     sortType: sortType,
+    doneReceipt: doneReceipt,
+    doneInvoice: doneInvoice,
+    isCard: isCard,
+    isWeb: isWeb,
   };
 
   return useInfiniteQuery({
-    queryKey: [
-      "reservationList",
-      customerName,
-      customerPhone,
-      productName,
-      memo,
-      reservationStatus.join(""),
-      managerId,
-      dateDepartureStartAt?.toISOString(),
-      dateDepartureEndAt?.toISOString(),
-      createdAtStartAt?.toISOString(),
-      createdAtEndAt?.toISOString(),
-      sortColumn,
-      sortType,
-    ],
+    queryKey: ["reservationList", ...Object.values(requestBody)],
+
     queryFn: async ({
       pageParam = {
-        first: 100,
+        first: 50,
         ...requestBody,
       },
     }) => await gqlClient.request(ReservationListInfinityQuery, pageParam),
@@ -103,6 +106,10 @@ type State = {
   createdAt: [Date | undefined, Date | undefined];
   sortColumn?: ReservationColumnName;
   sortType?: "asc" | "desc" | null;
+  doneReceipt?: boolean;
+  doneInvoice?: boolean;
+  isCard?: boolean;
+  isWeb?: boolean;
 };
 
 type Actions = {
@@ -117,6 +124,10 @@ type Actions = {
   changeCreatedAt: (type: "start" | "end", data: Date | undefined) => void;
   changeSortColumn: (sortColumn: State["sortColumn"]) => void;
   changeSortType: (sortType: State["sortType"]) => void;
+  changeDoneReceipt: (doneReceipt: State["doneReceipt"]) => void;
+  changeDoneInvoice: (doneInvoice: State["doneInvoice"]) => void;
+  changeIsCard: (isCard: State["isCard"]) => void;
+  changeIsWeb: (isWeb: State["isWeb"]) => void;
   reset: () => void;
 };
 
@@ -132,6 +143,10 @@ const initialState: State = {
   createdAt: [undefined, undefined],
   sortColumn: undefined,
   sortType: null,
+  doneReceipt: undefined,
+  doneInvoice: undefined,
+  isCard: undefined,
+  isWeb: undefined,
 };
 
 export const useReservationInfiniteQueryBody = create(
@@ -192,10 +207,29 @@ export const useReservationInfiniteQueryBody = create(
         state.sortColumn = sortColumn;
       });
     },
-
     changeSortType: (sortType) => {
       set((state) => {
         state.sortType = sortType;
+      });
+    },
+    changeDoneReceipt: (doneReceipt) => {
+      set((state) => {
+        state.doneReceipt = doneReceipt;
+      });
+    },
+    changeDoneInvoice: (doneInvoice) => {
+      set((state) => {
+        state.doneInvoice = doneInvoice;
+      });
+    },
+    changeIsCard: (isCard) => {
+      set((state) => {
+        state.isCard = isCard;
+      });
+    },
+    changeIsWeb: (isWeb) => {
+      set((state) => {
+        state.isWeb = isWeb;
       });
     },
     reset: () => set(initialState),

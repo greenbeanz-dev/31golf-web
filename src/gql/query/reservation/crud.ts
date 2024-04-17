@@ -16,6 +16,10 @@ query reservationListInfinityQuery(
   $createdAtEndAt: String,
   $sortColumn: String,
   $sortType: String,
+  $doneReceipt: Boolean,
+  $doneInvoice: Boolean,
+  $isCard: Boolean
+  $isWeb: Boolean
   ) {
     reservationList(
       first: $first 
@@ -32,6 +36,10 @@ query reservationListInfinityQuery(
       createdAtEndAt : $createdAtEndAt
       sortColumn: $sortColumn
       sortType: $sortType
+      doneReceipt: $doneReceipt
+      doneInvoice: $doneInvoice
+      isCard: $isCard
+      isWeb: $isWeb
       ) {
         pageInfo {
           endCursor
@@ -42,11 +50,10 @@ query reservationListInfinityQuery(
           node {
             id
             createdAt
+            updatedAt
             dateDeparture
-            memo
             numPeople
             numTeam
-            updatedAt
             customer {
               id
               name
@@ -61,6 +68,7 @@ query reservationListInfinityQuery(
               id
               name
               price
+              type
             }
             status
             doneReceipt
@@ -68,10 +76,12 @@ query reservationListInfinityQuery(
             isCard
             noteCheckout
             priceCustom
+            priceAddon
+            priceAddonSub
+            costAddon
+            costAddonSub
             costCustom
-            daysDay
-            daysNight
-        
+            isWeb
           }
         }
     }
@@ -81,28 +91,64 @@ query reservationListInfinityQuery(
 // 부가 상품 추가 부분 API를 추가 필요함
 
 // 등록날짜, 출발일자, 예약자, 연락처, 인원, 일정(1박,2일), 상품, 부가상품, 메모
-export const CreateReservationQueryByWeb = gql(`
-mutation createReservationByWeb(
+export const CreateReservationQuery = gql(`
+mutation createReservation(
   $dateDeparture: String
+  $memo: String
   $numPeople: Int
   $numTeam: Int
   $status: String
   $customerId: Int
+  $managerId: Int
   $productId: Int
+  $noteCheckout: String
+  $priceCustom: Float
+  $costCustom: Float
+  $priceAddon: Float
+  $costAddon: Float
+  $priceAddonMemo: String
+  $priceAddonSub: Float
+  $costAddonSub: Float
+  $priceAddonSubMemo: String
   $daysDay: Int
   $daysNight: Int
-  $priceCustom: Float
+  $smsReservation: String
+  $smsCheckout: String
+  $isTransactionEditable: Boolean
+  $transactionDeposit: Float
+  $transactionWithdrawal: Float
+  $transactionRemainder: Float
+  $transactionUnpaid: Float
+  $isWeb: Boolean
 ) {
-  createReservationByWeb(
+  createReservation(
     dateDeparture: $dateDeparture
+    memo: $memo
     numPeople: $numPeople
     numTeam: $numTeam
     status: $status
     customerId: $customerId
+    managerId: $managerId
     productId: $productId
+    noteCheckout: $noteCheckout
+    priceCustom: $priceCustom
+    costCustom: $costCustom
+    priceAddon: $priceAddon
+    costAddon: $costAddon
+    priceAddonMemo: $priceAddonMemo
+    priceAddonSub: $priceAddonSub
+    costAddonSub: $costAddonSub
+    priceAddonSubMemo: $priceAddonSubMemo
     daysDay: $daysDay
     daysNight: $daysNight
-    priceCustom: $priceCustom
+    smsReservation: $smsReservation
+    smsCheckout: $smsCheckout
+    isTransactionEditable: $isTransactionEditable
+    transactionDeposit: $transactionDeposit
+    transactionWithdrawal: $transactionWithdrawal
+    transactionRemainder: $transactionRemainder
+    transactionUnpaid: $transactionUnpaid
+    isWeb: $isWeb
   ) {
     id
     updatedAt
@@ -128,8 +174,10 @@ mutation updateReservationById(
   $priceCustom: Float
   $costCustom: Float
   $priceAddon: Float
+  $costAddon: Float
   $priceAddonMemo: String
   $priceAddonSub: Float
+  $costAddonSub: Float
   $priceAddonSubMemo: String
   $daysDay: Int
   $daysNight: Int
@@ -137,6 +185,12 @@ mutation updateReservationById(
   $smsReservationSub: String
   $smsConfirmation: String
   $smsCheckout: String
+  $isTransactionEditable: Boolean
+  $transactionDeposit: Float
+  $transactionWithdrawal: Float
+  $transactionRemainder: Float
+  $transactionUnpaid: Float
+  $isWeb: Boolean
 ) {
   updateReservationById(
     id: $id
@@ -155,8 +209,10 @@ mutation updateReservationById(
     priceCustom: $priceCustom
     costCustom: $costCustom
     priceAddon: $priceAddon
+    costAddon: $costAddon
     priceAddonMemo: $priceAddonMemo
     priceAddonSub: $priceAddonSub
+    costAddonSub: $costAddonSub
     priceAddonSubMemo: $priceAddonSubMemo
     daysDay: $daysDay
     daysNight: $daysNight
@@ -164,6 +220,12 @@ mutation updateReservationById(
     smsReservationSub: $smsReservationSub
     smsConfirmation: $smsConfirmation
     smsCheckout: $smsCheckout
+    isTransactionEditable: $isTransactionEditable
+    transactionDeposit: $transactionDeposit
+    transactionWithdrawal: $transactionWithdrawal
+    transactionRemainder: $transactionRemainder
+    transactionUnpaid: $transactionUnpaid
+    isWeb: $isWeb
   ) {
     id
     updatedAt
@@ -192,6 +254,7 @@ query reservationById($id: ID!) {
             id
             name
             phone
+            isVillain
           }
           manager {
             id
@@ -202,6 +265,8 @@ query reservationById($id: ID!) {
             name
             price
             cost
+            isBlock
+            type
           }
           status
           doneReceipt
@@ -211,8 +276,10 @@ query reservationById($id: ID!) {
           priceCustom
           costCustom
           priceAddon
+          costAddon
           priceAddonMemo
           priceAddonSub
+          costAddonSub
           priceAddonSubMemo
           daysDay
           daysNight
@@ -220,7 +287,12 @@ query reservationById($id: ID!) {
           smsReservationSub
           smsConfirmation
           smsCheckout
-      
+          isTransactionEditable
+          transactionDeposit
+          transactionWithdrawal
+          transactionRemainder
+          transactionUnpaid
+          isWeb
   }
 }
 `);

@@ -1,6 +1,12 @@
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { Type } from "class-transformer";
-import { IsDate, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 class ReservationInputModel {
   @IsOptional()
@@ -23,14 +29,15 @@ class ReservationInputModel {
 
   @IsOptional()
   @IsNumber()
-  numPeople: number;
+  numPeople?: number | null;
 
   @IsOptional()
   @IsNumber()
-  numTeam: number;
+  numTeam?: number | null;
 
   @IsOptional()
-  productId: number;
+  @IsNumber()
+  productId?: number | null;
 
   @IsOptional()
   customerId: number;
@@ -45,27 +52,37 @@ class ReservationInputModel {
 
   @IsOptional()
   @IsString()
+  summaryMemo?: string | null;
+
+  @IsOptional()
+  @IsString()
   noteCheckout?: string | null;
 
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   priceCustom?: number | null;
 
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   costCustom?: number | null;
 
   @IsOptional()
-  @IsInt()
+  // @IsInt()
   priceAddon?: number | null;
+
+  @IsOptional()
+  costAddon?: number | null;
 
   @IsOptional()
   @IsNumber()
   priceAddonMemo?: string | null;
 
   @IsOptional()
-  @IsInt()
+  // @IsInt()
   priceAddonSub?: number | null;
+
+  @IsOptional()
+  costAddonSub?: number | null;
 
   @IsOptional()
   @IsNumber()
@@ -94,6 +111,26 @@ class ReservationInputModel {
   @IsOptional()
   @IsString()
   smsCheckout?: string | null;
+
+  @IsOptional()
+  @IsBoolean()
+  isTransactionEditable?: boolean | null;
+
+  @IsOptional()
+  transactionDeposit?: number | null;
+
+  @IsOptional()
+  transactionWithdrawal?: number | null;
+
+  @IsOptional()
+  transactionRemainder?: number | null;
+
+  @IsOptional()
+  transactionUnpaid?: number | null;
+
+  @IsOptional()
+  @IsBoolean()
+  isWeb?: boolean | null;
 }
 
 export default ReservationInputModel;
