@@ -11,7 +11,7 @@ import { Button, Input, useDisclosure } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { BiSolidPhoneCall } from "react-icons/bi";
@@ -176,6 +176,10 @@ const Login = () => {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (id === "" || password === "") {
+      return alert("정보를 입력해 주세요.");
+    }
+
     const result = await login("credentials", {
       name: id,
       phone: password,
@@ -183,15 +187,7 @@ const Login = () => {
       redirect: false,
       callbackUrl: "/",
     });
-    console.log({ result });
   };
-
-  console.log({ userProfile });
-  useEffect(() => {
-    if (isLogin && !userProfile.id) {
-      window.location.href = "/signup";
-    }
-  }, [isLogin, userProfile]);
 
   return (
     <div className="flex-1 flex-col">
@@ -278,30 +274,6 @@ const Login = () => {
             <div className="pl-1" />
             <div className="text-[16px] font-medium text-white leading-none">
               네이버 로그인
-            </div>
-          </div>
-          <div
-            className="h-8 inline-flex"
-            style={{
-              fontSize: 14,
-              fontWeight: "normal",
-              justifyContent: "space-around",
-            }}
-          >
-            <div
-              className="flex items-start"
-              style={{
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                router.push({
-                  pathname: "/signup",
-                  query: { provider: "local" },
-                });
-              }}
-            >
-              회원가입
             </div>
           </div>
         </div>

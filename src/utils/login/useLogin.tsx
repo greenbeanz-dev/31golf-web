@@ -8,10 +8,19 @@ export default function useLogin() {
     await axios.get("/api/auth/signout");
     await signOut({ redirect: true });
   };
-  // console.log("session", session);
+
+  const login = async (provider, options) => {
+    const result = await signIn(provider, options);
+    if (result?.error) {
+      // 로그인 실패 시 회원가입 페이지로 리다이렉트
+      window.location.href = "/signup";
+    }
+    console.log({ result });
+    return result;
+  };
 
   return {
-    login: signIn,
+    login: login,
     logOut: logOut,
     userProfile: { ...session?.user } || {},
     isLogin: status === "authenticated",
