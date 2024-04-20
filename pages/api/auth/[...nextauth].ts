@@ -6,6 +6,8 @@ import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import prisma from "../../../src/lib/prisma";
 
+const TEMP_PHONE_NUMBER = "010634887983";
+
 declare module "next-auth" {
   // eslint-disable-next-line no-unused-vars
   interface User {
@@ -75,7 +77,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.kakao_account.profile.nickname,
           email: profile.kakao_account.email,
           image: profile.kakao_account.profile.profile_image_url,
-          phone: "",
+          phone: profile.kakao_account.phone_number,
         };
       },
     }),
@@ -88,58 +90,94 @@ export const authOptions: NextAuthOptions = {
           name: profile.response.nickname,
           email: profile.response.email,
           image: profile.response.profile_image,
-          phone: "",
+          phone: profile.response.mobile,
         };
       },
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile, email }) {
+      // TODO 휴대폰 번호 없는 경우 페이지 회원가입 페이지로 리다이렉트
+      console.log("Signing in:", account);
+      console.log("Signing profile:", profile);
+      // if (account && account.provider === "kakao") {
+      //   if (profile && !(profile as any).kakao_account.phone_number) {
+      //     const error = "필수 정보 누락"; // 사용자 정의 에러 메시지
+      //     throw new Error(error + "&callbackUrl=/signup");
+      //   }
+      // }
       return true;
     },
 
     async session({ session, user, token }) {
-      console.log({ session, user, token });
-      if (token) {
-        const response = await prisma.customer.findUnique({
+      if (token && token.name && token.phone) {
+        const response = await prisma.customer.findMany({
           where: {
-            id: token.sub,
+            name: token.name,
+            phone: token.phone,
           },
         });
 
-        return {
-          ...session,
-          user: {
-            id: response.id.toString(),
-            provider: response.provider,
-            name: response.name,
-            phone: response.phone,
-          },
-        };
-      }
-      const response = await prisma.customer.findMany({
-        where: {
-          provider: user.id || null,
-        },
-      });
+        if (response && response.length > 0) {
+          const recentCustomer = response.sort(
+            (a, b) => Number(b.id) - Number(a.id)
+          );
 
-      return {
-        ...session,
-        user:
-          response.length > 0
-            ? {
-                id: response[0].id.toString(),
-                provider: response[0].provider,
-                name: response[0].name,
-                phone: response[0].phone,
-              }
-            : {
-                id: null,
-                provider: user.id,
-              },
-      };
+          return {
+            ...session,
+            user: {
+              id: recentCustomer[0].id.toString(),
+              name: recentCustomer[0].name,
+              email: recentCustomer[0].email,
+              phone: recentCustomer[0].phone,
+              provvider: recentCustomer[0].provider,
+              image: "",
+            },
+          };
+        } else {
+          const newCustomer = await prisma.customer.create({
+            data: {
+              name: token.name,
+              phone: token.phone as string,
+              email: token.email,
+            },
+          });
+          return {
+            ...session,
+            user: {
+              id: newCustomer.id.toString(),
+              name: newCustomer.name,
+              email: newCustomer.email,
+              phone: newCustomer.phone,
+              provvider: newCustomer.provider,
+              image: "",
+            },
+          };
+        }
+      }
+      return {};
     },
-    async jwt({ token }) {
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (account) {
+        if (
+          account.provider === "kakao" &&
+          profile &&
+          (profile as any).kakao_account &&
+          (profile as any).kakao_account.phone_number
+        ) {
+          token.phone = (profile as any).kakao_account.phone_number;
+        }
+
+        if (
+          account.provider === "naver" &&
+          profile &&
+          (profile as any).response &&
+          (profile as any).response.mobile
+        ) {
+          token.phone = (profile as any).response.mobile;
+        }
+      }
+      token.phone = TEMP_PHONE_NUMBER;
       return token;
     },
   },

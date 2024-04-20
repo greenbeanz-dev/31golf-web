@@ -129,6 +129,9 @@ mutation UpdateCustomerByIdWeb(
     isVillain: $isVillain
   ) {
     id
+    name
+    phone
+    email
   }
 }
 `);
