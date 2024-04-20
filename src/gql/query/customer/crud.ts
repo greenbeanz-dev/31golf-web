@@ -94,8 +94,6 @@ mutation CreateCustomerByWeb(
   $fax: String
   $isVillain: Boolean
   $provider: String
-  $userId: String
-  $password: String
 ) {
   createCustomerByWeb(
     name: $name
@@ -105,8 +103,6 @@ mutation CreateCustomerByWeb(
     fax: $fax
     isVillain: $isVillain
     provider: $provider
-    userId: $userId
-    password: $password
   ) {
     id
   }
@@ -122,8 +118,6 @@ mutation UpdateCustomerByIdWeb(
   $memo: String
   $fax: String
   $isVillain: Boolean
-  $userId: String
-  $password: String
 ) {
   UpdateCustomerByIdWeb(
     id: $id
@@ -133,10 +127,11 @@ mutation UpdateCustomerByIdWeb(
     memo: $memo
     fax: $fax
     isVillain: $isVillain
-    userId: $userId
-    password: $password
   ) {
     id
+    name
+    phone
+    email
   }
 }
 `);

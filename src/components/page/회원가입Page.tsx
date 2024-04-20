@@ -6,7 +6,6 @@ import {
 import { Button, Input } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import bcrypt from "bcryptjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSmsSend } from "../../service/sms/useSmsSend";
@@ -32,8 +31,6 @@ export function 회원가입Page() {
     async () => {
       // if (!userProfile.provider) return;
       return await gqlClient.request(CreateCustomerQueryByWeb, {
-        userId: "",
-        password: "",
         name: name,
         phone: phone,
         email: "",
@@ -80,14 +77,20 @@ export function 회원가입Page() {
         memo: "",
         fax: "",
         isVillain: false,
-        userId: userId,
-        password: await bcrypt.hash(password, saltRounds),
       });
     },
     {
-      onSuccess: async (result) => {
-        if (result) {
+      onSuccess: async (data) => {
+        if (data) {
           queryClient.invalidateQueries(["customerList"]);
+          const result = await login("credentials", {
+            name: data.UpdateCustomerByIdWeb.name,
+            phone: data.UpdateCustomerByIdWeb.phone,
+            provider: "credentials",
+            redirect: false,
+            callbackUrl: "/",
+          });
+
           alert("회원가입이 완료되었습니다.");
           router.push("/");
         }
@@ -138,7 +141,7 @@ export function 회원가입Page() {
     <div className="flex flex-col gap-4">
       {provider === "local" && (
         <>
-          <Input
+          {/* <Input
             classNames={{
               label: "min-w-[7rem]",
               input: ["!ring-transparent"],
@@ -163,7 +166,7 @@ export function 회원가입Page() {
             labelPlacement="outside-left"
             variant="bordered"
             label="비밀번호"
-          />
+          /> */}
         </>
       )}
       <Input
