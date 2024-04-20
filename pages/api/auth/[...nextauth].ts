@@ -1,5 +1,4 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -14,6 +13,7 @@ declare module "next-auth" {
     name: string;
     email: string;
     image: string;
+    phone: string;
   }
   // eslint-disable-next-line no-unused-vars
   interface Session {
@@ -37,39 +37,31 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        username: { label: "아이디", type: "text" },
-        password: { label: "비밀번호", type: "password" },
+        name: { label: "이름", type: "text" },
+        phone: { label: "휴대폰번호", type: "password" },
       },
       async authorize(credentials) {
         console.log("credentials", credentials);
         if (credentials !== undefined) {
-          const response = await prisma.customer.findUnique({
+          const response = await prisma.customer.findMany({
             where: {
-              userid: credentials.username,
+              name: credentials.name,
+              phone: credentials.phone,
             },
           });
           console.log("response", response);
-          if (response) {
-            const isPasswordValid = await bcrypt.compare(
-              credentials.password,
-              response.password
+          if (response && response.length > 0) {
+            const newResponse = response.sort(
+              (a, b) => Number(b.id) - Number(a.id)
             );
-            if (isPasswordValid) {
-              return {
-                id: response.id,
-                name: response.name,
-                email: response.email,
-                image: "",
-              };
-            } else {
-              console.log("비밀번호가 일치하지 않습니다.");
-              return {
-                id: 0,
-                name: "",
-                email: "",
-                image: "",
-              };
-            }
+            console.log("newResponse", newResponse);
+            return {
+              id: newResponse[0].id,
+              name: newResponse[0].name,
+              email: newResponse[0].email,
+              phone: newResponse[0].phone,
+              image: "",
+            };
           }
         }
         return {
@@ -89,6 +81,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.kakao_account.profile.nickname,
           email: profile.kakao_account.email,
           image: profile.kakao_account.profile.profile_image_url,
+          phone: "",
         };
       },
     }),
@@ -101,6 +94,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.response.nickname,
           email: profile.response.email,
           image: profile.response.profile_image,
+          phone: "",
         };
       },
     }),
