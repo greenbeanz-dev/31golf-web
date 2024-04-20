@@ -7,11 +7,11 @@ import RequestInputModel, {
 import { 베스트상품Component } from "@component/Product/베스트상품Component";
 import CommonModal from "@component/molecule/modal/CommonModal";
 import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
-import { Button, Divider, Input, useDisclosure } from "@nextui-org/react";
+import { Button, Input, useDisclosure } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import { BiSolidPhoneCall } from "react-icons/bi";
@@ -24,6 +24,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import getShortPhoneNumber from "../../utils/format/getShortPhoneNumber";
 import useLogin from "../../utils/login/useLogin";
 
 const 메인Page = () => {
@@ -65,7 +66,6 @@ const 메인Page = () => {
           <></>
         ) : (
           <>
-            {/*  회원 로그인  */}
             <Login />
           </>
         )}
@@ -175,40 +175,39 @@ const Login = () => {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (id === "" || password === "") {
+      return alert("정보를 입력해 주세요.");
+    }
+
     const result = await login("credentials", {
-      username: id,
-      password: password,
+      name: id,
+      phone: password,
       provider: "credentials",
       redirect: false,
       callbackUrl: "/",
     });
-    console.log({ result });
   };
-
-  useEffect(() => {
-    if (isLogin && !userProfile.id) {
-      window.location.href = "/signup";
-    }
-  }, [isLogin, userProfile]);
 
   return (
     <div className="flex-1 flex-col">
       <div className="text-xl font-bold">
-        회원 로그인
-        {/* 임의로 로그인 확인하기 위해 추가함  */}
         {isLogin && userProfile.name && (
-          <div>{userProfile.name} 님 환영합니다.</div>
+          <div>
+            {userProfile.name}
+            {getShortPhoneNumber(userProfile.phone)}님 환영합니다.
+          </div>
         )}
         <div className="h-6" />
         <div className="flex flex-col gap-2">
           {!isLogin && (
             <>
+              회원 로그인
               <Input
                 classNames={{
                   mainWrapper: ["w-full"],
                   input: ["!ring-transparent", "bg-transparent"],
                 }}
-                placeholder="아이디"
+                placeholder="이름"
                 size={"sm"}
                 value={id}
                 onChange={(e) => {
@@ -220,7 +219,7 @@ const Login = () => {
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                placeholder="비밀번호"
+                placeholder="휴대폰번호"
                 size={"sm"}
                 value={password}
                 onChange={(e) => {
@@ -238,77 +237,42 @@ const Login = () => {
               >
                 로그인
               </Button>
+              <div
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
+                onClick={() => {
+                  login("kakao", {});
+                }}
+              >
+                <Image
+                  src="/icons/client/kakao_logo.svg"
+                  alt="naver"
+                  width={24}
+                  height={24}
+                />
+                <div className="pl-1.5" />
+                <div className="text-[16px] font-medium text-black opacity-85 leading-none">
+                  카카오 로그인
+                </div>
+              </div>
+              <div
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
+                onClick={() => {
+                  login("naver", {});
+                }}
+              >
+                <Image
+                  src="/icons/client/naver_logo.png"
+                  alt="naver"
+                  width={32}
+                  height={32}
+                />
+                <div className="pl-1" />
+                <div className="text-[16px] font-medium text-white leading-none">
+                  네이버 로그인
+                </div>
+              </div>
             </>
           )}
-
-          <div
-            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
-            onClick={() => {
-              login();
-            }}
-          >
-            <Image
-              src="/icons/client/kakao_logo.svg"
-              alt="naver"
-              width={24}
-              height={24}
-            />
-            <div className="pl-1.5" />
-            <div className="text-[16px] font-medium text-black opacity-85 leading-none">
-              카카오 로그인
-            </div>
-          </div>
-          <div
-            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
-            onClick={() => {
-              login();
-            }}
-          >
-            <Image
-              src="/icons/client/naver_logo.png"
-              alt="naver"
-              width={32}
-              height={32}
-            />
-            <div className="pl-1" />
-            <div className="text-[16px] font-medium text-white leading-none">
-              네이버 로그인
-            </div>
-          </div>
-          <div
-            className="h-8 items-center inline-flex"
-            style={{
-              fontSize: 14,
-              fontWeight: "normal",
-              justifyContent: "space-around",
-            }}
-          >
-            <div
-              className="flex justify-center items-center"
-              style={{
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                router.push({
-                  pathname: "/signup",
-                  query: { provider: "local" },
-                });
-              }}
-            >
-              회원가입
-            </div>
-            <Divider orientation="vertical" style={{ height: 16 }} />
-            <div
-              className="flex"
-              style={{
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-            >
-              아이디·비밀번호
-            </div>
-          </div>
         </div>
       </div>
     </div>
