@@ -75,10 +75,11 @@ const Layout: React.FC<Props> = ({ children }) => {
             {isMobile ? (
               <MobileTopBar />
             ) : (
-              <>
-                <TopButton />
-                <TopBar />
-              </>
+              <TopBar />
+              // <>
+              //   <TopButton />
+              //   <TopBar />
+              // </>
             )}
 
             {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}

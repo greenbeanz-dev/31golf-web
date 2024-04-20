@@ -622,6 +622,8 @@ const FloatBtnGroup = () => {
     const telNumber = "02-561-8008";
     switch (group.type) {
       case "kakao":
+        // new tab
+        window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
         break;
       case "request":
         onOpen();
