@@ -43,7 +43,7 @@ export function 상품이미지Component({
         width={isMobile ? mobileWidth : pcWidth}
       />
       <div className="pt-4" />
-      <div className="text-[14px] font-normal overflow-ellipsis overflow-hidden leading-6 opacity-70">
+      <div className="text-[14px] font-normal truncate leading-6 opacity-70">
         {item.summary}
       </div>
       <div className="pt-1" />

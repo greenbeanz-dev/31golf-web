@@ -124,18 +124,16 @@ const GuideInfo = ({ icon, description }) => {
   return (
     <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
       <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
-        <div className="w-4 h-3 relative">
-          {icon === "hotel" ? (
-            <FaBed size={16} color={theme.colors.primary} />
-          ) : (
-            <GiHotMeal size={16} color={theme.colors.primary} />
-          )}
-        </div>
-        <div className="text-black text-opacity-70 text-sm font-normal">
+        {icon === "hotel" ? (
+          <FaBed size={16} color={theme.colors.primary} />
+        ) : (
+          <GiHotMeal size={16} color={theme.colors.primary} />
+        )}
+        <div className="flex items-center text-black text-opacity-70 text-sm font-normal">
           {icon === "hotel" ? "숙소" : "식사"}
         </div>
       </div>
-      <div className="grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
+      <div className="flex items-center grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
         {description}
       </div>
     </div>
@@ -146,17 +144,15 @@ const PlanItem = ({ icon, description }) => (
   <div className="h-14 p-2 bg-black bg-opacity-5 rounded-xl justify-between items-center inline-flex w-full">
     <div className="h-10 justify-start items-center gap-2 flex">
       <div className="w-10 h-10 bg-white rounded-xl justify-center items-center gap-2.5 flex">
-        <div className="w-6 h-5 relative">
-          {icon === "car" ? (
-            <FaCarSide size={16} color={theme.colors.primary} />
-          ) : icon === "golf" ? (
-            <FaGolfBallTee size={16} color={theme.colors.primary} />
-          ) : icon === "flag" ? (
-            <TbFlag3Filled size={16} color={theme.colors.primary} />
-          ) : (
-            <PiForkKnifeFill size={16} color={theme.colors.primary} />
-          )}
-        </div>
+        {icon === "car" ? (
+          <FaCarSide size={24} color={theme.colors.primary} />
+        ) : icon === "golf" ? (
+          <FaGolfBallTee size={24} color={theme.colors.primary} />
+        ) : icon === "flag" ? (
+          <TbFlag3Filled size={24} color={theme.colors.primary} />
+        ) : (
+          <PiForkKnifeFill size={24} color={theme.colors.primary} />
+        )}
       </div>
       <div className="text-black text-base">{description}</div>
     </div>

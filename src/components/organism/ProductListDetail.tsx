@@ -5,6 +5,7 @@ import useProductInfiniteQuery, {
 } from "@/gql/query/product/useProductInfiniteQuery";
 import { Product } from "@/gql/__generated__/graphql";
 import { useEffect } from "react";
+import Image from "next/image";
 
 interface ProductListDetailProps {
   category1?: string;
@@ -47,15 +48,26 @@ const ProductListDetail = ({
     changeCategory3(category3);
   }, [category1, category2, category3]);
 
-  if (list === undefined) {
-    return;
+  if (list === undefined || list.length === 0) {
+    return (
+      <div className="flex flex-col grow w-full h-[432px] items-center justify-center">
+        <Image
+          alt="list_empty"
+          src="/images/list_empty.png"
+          width={160}
+          height={160}
+        />
+        <div className="pt-2" />
+        <div className="text-[24px] font-bold opacity-70">상품 준비중 ...</div>
+      </div>
+    );
   }
 
   return (
     <div className="w-full">
       {/* 반응형 여기 수정  */}
       <div className="w-full flex flex-wrap justify-between">
-        {list.map((item, idx) => {
+        {list!.map((item, idx) => {
           return (
             <상품이미지Component
               key={idx}
