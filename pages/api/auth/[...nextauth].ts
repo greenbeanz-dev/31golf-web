@@ -49,27 +49,21 @@ export const authOptions: NextAuthOptions = {
               phone: credentials.phone,
             },
           });
-          console.log("response", response);
+          // 가장 큰 customer.id로 정렬
           if (response && response.length > 0) {
-            const newResponse = response.sort(
+            const recentCustomer = response.sort(
               (a, b) => Number(b.id) - Number(a.id)
             );
-            console.log("newResponse", newResponse);
             return {
-              id: newResponse[0].id,
-              name: newResponse[0].name,
-              email: newResponse[0].email,
-              phone: newResponse[0].phone,
+              id: recentCustomer[0].id,
+              name: recentCustomer[0].name,
+              email: recentCustomer[0].email,
+              phone: recentCustomer[0].phone,
               image: "",
             };
           }
         }
-        return {
-          id: 0,
-          name: "",
-          email: "",
-          image: "",
-        };
+        throw new Error("로그인 실패");
       },
     }),
     KakaoProvider({
