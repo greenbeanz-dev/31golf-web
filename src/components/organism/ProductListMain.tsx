@@ -51,8 +51,19 @@ const ProductListMain = ({
     changeCategory3(category3);
   }, [category1, category2, category3]);
 
-  if (list === undefined) {
-    return;
+  if (list === undefined || list.length === 0) {
+    return (
+      <div className="flex flex-col grow w-full h-[432px] items-center justify-center">
+        <Image
+          alt="list_empty"
+          src="/images/list_empty.png"
+          width={120}
+          height={120}
+        />
+        <div className="pt-2" />
+        <div className="text-[16px] font-bold opacity-70">상품 준비중 ...</div>
+      </div>
+    );
   }
 
   return (
