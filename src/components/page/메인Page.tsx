@@ -66,7 +66,6 @@ const 메인Page = () => {
           <></>
         ) : (
           <>
-            {/*  회원 로그인  */}
             <Login />
           </>
         )}
@@ -192,7 +191,6 @@ const Login = () => {
   return (
     <div className="flex-1 flex-col">
       <div className="text-xl font-bold">
-        {/* 임의로 로그인 확인하기 위해 추가함  */}
         {isLogin && userProfile.name && (
           <div>
             {userProfile.name}
@@ -239,43 +237,42 @@ const Login = () => {
               >
                 로그인
               </Button>
+              <div
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
+                onClick={() => {
+                  login("kakao", {});
+                }}
+              >
+                <Image
+                  src="/icons/client/kakao_logo.svg"
+                  alt="naver"
+                  width={24}
+                  height={24}
+                />
+                <div className="pl-1.5" />
+                <div className="text-[16px] font-medium text-black opacity-85 leading-none">
+                  카카오 로그인
+                </div>
+              </div>
+              <div
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
+                onClick={() => {
+                  login("naver", {});
+                }}
+              >
+                <Image
+                  src="/icons/client/naver_logo.png"
+                  alt="naver"
+                  width={32}
+                  height={32}
+                />
+                <div className="pl-1" />
+                <div className="text-[16px] font-medium text-white leading-none">
+                  네이버 로그인
+                </div>
+              </div>
             </>
           )}
-
-          <div
-            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
-            onClick={() => {
-              login();
-            }}
-          >
-            <Image
-              src="/icons/client/kakao_logo.svg"
-              alt="naver"
-              width={24}
-              height={24}
-            />
-            <div className="pl-1.5" />
-            <div className="text-[16px] font-medium text-black opacity-85 leading-none">
-              카카오 로그인
-            </div>
-          </div>
-          <div
-            className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
-            onClick={() => {
-              login();
-            }}
-          >
-            <Image
-              src="/icons/client/naver_logo.png"
-              alt="naver"
-              width={32}
-              height={32}
-            />
-            <div className="pl-1" />
-            <div className="text-[16px] font-medium text-white leading-none">
-              네이버 로그인
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -80,9 +80,17 @@ export function 회원가입Page() {
       });
     },
     {
-      onSuccess: async (result) => {
-        if (result) {
+      onSuccess: async (data) => {
+        if (data) {
           queryClient.invalidateQueries(["customerList"]);
+          const result = await login("credentials", {
+            name: data.UpdateCustomerByIdWeb.name,
+            phone: data.UpdateCustomerByIdWeb.phone,
+            provider: "credentials",
+            redirect: false,
+            callbackUrl: "/",
+          });
+
           alert("회원가입이 완료되었습니다.");
           router.push("/");
         }
