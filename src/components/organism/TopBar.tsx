@@ -51,8 +51,8 @@ export default function Topbar() {
           }}
           alt="logo"
           src="/images/logo/31Logo.png"
-          height={70}
-          width={140}
+          height={65}
+          width={160}
           onClick={() => {
             router.push("/");
           }}
