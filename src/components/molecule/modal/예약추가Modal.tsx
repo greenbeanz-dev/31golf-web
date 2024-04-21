@@ -1,5 +1,5 @@
 import gqlClient from "@/gql/gqlClient";
-import { CreateReservationQueryByWeb } from "@/gql/query/reservation/crud";
+import { CreateReservationQuery } from "@/gql/query/reservation/crud";
 import { CreateReservationProductQuery } from "@/gql/query/reservation_product/crud";
 import { Input } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ const 예약추가Modal = ({
   //   const { isOpen, onOpen, onClose } = useDisclosure();
   const { mutateAsync: createReservation, isLoading } = useMutation(
     async () => {
-      return await gqlClient.request(CreateReservationQueryByWeb, {
+      return await gqlClient.request(CreateReservationQuery, {
         status: reservation.status,
         dateDeparture: reservation.dateDeparture
           ? new Date(reservation.dateDeparture).toISOString()
@@ -51,17 +51,20 @@ const 예약추가Modal = ({
         priceCustom: reservation.priceCustom,
         daysDay: reservation.daysDay,
         daysNight: reservation.daysNight,
+        isWeb: true,
       });
     },
     {
       onSuccess: async (data) => {
+        console.log({ data });
         // reservation.productId 가 있는 경우 reservation_product 테이블에도 데이터를 추가 (예약 상세에서 상품정보를 보기 위함)
         if (data) {
           if (!reservation.productId) return;
           await gqlClient.request(CreateReservationProductQuery, {
             productId: reservation.productId.toString(),
-            reservationId: data.createReservationByWeb.id.toString(),
+            reservationId: data.createReservation.id.toString(),
           });
+          alert("예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
         }
       },
     }
@@ -75,7 +78,6 @@ const 예약추가Modal = ({
         action: async () => {
           createReservation();
           onClose();
-          alert("예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
         },
         label: "예약 접수",
       }}
