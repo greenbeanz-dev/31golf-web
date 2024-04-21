@@ -9,14 +9,18 @@ import { Input, useDisclosure } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
+import LoginModal from "@component/login/LoginModal";
 import { useForm } from "react-hook-form";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { MdEventNote } from "react-icons/md";
 import { SiKakaotalk } from "react-icons/si";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useIsMobile } from "../../hooks/useIsMobile";
+import useLogin from "../../utils/login/useLogin";
+import { isEmpty } from "../../utils/validate/isEmpty";
 
 const FloatBtnGroup = () => {
+  const { login, isLogin, logOut, userProfile } = useLogin();
   const isMobile = useIsMobile();
 
   const BtnGroup = [
@@ -38,6 +42,11 @@ const FloatBtnGroup = () => {
   ];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isLoginOpen,
+    onOpen: loginOpen,
+    onClose: loginClose,
+  } = useDisclosure();
 
   const ModalContent = ({
     isOpen,
@@ -52,11 +61,13 @@ const FloatBtnGroup = () => {
     const [dateArrival, setDateArrival] = useState<Date>();
     const queryClient = useQueryClient();
 
+    console.log({ userProfile });
     const { mutateAsync: createRequest, isLoading } = useMutation(
       async (requestInputModel: any) => {
+        if (!userProfile.id) return;
         return await gqlClient.request(CreateRequestQuery, {
           ...requestInputModel,
-          customerId: 39715, // 임의 테스트
+          customerId: Number(userProfile.id),
           dateDeparture: dateDeparture?.toISOString(),
           dateArrival: dateArrival?.toISOString(),
         });
@@ -243,7 +254,13 @@ const FloatBtnGroup = () => {
         window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
         break;
       case "request":
-        onOpen();
+        console.log("userProfile", userProfile);
+        if (isEmpty(userProfile)) {
+          loginOpen();
+        } else {
+          onOpen();
+        }
+
         break;
       case "call":
         window.location.href = `tel:${telNumber}`;
@@ -294,6 +311,11 @@ const FloatBtnGroup = () => {
         </div>
       ))}
       <ModalContent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={loginOpen}
+        onClose={loginClose}
+      />
     </div>
   );
 };
