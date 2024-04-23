@@ -78,6 +78,16 @@ builder.prismaObject("product", {
       nullable: true,
       resolve: (product) => product.is_active,
     }),
+    isWeb: t.field({
+      type: "Boolean",
+      nullable: true,
+      resolve: (product) => product.is_web,
+    }),
+    isBest: t.field({
+      type: "Boolean",
+      nullable: true,
+      resolve: (product) => product.is_best,
+    }),
     courseId: t.field({
       type: "BigInt",
       nullable: true,
@@ -188,6 +198,8 @@ builder.queryField("productList", (t) =>
       name: t.arg.string(),
       memo: t.arg.string(),
       isActive: t.arg.boolean(),
+      isWeb: t.arg.boolean(),
+      isBest: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -209,6 +221,12 @@ builder.queryField("productList", (t) =>
             { is_active: true },
             _args.isActive !== null && _args.isActive !== undefined
               ? { is_active: _args.isActive }
+              : {},
+            _args.isWeb !== null && _args.isWeb !== undefined
+              ? { is_web: _args.isWeb }
+              : {},
+            _args.isBest !== null && _args.isBest !== undefined
+              ? { is_best: _args.isBest }
               : {},
             // _args.isActive
             //   ? {
@@ -414,6 +432,8 @@ builder.mutationField("createProduct", (t) =>
       blockName: t.arg.string(),
       fax: t.arg.string(),
       isActive: t.arg.boolean(),
+      isWeb: t.arg.boolean(),
+      isBest: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -451,7 +471,9 @@ builder.mutationField("createProduct", (t) =>
           block_status: _args.blockStatus,
           block_name: _args.blockName,
           fax: _args.fax,
-          is_active: true,
+          is_active: _args.isActive || false,
+          is_web: _args.isWeb || false,
+          is_best: _args.isBest || false,
           course_id: _args.courseId,
           category_1: _args.category1,
           category_2: _args.category2,
@@ -499,6 +521,8 @@ builder.mutationField("updateProductById", (t) =>
       blockName: t.arg.string(),
       fax: t.arg.string(),
       isActive: t.arg.boolean(),
+      isWeb: t.arg.boolean(),
+      isBest: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -539,6 +563,8 @@ builder.mutationField("updateProductById", (t) =>
           block_name: _args.blockName,
           fax: _args.fax,
           is_active: _args.isActive,
+          is_web: _args.isWeb,
+          is_best: _args.isBest,
           course_id: _args.courseId,
           category_1: _args.category1,
           category_2: _args.category2,

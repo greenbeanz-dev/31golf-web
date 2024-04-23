@@ -8,6 +8,8 @@ query productListInfinityQuery(
   $name: String,
   $memo: String,
   $isActive: Boolean,
+  $isWeb: Boolean,
+  $isBest: Boolean,
   $courseId: Int,
   $category1: String,
   $category2: String,
@@ -23,6 +25,8 @@ query productListInfinityQuery(
     name: $name
     memo: $memo
     isActive: $isActive
+    isWeb: $isWeb
+    isBest: $isBest
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -51,6 +55,8 @@ query productListInfinityQuery(
         memo
         fax
         isActive
+        isWeb
+        isBest
         course {
           id
           name
@@ -91,6 +97,8 @@ mutation createProduct(
   $memo: String
   $fax: String
   $isActive: Boolean
+  $isWeb: Boolean
+  $isBest: Boolean
   $courseId: Int
   $category1: String
   $category2: String
@@ -121,6 +129,8 @@ mutation createProduct(
     memo: $memo
     fax: $fax
     isActive: $isActive
+    isWeb: $isWeb
+    isBest: $isBest
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -185,6 +195,8 @@ mutation updateProductById(
   $memo: String
   $fax: String
   $isActive: Boolean
+  $isWeb: Boolean
+  $isBest: Boolean
   $courseId: Int
   $category1: String
   $category2: String
@@ -216,6 +228,8 @@ mutation updateProductById(
     memo: $memo
     fax: $fax
     isActive: $isActive
+    isWeb: $isWeb
+    isBest: $isBest
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -246,6 +260,8 @@ mutation updateProductById(
     memo
     fax
     isActive
+    isWeb
+    isBest
     courseId
     category1
     category2
@@ -292,6 +308,8 @@ query ProductById($id: ID!) {
     memo
     fax
     isActive
+    isWeb
+    isBest
     course {
       id
       name
