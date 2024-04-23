@@ -1,6 +1,7 @@
 import gqlClient from "@/gql/gqlClient";
 import { ImageListByProductIdQuery } from "@/gql/query/productImage/crud";
 import { 상품캘린더 } from "@component/calendar";
+import LoginModal from "@component/login/LoginModal";
 import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import 상품결제정보 from "@component/organism/상품결제정보";
 import 상품예약버튼 from "@component/organism/상품예약버튼";
@@ -30,11 +31,9 @@ import { Carousel } from "react-responsive-carousel";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useProductBy from "../../service/product/useProductBy";
+import useLogin from "../../utils/login/useLogin";
 
 const HEADER_HEIGHT = 95;
-
-// TODO 임의 값
-const customerId = 39714;
 
 export function 골프상세Page({ productId }: { productId: number }) {
   const productRef = useRef(null);
@@ -103,6 +102,22 @@ export function 골프상세Page({ productId }: { productId: number }) {
     };
   }, []);
 
+  const { login, isLogin, logOut, userProfile } = useLogin();
+
+  const {
+    isOpen: isLoginOpen,
+    onOpen: loginOpen,
+    onClose: loginClose,
+  } = useDisclosure();
+
+  useEffect(() => {
+    // 로그인을 하지 않은 유저같은 경우엔 로그인 모달 뜨도록 추가
+    console.log({ userProfile });
+    if (!userProfile.id) {
+      loginOpen();
+    }
+  }, [userProfile]);
+
   const isMobile = useIsMobile();
 
   const PC_MESSAGE = data?.name + " " + data?.type;
@@ -132,7 +147,7 @@ export function 골프상세Page({ productId }: { productId: number }) {
     numPeople: numPeople,
     numTeam: Math.floor(numPeople / 4),
     productId: productId,
-    customerId: customerId,
+    customerId: Number(userProfile.id),
     priceCustom: Number(판매가),
     daysDay: DAYS_DAY,
     daysNight: DAYS_NIGHT,
@@ -378,6 +393,11 @@ export function 골프상세Page({ productId }: { productId: number }) {
           </div>
         </div>
       )}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={loginOpen}
+        onClose={loginClose}
+      />
     </div>
   );
 }

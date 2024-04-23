@@ -71,6 +71,7 @@ export const authOptions: NextAuthOptions = {
     KakaoProvider({
       clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID || "",
       clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET || "",
+      allowDangerousEmailAccountLinking: true,
       profile(profile) {
         return {
           id: profile.id,
@@ -97,15 +98,43 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email }) {
-      // TODO 휴대폰 번호 없는 경우 페이지 회원가입 페이지로 리다이렉트
-      console.log("Signing in:", account);
-      console.log("Signing profile:", profile);
-      // if (account && account.provider === "kakao") {
-      //   if (profile && !(profile as any).kakao_account.phone_number) {
-      //     const error = "필수 정보 누락"; // 사용자 정의 에러 메시지
-      //     throw new Error(error + "&callbackUrl=/signup");
-      //   }
-      // }
+      // console.log("Signing in:", account);
+      // console.log("Signing profile:", profile);
+
+      // 카카오 로그인
+      if (account && account.provider === "kakao" && profile) {
+        if (!(profile as any).kakao_account.phone_number) {
+          return "/signup";
+        }
+        const response = await prisma.customer.findMany({
+          where: {
+            name: profile.name,
+            phone: (profile as any).kakao_account.phone_number,
+            // phone: TEMP_PHONE_NUMBER
+          },
+        });
+        if (response.length === 0) {
+          return "/signup";
+        }
+      }
+
+      // 네이버 로그인
+      if (account && account.provider === "naver" && profile) {
+        if (!(profile as any).response.mobile) {
+          return "/signup";
+        }
+        const response = await prisma.customer.findMany({
+          where: {
+            name: (profile as any).response.nickname,
+            phone: (profile as any).response.mobile,
+            // phone: TEMP_PHONE_NUMBER
+          },
+        });
+
+        if (response.length === 0) {
+          return "/signup";
+        }
+      }
       return true;
     },
 
@@ -182,6 +211,11 @@ export const authOptions: NextAuthOptions = {
     },
   },
   adapter: PrismaAdapter(prisma),
+  redirect: async (url, baseUrl) => {
+    return url.startsWith(baseUrl)
+      ? Promise.resolve(url)
+      : Promise.resolve(baseUrl);
+  },
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>

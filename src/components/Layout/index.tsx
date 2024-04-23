@@ -1,3 +1,4 @@
+import FloatBtnGroup from "@component/button/FloatBtnGroup";
 import { Footer } from "@component/organism/Footer";
 import MobileTopBar from "@component/organism/MobilTopBar";
 import { MobileFooter } from "@component/organism/MobileFooter";
@@ -8,7 +9,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useMediaQuery } from "react-responsive";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { isMobileSize } from "../../utils/responsive/isMobile";
-
 interface Props {
   children: React.ReactNode;
 }
@@ -95,6 +95,7 @@ const Layout: React.FC<Props> = ({ children }) => {
             <div style={{ minHeight: 72 }} />
             {isMobile ? <MobileFooter /> : <Footer />}
           </div>
+          <FloatBtnGroup />
         </div>
       </Suspense>
     </ErrorBoundary>
