@@ -57,6 +57,16 @@ export const authOptions: NextAuthOptions = {
             const recentCustomer = response.sort(
               (a, b) => Number(b.id) - Number(a.id)
             );
+
+            // 가장 최근 로그인 정보로 provider 업데이트
+            const updateProvider = await prisma.customer.update({
+              where: {
+                id: recentCustomer[0].id,
+              },
+              data: {
+                provider: "provider",
+              },
+            });
             return {
               id: recentCustomer[0].id,
               name: recentCustomer[0].name,
@@ -113,12 +123,14 @@ export const authOptions: NextAuthOptions = {
 
       // 카카오 로그인
       if (account && account.provider === "kakao" && profile) {
+        // note: KEY 교환 전 테스트시 주석 처리 해주세요.
         if (!(profile as any).kakao_account.phone_number) {
           return "/signup";
         }
         const response = await prisma.customer.findMany({
           where: {
             name: profile.name,
+            // note: KEY 교환 전 테스트시 주석 처리 해주세요.
             phone: (profile as any).kakao_account.phone_number,
             // phone: TEMP_PHONE_NUMBER,
           },
@@ -130,12 +142,14 @@ export const authOptions: NextAuthOptions = {
 
       // 네이버 로그인
       if (account && account.provider === "naver" && profile) {
+        // note: KEY 교환 전 테스트시 주석 처리 해주세요.
         if (!(profile as any).response.mobile) {
           return "/signup";
         }
         const response = await prisma.customer.findMany({
           where: {
             name: (profile as any).response.nickname,
+            // note: KEY 교환 전 테스트시 주석 처리 해주세요.
             phone: (profile as any).response.mobile,
             // phone: TEMP_PHONE_NUMBER,
           },
@@ -161,6 +175,17 @@ export const authOptions: NextAuthOptions = {
           const recentCustomer = response.sort(
             (a, b) => Number(b.id) - Number(a.id)
           );
+
+          // 가장 최근 로그인 정보로 provider 업데이트
+          const updateProvider = await prisma.customer.update({
+            where: {
+              id: recentCustomer[0].id,
+            },
+            data: {
+              provider: "sns",
+            },
+          });
+          console.log({ updateProvider });
 
           return {
             ...session,
