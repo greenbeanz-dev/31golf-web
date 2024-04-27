@@ -159,7 +159,7 @@ export const authOptions: NextAuthOptions = {
               name: recentCustomer[0].name,
               email: recentCustomer[0].email,
               phone: recentCustomer[0].phone,
-              provvider: recentCustomer[0].provider,
+              provider: recentCustomer[0].provider,
               image: "",
             },
           };
@@ -178,7 +178,7 @@ export const authOptions: NextAuthOptions = {
               name: newCustomer.name,
               email: newCustomer.email,
               phone: newCustomer.phone,
-              provvider: newCustomer.provider,
+              provider: newCustomer.provider,
               image: "",
             },
           };
