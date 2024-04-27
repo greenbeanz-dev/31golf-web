@@ -70,6 +70,7 @@ const FloatBtnGroup = () => {
           customerId: Number(userProfile.id),
           dateDeparture: dateDeparture?.toISOString(),
           dateArrival: dateArrival?.toISOString(),
+          isWeb: true,
         });
       },
       {
