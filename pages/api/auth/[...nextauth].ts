@@ -6,7 +6,7 @@ import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import prisma from "../../../src/lib/prisma";
 
-const TEMP_PHONE_NUMBER = "010634887983";
+const TEMP_PHONE_NUMBER = "01063487983";
 
 declare module "next-auth" {
   // eslint-disable-next-line no-unused-vars
@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
               phone: credentials.phone,
             },
           });
+          console.log({ response });
           // 가장 큰 customer.id로 정렬
           if (response && response.length > 0) {
             const recentCustomer = response.sort(
@@ -63,9 +64,13 @@ export const authOptions: NextAuthOptions = {
               phone: recentCustomer[0].phone,
               image: "",
             };
+          } else {
+            console.log(
+              "일반 회원가입 유저가 아니기 때문에 회원가입 페이지로 이동합니다."
+            );
+            return true;
           }
         }
-        throw new Error("로그인 실패");
       },
     }),
     KakaoProvider({
@@ -98,8 +103,13 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email }) {
-      // console.log("Signing in:", account);
-      // console.log("Signing profile:", profile);
+      console.log("Signing in:", account);
+      console.log("Signing profile:", profile);
+
+      // 일반 로그인 클릭 시 회원가입이 안 된 유저일 경우 회원가입 페이지로 redirect
+      if (!profile && !account?.providerAccountId) {
+        return "/signup";
+      }
 
       // 카카오 로그인
       if (account && account.provider === "kakao" && profile) {
@@ -110,7 +120,7 @@ export const authOptions: NextAuthOptions = {
           where: {
             name: profile.name,
             phone: (profile as any).kakao_account.phone_number,
-            // phone: TEMP_PHONE_NUMBER
+            // phone: TEMP_PHONE_NUMBER,
           },
         });
         if (response.length === 0) {
@@ -127,7 +137,7 @@ export const authOptions: NextAuthOptions = {
           where: {
             name: (profile as any).response.nickname,
             phone: (profile as any).response.mobile,
-            // phone: TEMP_PHONE_NUMBER
+            // phone: TEMP_PHONE_NUMBER,
           },
         });
 
@@ -169,6 +179,7 @@ export const authOptions: NextAuthOptions = {
               name: token.name,
               phone: token.phone as string,
               email: token.email,
+              provider: "sns",
             },
           });
           return {
@@ -206,16 +217,16 @@ export const authOptions: NextAuthOptions = {
           token.phone = (profile as any).response.mobile;
         }
       }
-      token.phone = TEMP_PHONE_NUMBER;
+      // token.phone = TEMP_PHONE_NUMBER;
       return token;
     },
   },
   adapter: PrismaAdapter(prisma),
-  redirect: async (url, baseUrl) => {
-    return url.startsWith(baseUrl)
-      ? Promise.resolve(url)
-      : Promise.resolve(baseUrl);
-  },
+  // redirect: async (url, baseUrl) => {
+  //   return url.startsWith(baseUrl)
+  //     ? Promise.resolve(url)
+  //     : Promise.resolve(baseUrl);
+  // },
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>
