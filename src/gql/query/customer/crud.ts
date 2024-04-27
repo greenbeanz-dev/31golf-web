@@ -118,6 +118,7 @@ mutation UpdateCustomerByIdWeb(
   $memo: String
   $fax: String
   $isVillain: Boolean
+  $provider: String
 ) {
   UpdateCustomerByIdWeb(
     id: $id
@@ -127,11 +128,13 @@ mutation UpdateCustomerByIdWeb(
     memo: $memo
     fax: $fax
     isVillain: $isVillain
+    provider: $provider
   ) {
     id
     name
     phone
     email
+    provider
   }
 }
 `);
