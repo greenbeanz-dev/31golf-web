@@ -68,7 +68,6 @@ mutation createRequest(
   $isCanceled: Boolean
   $dateOperation: String
   $golfCourse: String
-  $isWeb: Boolean
 ) {
   createRequest(
     dateArrival: $dateArrival
@@ -82,7 +81,6 @@ mutation createRequest(
     isCanceled: $isCanceled
     dateOperation: $dateOperation
     golfCourse: $golfCourse
-    isWeb: $isWeb
   ) {
     id
     createdAt
@@ -95,10 +93,9 @@ mutation createRequest(
     requestContent
     customerId
     isReservation
-    isCanceled
+  isCanceled
     dateOperation
     golfCourse
-    isWeb
   }
 }
 `);
