@@ -3,6 +3,7 @@ import Login from "@component/login/LoginComponent";
 import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { FaBusAlt, FaCarSide, FaMapMarkedAlt, FaStore } from "react-icons/fa";
 import { FaCircleQuestion, FaTree } from "react-icons/fa6";
@@ -114,7 +115,9 @@ const 메인Page = () => {
               삼일골프의 다양한 투어 상품을 만나보세요!
             </div>
           </div>
-          <ProdudctTabBarMain />
+          <Suspense fallback={<div>asdasdasdasdasdas</div>}>
+            <ProdudctTabBarMain />
+          </Suspense>
         </div>
       </div>
       {/* </Suspense> */}
@@ -139,6 +142,8 @@ const ImageCarousel = () => {
       {imageList.map((image, idx) => {
         return (
           <Image
+            priority={true}
+            quality={100}
             alt={"mainImage"}
             key={idx}
             src={image}
