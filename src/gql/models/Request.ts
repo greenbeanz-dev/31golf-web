@@ -78,11 +78,6 @@ builder.prismaObject("request", {
       nullable: true,
       resolve: (request) => request.row_style,
     }),
-    isWeb: t.field({
-      type: "Boolean",
-      nullable: true,
-      resolve: (request) => request.is_web,
-    }),
   }),
 });
 
@@ -150,7 +145,6 @@ builder.mutationField("createRequest", (t) =>
       isCanceled: t.arg.boolean(),
       dateOperation: t.arg.string(),
       golfCourse: t.arg.string(),
-      isWeb: t.arg.boolean(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.request.create({
@@ -169,7 +163,6 @@ builder.mutationField("createRequest", (t) =>
           golf_course: _args.golfCourse,
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
-          is_web: _args.isWeb,
         },
       });
 
