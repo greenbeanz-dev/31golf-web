@@ -46,6 +46,11 @@ builder.prismaObject("customer", {
       nullable: true,
       resolve: (customer) => customer.is_villain,
     }),
+    provider: t.field({
+      type: "String",
+      nullable: true,
+      resolve: (customer) => customer.provider,
+    }),
   }),
 });
 
@@ -145,6 +150,7 @@ builder.mutationField("UpdateCustomerByIdWeb", (t) =>
       memo: t.arg.string(),
       fax: t.arg.string(),
       isVillain: t.arg.boolean(),
+      provider: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.customer.update({
@@ -160,6 +166,7 @@ builder.mutationField("UpdateCustomerByIdWeb", (t) =>
           fax: _args.fax,
           is_villain: _args.isVillain,
           updated_at: new Date(Date.now()).toISOString(),
+          provider: _args.provider,
         },
       });
       return result;

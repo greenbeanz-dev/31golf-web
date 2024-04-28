@@ -45,10 +45,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     (state) => state.changeProductId
   );
 
-  useEffect(() => {
-    // TODO 임의 추후 상품 ID로 교체 예정
-    changeProductId("2553");
-  }, []);
+  const [renderCalendar, setRenderCalendar] = useState(false);
 
   const { data, fetchNextPage, hasNextPage } =
     useProductPriceCalendarInfiniteQuery();
@@ -203,6 +200,18 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       set출발일(slot.start);
     }
   };
+
+  useEffect(() => {
+    // TODO 임의 추후 상품 ID로 교체 예정
+    changeProductId("2553");
+    setTimeout(() => {
+      setRenderCalendar(true);
+    }, 100); // 0.1초 후에 렌더링되도록 지연시킴 (캘린더 toolbar가 동작하지 않는 이슈로 인해 추가함)
+  }, []);
+
+  if (!renderCalendar) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
