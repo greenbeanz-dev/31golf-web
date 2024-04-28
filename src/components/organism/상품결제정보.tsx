@@ -1,8 +1,12 @@
+import dayjs from "dayjs";
 import { Dispatch, SetStateAction } from "react";
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { theme } from "../../../pages/_app";
-import dayjs from "dayjs";
 dayjs.locale("ko");
+const localizedFormat = require("dayjs/plugin/localizedFormat");
+const koLocale = require("dayjs/locale/ko");
+dayjs.extend(localizedFormat);
+dayjs.locale(koLocale);
 
 interface 상품결제정보Props {
   count: number;
@@ -26,11 +30,6 @@ const 상품결제정보 = ({
   note,
 }: 상품결제정보Props) => {
   const formattedDateDeparture = dayjs(dateDeparture).format("YYYY.MM.DD(ddd)");
-  // const year = dateDeparture.getFullYear();
-  // const month = String(dateDeparture.getMonth() + 1).padStart(2, "0");
-  // const day = String(dateDeparture.getDate()).padStart(2, "0");
-  // const formattedDateDeparture = `${year}.${month}.${day}`;
-
   const endDate = dayjs(dateDeparture).add(daysDay - 1, "day");
   const formattedDateArrival = endDate.format("YYYY.MM.DD(ddd)");
 
@@ -41,7 +40,7 @@ const 상품결제정보 = ({
       <div className="flex items-center">
         <div className="text-[14px] font-bold">기간</div>
         <div className="pl-2" />
-        <div className="text-[14px]">{`${formattedDateDeparture} ~ ${formattedDateArrival} ${daysNight}박 ${daysDay}일`}</div>
+        <div className="text-[14px]">{`${formattedDateDeparture} ~ ${formattedDateArrival} ${isNaN(daysNight) ? "당일" : `${daysNight}박 ${daysDay}일`} `}</div>
       </div>
       <div className="pt-1" />
       <div className="text-red-500 text-sm font-normal">{note}</div>
