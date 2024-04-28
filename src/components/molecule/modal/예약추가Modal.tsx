@@ -50,7 +50,7 @@ const 예약추가Modal = ({
         customerId: reservation.customerId,
         priceCustom: reservation.priceCustom,
         daysDay: reservation.daysDay,
-        daysNight: reservation.daysNight,
+        daysNight: isNaN(reservation.daysNight) ? 0 : 1,
         isWeb: true,
       });
     },
