@@ -1,12 +1,11 @@
-import { 상품이미지Component } from "@component/Image/상품이미지Component";
-import { useIsMobile } from "../../hooks/useIsMobile";
-import { Button } from "@nextui-org/react";
-import Image from "next/image";
+import { Product } from "@/gql/__generated__/graphql";
 import useProductInfiniteQuery, {
   useProductInfiniteQueryBody,
 } from "@/gql/query/product/useProductInfiniteQuery";
-import { Product } from "@/gql/__generated__/graphql";
-import { useEffect } from "react";
+import { 상품이미지Component } from "@component/Image/상품이미지Component";
+import { Button } from "@nextui-org/react";
+import Image from "next/image";
+import { Suspense, useEffect } from "react";
 
 interface ProductListMainProps {
   category1?: string;
@@ -19,8 +18,8 @@ const ProductListMain = ({
   category2,
   category3,
 }: ProductListMainProps) => {
-  const isMobile = useIsMobile();
-  const { data, fetchNextPage, hasNextPage } = useProductInfiniteQuery();
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useProductInfiniteQuery();
 
   const changeCategory1 = useProductInfiniteQueryBody(
     (state) => state.changeCategory1
@@ -67,32 +66,34 @@ const ProductListMain = ({
   }
 
   return (
-    <div className="w-full">
-      {/* 반응형 여기 수정  */}
-      <div className="w-full flex flex-wrap justify-between">
-        {list.map((item, idx) => {
-          return (
-            <상품이미지Component
-              key={idx}
-              item={item as Product}
-              mobileWidth={160}
-              mobileHeight={160}
-              pcWidth={448}
-              pcHeight={345}
-            />
-          );
-        })}
+    <Suspense fallback={<div>asdfasdfasdf</div>}>
+      <div className="w-full">
+        {/* 반응형 여기 수정  */}
+        <div className="w-full flex flex-wrap justify-between">
+          {list.map((item, idx) => {
+            return (
+              <상품이미지Component
+                key={idx}
+                item={item as Product}
+                mobileWidth={160}
+                mobileHeight={160}
+                pcWidth={448}
+                pcHeight={345}
+              />
+            );
+          })}
+        </div>
+        <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
+          <Image
+            alt="circle"
+            src={"/images/logo/add-circle.png"}
+            width={24}
+            height={24}
+          />
+          투어 상품 더보기
+        </Button>
       </div>
-      <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
-        <Image
-          alt="circle"
-          src={"/images/logo/add-circle.png"}
-          width={24}
-          height={24}
-        />
-        투어 상품 더보기
-      </Button>
-    </div>
+    </Suspense>
   );
 };
 

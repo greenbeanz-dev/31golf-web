@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
         name: { label: "이름", type: "text" },
         phone: { label: "휴대폰번호", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any> {
         console.log("credentials", credentials);
         if (credentials !== undefined) {
           const response = await prisma.customer.findMany({
@@ -68,10 +68,10 @@ export const authOptions: NextAuthOptions = {
               },
             });
             return {
-              id: recentCustomer[0].id,
-              name: recentCustomer[0].name,
-              email: recentCustomer[0].email,
-              phone: recentCustomer[0].phone,
+              id: recentCustomer[0].id ? Number(recentCustomer[0].id) : 0,
+              name: recentCustomer[0].name || "",
+              email: recentCustomer[0].email || "",
+              phone: recentCustomer[0].phone || "",
               image: "",
             };
           } else {
@@ -162,7 +162,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async session({ session, user, token }) {
+    async session({ session, user, token }): Promise<any> {
       if (token && token.name && token.phone) {
         const response = await prisma.customer.findMany({
           where: {
@@ -260,11 +260,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   adapter: PrismaAdapter(prisma),
-  // redirect: async (url, baseUrl) => {
-  //   return url.startsWith(baseUrl)
-  //     ? Promise.resolve(url)
-  //     : Promise.resolve(baseUrl);
-  // },
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>
