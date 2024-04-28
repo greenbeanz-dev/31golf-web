@@ -3,7 +3,6 @@ import { Footer } from "@component/organism/Footer";
 import MobileTopBar from "@component/organism/MobilTopBar";
 import { MobileFooter } from "@component/organism/MobileFooter";
 import TopBar from "@component/organism/TopBar";
-import TopButton from "@component/organism/TopButton";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useMediaQuery } from "react-responsive";
@@ -22,6 +21,8 @@ const Layout: React.FC<Props> = ({ children }) => {
   const mobile = useMediaQuery({ query: `(max-width: ${isMobileSize}px)` });
 
   const isMobile = useIsMobile();
+
+  const [isClient, setIsClient] = React.useState(false);
 
   //   const isManager = userProfile?.role === "MANAGER";
 
@@ -53,6 +54,14 @@ const Layout: React.FC<Props> = ({ children }) => {
   //         </div>
   //       );
   //     });
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <div>loading...</div>;
+  }
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
@@ -95,7 +104,9 @@ const Layout: React.FC<Props> = ({ children }) => {
             <div style={{ minHeight: 72 }} />
             {isMobile ? <MobileFooter /> : <Footer />}
           </div>
-          <FloatBtnGroup />
+          <Suspense fallback={<div>loading...</div>}>
+            <FloatBtnGroup />
+          </Suspense>
         </div>
       </Suspense>
     </ErrorBoundary>

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, course, customer, manager, Renamedpackage, payment, product, reservation, add_on, company, member, request, transaction, attraction, inclusive, message_history, product_attraction, product_inclusive, product_price, reservation_product, savings_account, Account, Session, User, VerificationToken, reservation_file, fax_history, savings_account_log, product_image } from "@prisma/client";
+import type { Prisma, course, customer, manager, Renamedpackage, payment, product, reservation, add_on, company, member, request, transaction, attraction, inclusive, message_history, product_attraction, product_inclusive, product_price, reservation_product, savings_account, Account, Session, User, VerificationToken, reservation_file, fax_history, savings_account_log, product_image, web_setting } from "@prisma/client";
 export default interface PrismaTypes {
     course: {
         Name: "course";
@@ -621,5 +621,19 @@ export default interface PrismaTypes {
                 Name: "product";
             };
         };
+    };
+    web_setting: {
+        Name: "web_setting";
+        Shape: web_setting;
+        Include: never;
+        Select: Prisma.web_settingSelect;
+        OrderBy: Prisma.web_settingOrderByWithRelationInput;
+        WhereUnique: Prisma.web_settingWhereUniqueInput;
+        Where: Prisma.web_settingWhereInput;
+        Create: {};
+        Update: {};
+        RelationName: never;
+        ListRelations: never;
+        Relations: {};
     };
 }

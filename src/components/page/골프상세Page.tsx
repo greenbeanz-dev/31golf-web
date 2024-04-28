@@ -159,7 +159,7 @@ export function 골프상세Page({ productId }: { productId: number }) {
   const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
   const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
 
-  const schedule = `${formatted출발일} ~ ${formatted도착일} (${DAYS_NIGHT}박 ${DAYS_DAY}일)`;
+  const schedule = `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`;
 
   const inclusiveList = data?.inclusives
     ? data.inclusives

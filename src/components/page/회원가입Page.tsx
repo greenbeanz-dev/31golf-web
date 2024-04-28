@@ -77,6 +77,7 @@ export function 회원가입Page() {
         memo: "",
         fax: "",
         isVillain: false,
+        provider: "local",
       });
     },
     {
