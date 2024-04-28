@@ -14,6 +14,7 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "reflect-metadata";
 import "../styles/custom-calendar.css";
+import "../styles/global.css";
 import "../styles/tailwind.css";
 dayjs.locale("ko");
 

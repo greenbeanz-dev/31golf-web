@@ -185,7 +185,7 @@ export const authOptions: NextAuthOptions = {
               provider: "sns",
             },
           });
-          console.log({ updateProvider });
+          // console.log({ updateProvider });
 
           return {
             ...session,
@@ -241,8 +241,21 @@ export const authOptions: NextAuthOptions = {
         ) {
           token.phone = (profile as any).response.mobile;
         }
+      } else {
+        // 일반 회원가입
+        if (token && token.sub) {
+          const response = await prisma.customer.findUnique({
+            where: {
+              id: Number(token.sub),
+            },
+          });
+          if (response) {
+            token.phone = response.phone;
+          }
+        }
       }
-      // token.phone = TEMP_PHONE_NUMBER;
+      // note: KEY 교환 후 삭제 필요.
+      token.phone = TEMP_PHONE_NUMBER;
       return token;
     },
   },
