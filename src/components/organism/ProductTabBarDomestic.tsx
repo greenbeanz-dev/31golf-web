@@ -1,29 +1,28 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductListDetail from "./ProductListDetail";
 
+const navItem = [
+  {
+    label: "강원도",
+  },
+  {
+    label: "충청도",
+  },
+  {
+    label: "전라도",
+  },
+  {
+    label: "경상도",
+  },
+  {
+    label: "제주도",
+  },
+];
+
 const ProductTabBarDomestic = () => {
-  const navItem = [
-    {
-      label: "강원도",
-    },
-    {
-      label: "충청도",
-    },
-    {
-      label: "전라도",
-    },
-    {
-      label: "경상도",
-    },
-    {
-      label: "제주도",
-    },
-  ];
   const [tab, setTab] = useState("강원도");
-  useEffect(() => {
-    console.log(tab);
-  }, [tab]);
+
   return (
     <>
       <Navbar

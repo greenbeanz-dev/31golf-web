@@ -48,22 +48,8 @@ const useProductInfiniteQuery = () => {
         ProductListInfinityQuery,
         pageParam
       );
-      // await new Promise((resolve) => setTimeout(resolve, 5000));
       return response;
     },
-    // select: (data) => {
-    //   return {
-    //     list: data?.pages
-    //       .map((page) => page.productList.edges.map((item) => item?.node))
-    //       .flat()
-    //       .map((item, index) => {
-    //         return {
-    //           ...item,
-    //         };
-    //       }),
-    //     ...data,
-    //   };
-    // },
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage.productList.pageInfo.hasNextPage) return false;
       return {
