@@ -22,8 +22,6 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   const isMobile = useIsMobile();
 
-  const [isClient, setIsClient] = React.useState(false);
-
   //   const isManager = userProfile?.role === "MANAGER";
 
   //   const RenderedChildren = match({
@@ -54,14 +52,6 @@ const Layout: React.FC<Props> = ({ children }) => {
   //         </div>
   //       );
   //     });
-
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <div>loading...</div>;
-  }
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>

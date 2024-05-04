@@ -1,5 +1,5 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import ProductListMain from "./ProductListMain";
 
 const navItem = [
@@ -64,15 +64,13 @@ const ProdudctTabBarMain = () => {
         </NavbarContent>
       </Navbar>
       <div className="min-h-[12px]" />
-      <Suspense fallback={<div>loading...</div>}>
-        <div>
-          {tab == "domestic" && <ProductListMain category1="국내" />}
-          {tab == "jeju" && (
-            <ProductListMain category1="국내" category2="제주도" />
-          )}
-          {tab == "overseas" && <ProductListMain category1="해외" />}
-        </div>
-      </Suspense>
+      <div>
+        {tab == "domestic" && <ProductListMain category1="국내" />}
+        {tab == "jeju" && (
+          <ProductListMain category1="국내" category2="제주도" />
+        )}
+        {tab == "overseas" && <ProductListMain category1="해외" />}
+      </div>
     </>
   );
 };
