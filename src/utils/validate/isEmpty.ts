@@ -1,6 +1,6 @@
 export function isEmpty(obj) {
   for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       return false;
     }
   }
