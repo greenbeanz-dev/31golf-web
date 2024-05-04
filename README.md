@@ -9,7 +9,7 @@ DATABASE_URL=postgresql://postgres:53r8bo6nFnGTmre@db-greenbeanz-31golf.c23aiwhh
 ```
 
 ```
-git pull https://github.com/greenbeanz-dev/31golf-front.git
+git pull https://github.com/greenbeanz-dev/31golf-web.git
 
 yarn
 
