@@ -2,22 +2,23 @@ import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { Suspense, useState } from "react";
 import ProductListMain from "./ProductListMain";
 
+const navItem = [
+  {
+    label: "국내골프",
+    name: "domestic",
+  },
+  {
+    label: "제주골프",
+    name: "jeju",
+  },
+  {
+    label: "해외골프",
+    name: "overseas",
+  },
+];
+
 const ProdudctTabBarMain = () => {
   const [tab, setTab] = useState("domestic");
-  const navItem = [
-    {
-      label: "국내골프",
-      name: "domestic",
-    },
-    {
-      label: "제주골프",
-      name: "jeju",
-    },
-    {
-      label: "해외골프",
-      name: "overseas",
-    },
-  ];
 
   return (
     <>

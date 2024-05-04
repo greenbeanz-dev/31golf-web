@@ -1,9 +1,10 @@
+import { Product } from "@/gql/__generated__/graphql";
+import { Skeleton } from "@nextui-org/react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import Image from "next/image";
-import { Product } from "@/gql/__generated__/graphql";
 
-export function 상품이미지Component({
+function 상품이미지Component({
   item,
   mobileWidth,
   mobileHeight,
@@ -80,3 +81,33 @@ export function 상품이미지Component({
     </div>
   );
 }
+
+const 상품이미지SkeletonComponent = ({
+  mobileWidth,
+  mobileHeight,
+  pcWidth,
+  pcHeight,
+}: {
+  mobileWidth?: number;
+  mobileHeight?: number;
+  pcWidth?: number;
+  pcHeight?: number;
+}) => {
+  const isMobile = useIsMobile();
+  return (
+    <div className="">
+      <Skeleton
+        className="rounded-[24px]"
+        style={{
+          width: isMobile ? mobileWidth : pcWidth,
+          height: isMobile ? mobileHeight : pcHeight,
+        }}
+      ></Skeleton>
+      <div className="pt-6" />
+      <Skeleton className="h-32 rounded-2xl" />
+      <div className="pt-6" />
+    </div>
+  );
+};
+
+export { 상품이미지Component, 상품이미지SkeletonComponent };

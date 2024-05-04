@@ -2,7 +2,11 @@ import { Product } from "@/gql/__generated__/graphql";
 import useProductInfiniteQuery, {
   useProductInfiniteQueryBody,
 } from "@/gql/query/product/useProductInfiniteQuery";
-import { 상품이미지Component } from "@component/Image/상품이미지Component";
+import {
+  상품이미지Component,
+  상품이미지SkeletonComponent,
+} from "@component/Image/상품이미지Component";
+import Repeat from "@component/molecule/Repeat";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { Suspense, useEffect } from "react";
@@ -18,22 +22,39 @@ const ProductListMain = ({
   category2,
   category3,
 }: ProductListMainProps) => {
-  const { data, fetchNextPage, hasNextPage, isLoading } =
-    useProductInfiniteQuery();
+  useEffect(() => {
+    useProductInfiniteQueryBody.getState().changeCategory1(category1);
+    useProductInfiniteQueryBody.getState().changeCategory2(category2);
+    useProductInfiniteQueryBody.getState().changeCategory3(category3);
+  }, [category1, category2, category3]);
 
-  const changeCategory1 = useProductInfiniteQueryBody(
-    (state) => state.changeCategory1
+  return (
+    <div className="w-full">
+      <Suspense
+        fallback={
+          <div className="w-full flex flex-wrap justify-between">
+            <Repeat repeat={4}>
+              <상품이미지SkeletonComponent
+                mobileWidth={160}
+                mobileHeight={160}
+                pcWidth={448}
+                pcHeight={345}
+              />
+            </Repeat>
+          </div>
+        }
+      >
+        <ProductListMainSuspense />
+      </Suspense>
+    </div>
   );
+};
 
-  const changeCategory2 = useProductInfiniteQueryBody(
-    (state) => state.changeCategory2
-  );
+export default ProductListMain;
 
-  const changeCategory3 = useProductInfiniteQueryBody(
-    (state) => state.changeCategory3
-  );
+const ProductListMainSuspense = () => {
+  const { data } = useProductInfiniteQuery();
 
-  // w
   let list = data?.pages
     .map((page) => page.productList.edges.map((item) => item?.node))
     .flat()
@@ -43,12 +64,6 @@ const ProductListMain = ({
       };
     })
     .slice(0, 4);
-
-  useEffect(() => {
-    changeCategory1(category1);
-    changeCategory2(category2);
-    changeCategory3(category3);
-  }, [category1, category2, category3]);
 
   if (list === undefined || list.length === 0) {
     return (
@@ -66,35 +81,28 @@ const ProductListMain = ({
   }
 
   return (
-    <Suspense fallback={<div>asdfasdfasdf</div>}>
-      <div className="w-full">
-        {/* 반응형 여기 수정  */}
-        <div className="w-full flex flex-wrap justify-between">
-          {list.map((item, idx) => {
-            return (
-              <상품이미지Component
-                key={idx}
-                item={item as Product}
-                mobileWidth={160}
-                mobileHeight={160}
-                pcWidth={448}
-                pcHeight={345}
-              />
-            );
-          })}
-        </div>
-        <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
-          <Image
-            alt="circle"
-            src={"/images/logo/add-circle.png"}
-            width={24}
-            height={24}
+    <div className="w-full flex flex-wrap justify-between">
+      {list.map((item, idx) => {
+        return (
+          <상품이미지Component
+            key={idx}
+            item={item as Product}
+            mobileWidth={160}
+            mobileHeight={160}
+            pcWidth={448}
+            pcHeight={345}
           />
-          투어 상품 더보기
-        </Button>
-      </div>
-    </Suspense>
+        );
+      })}
+      <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
+        <Image
+          alt="circle"
+          src={"/images/logo/add-circle.png"}
+          width={24}
+          height={24}
+        />
+        투어 상품 더보기
+      </Button>
+    </div>
   );
 };
-
-export default ProductListMain;
