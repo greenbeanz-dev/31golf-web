@@ -178,6 +178,7 @@ model reservation {
   transaction_unpaid      Int?
   is_transaction_editable Boolean?
   is_web                  Boolean?
+  product_name            String?
   payment                 payment[]
   request                 request[]
   manager                 manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk1w6gpc1lfmlb953goyfvg3so9")
