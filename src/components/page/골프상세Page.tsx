@@ -476,7 +476,7 @@ const LoginModalWhenNotLoggedIn = () => {
   useEffect(() => {
     // 로그인을 하지 않은 유저같은 경우엔 로그인 모달 뜨도록 추가
     if (!userProfile.id) {
-      loginOpen();
+      // loginOpen();
     }
   }, [userProfile]);
 
