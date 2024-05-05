@@ -6,7 +6,6 @@ query requestListInfinityQuery(
   $after: ID,
   $createdAt: String,
   $dateArrival: String,
-  $dateOperation: String,
   $customerName: String,
   $customerPhone: String,
   $requestContent: String,
@@ -17,7 +16,6 @@ query requestListInfinityQuery(
       after: $after
       createdAt: $createdAt
       dateArrival: $dateArrival
-      dateOperation: $dateOperation
       customerName: $customerName
       customerPhone: $customerPhone
       requestContent: $requestContent
@@ -46,7 +44,6 @@ query requestListInfinityQuery(
           }
           isReservation
           isCanceled
-          dateOperation
           golfCourse
           rowStyle
         }
@@ -66,7 +63,6 @@ mutation createRequest(
   $customerId: Int
   $isReservation: Boolean
   $isCanceled: Boolean
-  $dateOperation: String
   $golfCourse: String
 ) {
   createRequest(
@@ -79,7 +75,6 @@ mutation createRequest(
     customerId: $customerId
     isReservation: $isReservation
     isCanceled: $isCanceled
-    dateOperation: $dateOperation
     golfCourse: $golfCourse
   ) {
     id
@@ -93,8 +88,7 @@ mutation createRequest(
     requestContent
     customerId
     isReservation
-  isCanceled
-    dateOperation
+    isCanceled
     golfCourse
   }
 }
@@ -112,7 +106,6 @@ mutation updateRequestById(
   $customerId: Int
   $isReservation: Boolean
   $isCanceled: Boolean
-  $dateOperation: String
   $golfCourse: String
   $rowStyle: String
 ) {
@@ -127,7 +120,6 @@ mutation updateRequestById(
     customerId: $customerId
     isReservation: $isReservation
     isCanceled: $isCanceled
-    dateOperation: $dateOperation
     golfCourse: $golfCourse
     rowStyle: $rowStyle
   ) {
@@ -143,7 +135,6 @@ mutation updateRequestById(
     customerId
     isReservation
     isCanceled
-    dateOperation
     golfCourse
     rowStyle
   }
@@ -168,7 +159,6 @@ export const RequestByIdQuery = gql(`
       }
       isReservation
       isCanceled
-      dateOperation
       golfCourse
       rowStyle
     }
