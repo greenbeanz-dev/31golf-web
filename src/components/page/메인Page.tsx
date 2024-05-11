@@ -15,27 +15,7 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
-  const mainImageList = [
-    {
-      url: "/images/logo/golf_img1.png",
-      title: "여수 디오션 C.C 1박 2일 (36홀)",
-      description:
-        "바다름 품은 골프장! 다도해의 아름다움과 탁트인 바다의 상쾌감을 느껴보세요.",
-      price: 246000,
-    },
-    {
-      url: "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f",
-      title: "그린필드CC 당일 18홀",
-      description: "새로운 이름 새로운 느낌",
-      price: 500000,
-    },
-    {
-      url: "/images/logo/golf_img3.png",
-      title: "강릉 메이플비치 C.C 1박 2일 (36홀)",
-      description: "바람이 설계하고 사람이 감동하는 정통 링크스 코스!",
-      price: 305000,
-    },
-  ];
+
   return (
     <ErrorBoundary fallback={<div>메인</div>}>
       {/* <Suspense fallback={<Spinner />}>  suspense 오류뜸  */}
@@ -71,40 +51,6 @@ const 메인Page = () => {
           </div>
           <div style={{ minHeight: 24 }} />
           <베스트상품Component />
-          {/* <div
-            className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : ""}`}
-          >
-            {mainImageList.map((item) => {
-              return (
-                <div
-                  style={{
-                    width: isMobile ? 256 : 290,
-                    minWidth: isMobile ? 256 : 290,
-                  }}
-                >
-                  <img
-                    className={"rounded-2xl"}
-                    src={item.url}
-                    height={isMobile ? 343 : 223}
-                  />
-                  <div style={{ minHeight: 16 }} />
-                  <div className="text-base font-bold">{item.title}</div>
-                  <div
-                    className="text-base font-normal"
-                    style={{
-                      width: "100%",
-                      overflowWrap: "break-word",
-                    }}
-                  >
-                    {item.description}
-                  </div>
-                  <div className="text-sky-600 text-xl font-bold">
-                    {item.price.toLocaleString()}원 ~
-                  </div>
-                </div>
-              );
-            })}
-          </div> */}
           <div className={isMobile ? "min-h-[48px]" : "min-h-[36px]"} />
           {/* 투어 전체보기 */}
           <div
