@@ -52,7 +52,7 @@ export function 골프상세Page({
 
   const productRef = useRef(null);
   const 예약가이드Ref = useRef(null);
-  // TODO: 스크롤 내릴 때 page의 width가 변경됨
+
   const scrollYRef = useRef(0);
   const [fixed, setFixed] = useState(false);
 
