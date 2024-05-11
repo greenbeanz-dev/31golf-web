@@ -39,7 +39,13 @@ const 메인Page = () => {
         <div style={{ minWidth: isMobile ? 0 : 40 }}></div>
 
         {/* 베스트 상품  */}
-        <div style={{ flex: isMobile ? 0 : 4, width: "100%" }}>
+        <div
+          style={{
+            flex: isMobile ? 0 : 4,
+            width: "100%",
+            maxWidth: isMobile ? "100%" : 900,
+          }}
+        >
           {isMobile && <MobileMenu />}
           <div
             className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-2 ${isMobile ? "" : "items-end"}`}
