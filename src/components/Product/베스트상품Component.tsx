@@ -13,7 +13,6 @@ export function 베스트상품Component() {
       const response = await gqlClient.request(ProductListInfinityQuery, {
         first: 100,
         isBest: true,
-        isActive: true,
       });
       return response;
     },
