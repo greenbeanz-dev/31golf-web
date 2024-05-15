@@ -231,9 +231,9 @@ builder.queryField("productList", (t) =>
             // _args.isWeb !== null && _args.isWeb !== undefined
             //   ? { is_web: _args.isWeb }
             //   : {},
-            _args.isBest !== null && _args.isBest !== undefined
-              ? { is_best: _args.isBest }
-              : {},
+            // _args.isBest !== null && _args.isBest !== undefined
+            //   ? { is_best: _args.isBest }
+            //   : {},
             dateDepartureCondition
               ? {
                   date_departure: dateDepartureCondition,
@@ -303,10 +303,10 @@ builder.queryField("productList", (t) =>
           ],
         },
         orderBy: [
-          {
-            id: "desc",
-          },
-          // { sort: "asc" },
+          // {
+          //   id: "desc",
+          // },
+          { sort: "asc" },
         ],
       });
     },

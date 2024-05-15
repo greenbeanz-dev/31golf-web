@@ -11,7 +11,6 @@ export function 베스트상품Component() {
   const data = useQuery({
     queryFn: async () => {
       const response = await gqlClient.request(ProductListInfinityQuery, {
-        first: 100,
         isBest: true,
       });
       return response;
