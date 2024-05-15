@@ -186,11 +186,11 @@ builder.prismaObject("product", {
       nullable: true,
       resolve: (product) => product.thumbnail_image,
     }),
-    sort: t.field({
-      type: "BigInt",
-      nullable: true,
-      resolve: (product) => Number(product.sort),
-    }),
+    // sort: t.field({
+    //   type: "BigInt",
+    //   nullable: true,
+    //   resolve: (product) => Number(product.sort),
+    // }),
   }),
 });
 
