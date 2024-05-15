@@ -1,10 +1,10 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import prisma from "../../../src/lib/prisma";
+import { parsePhoneNumber } from "../../../src/utils/format/getFormatedPhoneNumber";
 
 const TEMP_PHONE_NUMBER = "01063487983";
 
@@ -90,9 +90,9 @@ export const authOptions: NextAuthOptions = {
       profile(profile) {
         return {
           id: profile.id,
-          name: profile.kakao_account.profile.nickname,
+          name: profile.kakao_account.name,
           email: profile.kakao_account.email,
-          image: profile.kakao_account.profile.profile_image_url,
+          image: "",
           phone: profile.kakao_account.phone_number,
         };
       },
@@ -117,7 +117,11 @@ export const authOptions: NextAuthOptions = {
       console.log("Signing profile:", profile);
 
       // 일반 로그인 클릭 시 회원가입이 안 된 유저일 경우 회원가입 페이지로 redirect
-      if (!profile && !account?.providerAccountId) {
+      if (
+        !profile &&
+        !account?.providerAccountId &&
+        account?.type === "credentials"
+      ) {
         return "/signup";
       }
 
@@ -127,16 +131,38 @@ export const authOptions: NextAuthOptions = {
         if (!(profile as any).kakao_account.phone_number) {
           return "/signup";
         }
+        const name = (profile as any).kakao_account.name;
+        const phone = parsePhoneNumber(
+          (profile as any).kakao_account.phone_number
+        );
+
         const response = await prisma.customer.findMany({
           where: {
-            name: profile.name,
+            name: name,
             // note: KEY 교환 전 테스트시 주석 처리 해주세요.
-            phone: (profile as any).kakao_account.phone_number,
-            // phone: TEMP_PHONE_NUMBER,
+            phone: phone,
           },
         });
+
+        console.log("카카오 response", response);
         if (response.length === 0) {
-          return "/signup";
+          if (name && phone) {
+            try {
+              const newCustomer = await prisma.customer.create({
+                data: {
+                  name: name,
+                  phone: phone,
+                  provider: "sns",
+                },
+              });
+              console.log({ newCustomer });
+            } catch (error) {
+              console.log(
+                "카카오 회원가입 수행시 에러 발생하였습니다. 회원가입 페이지로 이동합니다."
+              );
+              return "/signup";
+            }
+          }
         }
       }
 
@@ -146,17 +172,36 @@ export const authOptions: NextAuthOptions = {
         if (!(profile as any).response.mobile) {
           return "/signup";
         }
+
+        const name = (profile as any).response.name;
+        const phone = (profile as any).response.mobile.replaceAll("-", "");
+
         const response = await prisma.customer.findMany({
           where: {
-            name: (profile as any).response.name,
+            name: name,
             // note: KEY 교환 전 테스트시 주석 처리 해주세요.
-            phone: (profile as any).response.mobile,
-            // phone: TEMP_PHONE_NUMBER,
+            phone: phone,
           },
         });
 
         if (response.length === 0) {
-          return "/signup";
+          if (name && phone) {
+            try {
+              const newCustomer = await prisma.customer.create({
+                data: {
+                  name: name,
+                  phone: phone,
+                  provider: "sns",
+                },
+              });
+              console.log({ newCustomer });
+            } catch (error) {
+              console.log(
+                "naver 회원가입 수행시 에러 발생하였습니다. 회원가입 페이지로 이동합니다."
+              );
+              return "/signup";
+            }
+          }
         }
       }
       return true;
@@ -223,6 +268,7 @@ export const authOptions: NextAuthOptions = {
       return {};
     },
     async jwt({ token, user, account, profile, isNewUser }) {
+      console.log({ account, profile, token });
       if (account) {
         if (
           account.provider === "kakao" &&
@@ -230,7 +276,9 @@ export const authOptions: NextAuthOptions = {
           (profile as any).kakao_account &&
           (profile as any).kakao_account.phone_number
         ) {
-          token.phone = (profile as any).kakao_account.phone_number;
+          token.phone = parsePhoneNumber(
+            (profile as any).kakao_account.phone_number
+          );
         }
 
         if (
@@ -239,11 +287,11 @@ export const authOptions: NextAuthOptions = {
           (profile as any).response &&
           (profile as any).response.mobile
         ) {
-          token.phone = (profile as any).response.mobile;
+          token.phone = (profile as any).response.mobile.replaceAll("-", "");
         }
       } else {
         // 일반 회원가입
-        if (token && token.sub) {
+        if (token && token.sub && !isNaN(Number(token.sub))) {
           const response = await prisma.customer.findUnique({
             where: {
               id: Number(token.sub),
@@ -252,14 +300,24 @@ export const authOptions: NextAuthOptions = {
           if (response) {
             token.phone = response.phone;
           }
+        } else {
+          if (token && token.name && token.phone) {
+            const response = await prisma.customer.findMany({
+              where: {
+                name: token.name,
+                phone: token.phone,
+              },
+            });
+            if (response) {
+              token.phone = response[0].phone;
+            }
+          }
         }
       }
-      // note: KEY 교환 후 삭제 필요.
-      token.phone = TEMP_PHONE_NUMBER;
       return token;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
 };
 
 const Auth = (req: NextApiRequest, res: NextApiResponse) =>
