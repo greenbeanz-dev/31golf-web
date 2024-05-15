@@ -2,7 +2,7 @@ import axios from "axios";
 
 const NEXT_PUBLIC_TRACK = process.env.NEXT_PUBLIC_TRACK;
 
-export const useSmsSend = async (data: {
+export const sendSms = async (data: {
   phoneNumber: string;
   customerId: number;
 }): Promise<string> => {
