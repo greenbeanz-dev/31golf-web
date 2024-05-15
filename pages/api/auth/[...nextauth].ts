@@ -103,7 +103,7 @@ export const authOptions: NextAuthOptions = {
       profile(profile) {
         return {
           id: profile.response.id,
-          name: profile.response.nickname,
+          name: profile.response.name,
           email: profile.response.email,
           image: profile.response.profile_image,
           phone: profile.response.mobile,
@@ -148,7 +148,7 @@ export const authOptions: NextAuthOptions = {
         }
         const response = await prisma.customer.findMany({
           where: {
-            name: (profile as any).response.nickname,
+            name: (profile as any).response.name,
             // note: KEY 교환 전 테스트시 주석 처리 해주세요.
             phone: (profile as any).response.mobile,
             // phone: TEMP_PHONE_NUMBER,
