@@ -130,6 +130,7 @@ model product {
   thumbnail_image     String?
   is_web              Boolean?
   is_best             Boolean?
+  sort                BigInt?
   manager             manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkjr0yud7fty8ma1jvn0hif3no7")
   course              course?               @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_course_id_fk")
   product_attraction  product_attraction[]
@@ -238,6 +239,8 @@ model request {
   product_id      BigInt?
   reservation_id  BigInt?
   schedule        String?
+  days_day        Int?
+  days_night      Int?
   customer        customer?    @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk6wuyy6femh1tl1jxmw1ilrs6b")
   manager         manager?     @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkb333houpq99p6nl4pq5c6ykda")
   product         product?     @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkbywsb4tohr9bviei9hqvp7r4i")

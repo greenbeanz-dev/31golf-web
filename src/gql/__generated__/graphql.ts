@@ -971,6 +971,7 @@ export type Product = {
   price?: Maybe<Scalars['Float']['output']>;
   schedulePc?: Maybe<Scalars['String']['output']>;
   scheduleTablePc?: Maybe<Scalars['String']['output']>;
+  sort?: Maybe<Scalars['BigInt']['output']>;
   summary?: Maybe<Scalars['String']['output']>;
   teeOff?: Maybe<Scalars['String']['output']>;
   thumbnailImage?: Maybe<Scalars['String']['output']>;

@@ -84,7 +84,7 @@ const Login = () => {
                 로그인
               </Button>
               <div
-                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500]"
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500] cursor-pointer"
                 onClick={() => {
                   login("kakao", {});
                 }}
@@ -101,7 +101,7 @@ const Login = () => {
                 </div>
               </div>
               <div
-                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A]"
+                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A] cursor-pointer"
                 onClick={() => {
                   login("naver", {});
                 }}
