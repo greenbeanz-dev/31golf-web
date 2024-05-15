@@ -1,15 +1,12 @@
 import gqlClient from "@/gql/gqlClient";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { RequestListInfinityQuery } from "@/gql/query/request/crud";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 const useRequestInfiniteQuery = () => {
   const createdAt = useRequestInfiniteQueryBody((state) => state.createdAt);
   const dateArrival = useRequestInfiniteQueryBody((state) => state.dateArrival);
-  const dateOperation = useRequestInfiniteQueryBody(
-    (state) => state.dateOperation
-  );
   const name = useRequestInfiniteQueryBody((state) => state.name);
   const requestContent = useRequestInfiniteQueryBody(
     (state) => state.requestContent
@@ -21,7 +18,6 @@ const useRequestInfiniteQuery = () => {
       "requestList",
       createdAt?.toISOString(),
       dateArrival?.toISOString(),
-      dateOperation?.toISOString(),
       name,
       requestContent,
       memo,
@@ -31,7 +27,6 @@ const useRequestInfiniteQuery = () => {
         first: 10,
         createdAt: createdAt?.toISOString(),
         dateArrival: dateArrival?.toISOString(),
-        dateOperation: dateOperation?.toISOString(),
         name: name,
         requestContent: requestContent,
         memo: memo,
@@ -51,7 +46,6 @@ export default useRequestInfiniteQuery;
 type State = {
   createdAt: Date | undefined;
   dateArrival: Date | undefined;
-  dateOperation: Date | undefined;
   name: string;
   requestContent: string;
   memo: string;
@@ -60,7 +54,6 @@ type State = {
 type Actions = {
   changeCreatedAt: (createdAt: State["createdAt"]) => void;
   changeDateArrival: (dateArrival: State["dateArrival"]) => void;
-  changeDateOperation: (dateOperation: State["dateOperation"]) => void;
   changeName: (name: State["name"]) => void;
   changeRequestContent: (requestContent: State["requestContent"]) => void;
   changeMemo: (memo: State["memo"]) => void;
@@ -70,7 +63,6 @@ type Actions = {
 const initialState: State = {
   createdAt: undefined,
   dateArrival: undefined,
-  dateOperation: undefined,
   name: "",
   requestContent: "",
   memo: "",
@@ -87,11 +79,6 @@ export const useRequestInfiniteQueryBody = create(
     changeDateArrival: (dateArrival) => {
       set((state) => {
         state.dateArrival = dateArrival;
-      });
-    },
-    changeDateOperation: (dateOperation) => {
-      set((state) => {
-        state.dateOperation = dateOperation;
       });
     },
     changeName: (name) => {

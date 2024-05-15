@@ -57,10 +57,6 @@ class RequestInputModel {
 
   @IsOptional()
   @IsString()
-  dateOperation?: string | null;
-
-  @IsOptional()
-  @IsString()
   golfCourse?: string | null;
 
   // @IsOptional()
