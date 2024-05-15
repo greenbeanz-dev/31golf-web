@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSmsSend } from "../../service/sms/useSmsSend";
+import { sendSms } from "../../service/sms/sendSms";
 import useLogin from "../../utils/login/useLogin";
 
 export function 회원가입Page() {
@@ -44,7 +44,7 @@ export function 회원가입Page() {
       onSuccess: async (result) => {
         if (result) {
           const { createCustomerByWeb } = result;
-          const smsData = await useSmsSend({
+          const smsData = await sendSms({
             phoneNumber: phone,
             customerId: createCustomerByWeb.id,
           });
@@ -110,7 +110,7 @@ export function 회원가입Page() {
   const sendVerificationCode = async () => {
     console.log("sendVerificationCode", customerId);
     if (customerId !== 0) {
-      const smsData = await useSmsSend({
+      const smsData = await sendSms({
         phoneNumber: phone,
         customerId: customerId,
       });
