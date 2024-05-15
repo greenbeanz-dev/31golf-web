@@ -306,7 +306,7 @@ builder.queryField("productList", (t) =>
           {
             id: "desc",
           },
-          { sort: "asc" },
+          // { sort: "asc" },
         ],
       });
     },
