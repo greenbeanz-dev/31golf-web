@@ -7,8 +7,9 @@ import {
   상품이미지SkeletonComponent,
 } from "@component/Image/상품이미지Component";
 import Repeat from "@component/molecule/Repeat";
+import { Checkbox } from "@nextui-org/react";
 import Image from "next/image";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 interface ProductListDetailProps {
   category1?: string;
@@ -54,8 +55,18 @@ export default ProductListDetail;
 const ProductListDetailSuspense = () => {
   const { data } = useProductInfiniteQuery();
 
+  const [isDay, setIsDay] = useState<boolean>(false);
+
   let list = data?.pages
-    .map((page) => page.productList.edges.map((item) => item?.node))
+    .map((page) =>
+      page.productList.edges
+        .map((item) => item?.node)
+        .filter((product) =>
+          isDay
+            ? product?.type?.includes("당일")
+            : !product?.type?.includes("당일")
+        )
+    )
     .flat()
     .map((item, index) => {
       return {
@@ -79,19 +90,29 @@ const ProductListDetailSuspense = () => {
   }
 
   return (
-    <div className="w-full flex flex-wrap justify-between">
-      {list.map((item, idx) => {
-        return (
-          <상품이미지Component
-            key={idx}
-            item={item as Product}
-            mobileWidth={160}
-            mobileHeight={160}
-            pcWidth={384}
-            pcHeight={295}
-          />
-        );
-      })}
+    <div className="flex flex-col w-full gap-2">
+      <Checkbox
+        id={`checkbox-jeju`}
+        isSelected={isDay}
+        onChange={() => setIsDay(!isDay)}
+      >
+        당일 상품 보기
+      </Checkbox>
+
+      <div className="w-full flex flex-wrap justify-between">
+        {list.map((item, idx) => {
+          return (
+            <상품이미지Component
+              key={idx}
+              item={item as Product}
+              mobileWidth={160}
+              mobileHeight={160}
+              pcWidth={384}
+              pcHeight={295}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

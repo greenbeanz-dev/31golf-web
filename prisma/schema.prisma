@@ -231,7 +231,6 @@ model request {
   customer_id     BigInt?
   is_reservation  Boolean?
   is_canceled     Boolean?
-  date_operation  String?
   golf_course     String?
   row_style       String?      @db.VarChar
   todos           String[]

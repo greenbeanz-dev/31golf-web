@@ -28,7 +28,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex-1 flex-col">
+    <div className="flex-1 flex-col" style={{ minWidth: "224px" }}>
       <div className="text-xl font-bold">
         <Button
           onClick={() => {

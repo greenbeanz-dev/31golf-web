@@ -5,11 +5,12 @@ import { CreateRequestQuery } from "@/gql/query/request/crud";
 //   RequestInputModelResolver,
 // } from "@/gql/query/request/model"; 사용시 Reflect.getMetadata is not a function 에러 발생
 import CommonModal from "@component/molecule/modal/CommonModal";
-import { Input, useDisclosure } from "@nextui-org/react";
+import { Input, Textarea, useDisclosure } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import LoginModal from "@component/login/LoginModal";
+import DateTimeNumberInput from "@component/molecule/input/DateTimeNumberInput";
 import { useForm } from "react-hook-form";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { MdEventNote } from "react-icons/md";
@@ -58,7 +59,13 @@ const FloatBtnGroup = () => {
     onClose: () => void;
   }) => {
     const [dateDeparture, setDateDeparture] = useState<Date>();
-    const [dateArrival, setDateArrival] = useState<Date>();
+    const [daysDay, setDaysDay] = useState<string>("1");
+    const [daysNight, setDaysNight] = useState<string>("2");
+    const [numTeam, setNumTeam] = useState<string>("1");
+    const [numPeople, setNumPeople] = useState<string>("4");
+    const [golfCourse, setGolfCourse] = useState<string>("");
+    const [requestContent, setRequestContent] = useState<string>("");
+
     const queryClient = useQueryClient();
 
     console.log({ userProfile });
@@ -69,7 +76,12 @@ const FloatBtnGroup = () => {
           ...requestInputModel,
           customerId: Number(userProfile.id),
           dateDeparture: dateDeparture?.toISOString(),
-          dateArrival: dateArrival?.toISOString(),
+          daysDay: Number(daysDay),
+          daysNight: Number(daysNight),
+          numTeam: Number(numTeam),
+          numPeople: Number(numPeople),
+          golfCourse: golfCourse,
+          requestContent: requestContent,
         });
       },
       {
@@ -89,7 +101,7 @@ const FloatBtnGroup = () => {
       formState: { errors },
     } = useForm<Omit<any, "id">>({
       mode: "onSubmit",
-      //   resolver: RequestInputModelResolver,
+      // resolver: RequestInputModelResolver,
     });
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
@@ -125,119 +137,138 @@ const FloatBtnGroup = () => {
         <div className="flex flex-col w-full gap-4">
           <form className="w-full">
             <div className="flex flex-col w-full gap-2">
-              <Input
-                classNames={{
-                  label: "min-w-[7rem]",
-                  input: ["!ring-transparent"],
-                  mainWrapper: ["w-full"],
+              <DateTimeNumberInput
+                label="출발날짜"
+                value={dateDeparture ? new Date(dateDeparture) : undefined}
+                onChange={(e) => {
+                  setDateDeparture(e);
                 }}
-                {...register("schedule")}
-                isClearable
-                labelPlacement="outside-left"
-                variant="bordered"
-                placeholder="YY-mm-dd ~ YY-mm-dd"
-                label="일정"
-                isInvalid={!!errors.golfCourse}
-                // errorMessage={errors?.golfCourse?.message || ""}
               />
-
               <div className="flex gap-10">
                 <Input
                   classNames={{
-                    label: "min-w-[7rem]",
+                    label: "min-w-[5rem]",
+                    input: ["!ring-transparent"],
+                    mainWrapper: ["w-full"],
+                  }}
+                  value={daysDay}
+                  isClearable
+                  labelPlacement="outside-left"
+                  variant="bordered"
+                  placeholder="박"
+                  label="박"
+                  onChange={(e) => {
+                    const day = Number(e.target.value);
+
+                    if (!isNaN(day)) {
+                      setDaysDay(e.target.value);
+                      setDaysNight((day + 1).toString());
+                    }
+                  }}
+                />
+                <Input
+                  classNames={{
+                    label: "min-w-[5rem]",
                     input: ["!ring-transparent"],
                     mainWrapper: ["w-full"],
                   }}
                   type="number"
-                  {...register("numTeam", {
-                    valueAsNumber: true,
-                  })}
+                  value={daysNight}
+                  // {...register("numPeople", {
+                  //   valueAsNumber: true,
+                  // })}
+                  isClearable
+                  labelPlacement="outside-left"
+                  variant="bordered"
+                  placeholder="일"
+                  label="일"
+                  onChange={(e) => {
+                    const night = Number(e.target.value);
+
+                    if (!isNaN(night)) {
+                      setDaysNight(night.toString());
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex gap-10">
+                <Input
+                  classNames={{
+                    label: "min-w-[5rem]",
+                    input: ["!ring-transparent"],
+                    mainWrapper: ["w-full"],
+                  }}
+                  value={numTeam}
                   isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="팀"
                   label="팀 수"
-                  isInvalid={!!errors.numTeam}
-                  //   errorMessage={errors?.numTeam?.message || ""}
+                  onChange={(e) => {
+                    const team = Number(e.target.value);
+
+                    if (!isNaN(team)) {
+                      setNumTeam(e.target.value);
+                      setNumPeople((team * 4).toString());
+                    }
+                  }}
                 />
                 <Input
                   classNames={{
-                    label: "min-w-[7rem]",
+                    label: "min-w-[5rem]",
                     input: ["!ring-transparent"],
                     mainWrapper: ["w-full"],
                   }}
                   type="number"
-                  {...register("numPeople", {
-                    valueAsNumber: true,
-                  })}
+                  value={numPeople}
+                  // {...register("numPeople", {
+                  //   valueAsNumber: true,
+                  // })}
                   isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="명"
                   label="인원 수"
-                  isInvalid={!!errors.numPeople}
-                  //   errorMessage={errors?.numPeople?.message || ""}
+                  onChange={(e) => {
+                    const people = Number(e.target.value);
+
+                    if (!isNaN(people)) {
+                      setNumPeople(people.toString());
+                    }
+                  }}
                 />
               </div>
               <Input
                 classNames={{
-                  label: "min-w-[7rem]",
+                  label: "min-w-[5rem]",
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                {...register("golfCourse")}
                 isClearable
                 labelPlacement="outside-left"
                 variant="bordered"
                 placeholder="골프장"
                 label="골프장"
-                isInvalid={!!errors.golfCourse}
-                // errorMessage={errors?.golfCourse?.message || ""}
+                onChange={(e) => {
+                  setGolfCourse(e.target.value);
+                }}
               />
-              <Input
+
+              <Textarea
                 classNames={{
-                  label: "min-w-[7rem]",
+                  label: "min-w-[5rem]",
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                {...register("dateOperation")}
-                isClearable
+                minRows={5}
                 labelPlacement="outside-left"
                 variant="bordered"
-                placeholder="신청일"
-                label="신청일"
-                isInvalid={!!errors.dateOperation}
-                // errorMessage={errors?.dateOperation?.message || ""}
-              />
-              <Input
-                classNames={{
-                  label: "min-w-[7rem]",
-                  input: ["!ring-transparent"],
-                  mainWrapper: ["w-full"],
+                placeholder="문의사항"
+                label="문의사항"
+                onChange={(e) => {
+                  setRequestContent(e.target.value);
                 }}
-                {...register("requestContent")}
-                isClearable
-                labelPlacement="outside-left"
-                variant="bordered"
-                placeholder="접수 내용"
-                label="접수내용"
-                isInvalid={!!errors.requestContent}
-                // errorMessage={errors?.requestContent?.message || ""}
-              />
-              <Input
-                classNames={{
-                  label: "min-w-[7rem]",
-                  input: ["!ring-transparent"],
-                  mainWrapper: ["w-full"],
-                }}
-                {...register("memo")}
-                isClearable
-                labelPlacement="outside-left"
-                variant="bordered"
-                placeholder="메모"
-                label="메모"
-                isInvalid={!!errors.memo}
-                // errorMessage={errors?.memo?.message || ""}
               />
             </div>
           </form>
