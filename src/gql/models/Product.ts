@@ -186,11 +186,11 @@ builder.prismaObject("product", {
       nullable: true,
       resolve: (product) => product.thumbnail_image,
     }),
-    // sort: t.field({
-    //   type: "BigInt",
-    //   nullable: true,
-    //   resolve: (product) => Number(product.sort),
-    // }),
+    sort: t.field({
+      type: "BigInt",
+      nullable: true,
+      resolve: (product) => Number(product.sort),
+    }),
   }),
 });
 
@@ -231,9 +231,9 @@ builder.queryField("productList", (t) =>
             // _args.isWeb !== null && _args.isWeb !== undefined
             //   ? { is_web: _args.isWeb }
             //   : {},
-            // _args.isBest !== null && _args.isBest !== undefined
-            //   ? { is_best: _args.isBest }
-            //   : {},
+            _args.isBest !== null && _args.isBest !== undefined
+              ? { is_best: _args.isBest }
+              : {},
             dateDepartureCondition
               ? {
                   date_departure: dateDepartureCondition,
