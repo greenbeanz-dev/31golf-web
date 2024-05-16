@@ -432,4 +432,5 @@ model web_setting {
   url           String?
   display_begin DateTime? @db.Timestamp(6)
   display_end   DateTime? @db.Timestamp(6)
+  type          String?   @db.VarChar(255)
 }
