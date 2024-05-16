@@ -37,6 +37,7 @@ interface CommonModalProps {
     | "4xl"
     | "5xl"
     | "full";
+  footer?: React.ReactNode;
 }
 
 const CommonModal = ({
@@ -47,13 +48,22 @@ const CommonModal = ({
   isOpen,
   onClose,
   size = "xl",
+  footer,
 }: CommonModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={size}>
+    <Modal
+      classNames={{
+        wrapper: "z-[1000]",
+      }}
+      isOpen={isOpen}
+      onClose={onClose}
+      size={size}
+    >
       <ModalContent>
         <ModalHeader>{header}</ModalHeader>
         <ModalBody className="min-h-unit-5">{children}</ModalBody>
         <ModalFooter>
+          {footer}
           {confirmAction && (
             <Button
               variant="solid"
