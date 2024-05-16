@@ -55,7 +55,7 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
-      <Suspense fallback={<></>}>
+      <Suspense fallback={<div></div>}>
         <div
           className="max-w-[100vw] min-h-[100vh]"
           style={{

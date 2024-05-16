@@ -224,7 +224,7 @@ export function 골프상세Page({
             <div className="pt-2" />
             <div className="text-[16px] opacity-70">{data?.summary}</div>
             <div className="pt-[10px]" />
-            <Suspense fallback={<></>}>
+            <Suspense fallback={<div></div>}>
               <상품캘린더
                 판매가={판매가}
                 set판매가={set판매가}

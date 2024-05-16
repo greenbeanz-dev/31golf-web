@@ -25,7 +25,7 @@ function Detail({
         <title>Home</title>
       </Head>
       <div className="min-h-10" />
-      <Suspense fallback={<></>}>
+      <Suspense fallback={<div></div>}>
         <골프상세Page
           productId={Number(id)}
           productImageList={productImageList}
