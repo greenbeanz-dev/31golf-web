@@ -303,9 +303,9 @@ builder.queryField("productList", (t) =>
           ],
         },
         orderBy: [
-          {
-            id: "desc",
-          },
+          // {
+          //   id: "desc",
+          // },
           { sort: "asc" },
         ],
       });
