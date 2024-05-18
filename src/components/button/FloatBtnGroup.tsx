@@ -11,6 +11,7 @@ import { useState } from "react";
 
 import LoginModal from "@component/login/LoginModal";
 import DateTimeNumberInput from "@component/molecule/input/DateTimeNumberInput";
+import { ConfirmModal } from "@component/molecule/modal/ConfirmModal";
 import { useForm } from "react-hook-form";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { MdEventNote } from "react-icons/md";
@@ -48,6 +49,11 @@ const FloatBtnGroup = () => {
     onOpen: loginOpen,
     onClose: loginClose,
   } = useDisclosure();
+  const {
+    isOpen: isConfirmOpen,
+    onOpen: confirmOpen,
+    onClose: confirmClose,
+  } = useDisclosure();
 
   const ModalContent = ({
     isOpen,
@@ -68,7 +74,6 @@ const FloatBtnGroup = () => {
 
     const queryClient = useQueryClient();
 
-    console.log({ userProfile });
     const { mutateAsync: createRequest, isLoading } = useMutation(
       async (requestInputModel: any) => {
         if (!userProfile.id) return;
@@ -89,6 +94,7 @@ const FloatBtnGroup = () => {
           queryClient.invalidateQueries(["requestList"]);
           onClose();
           reset();
+          confirmOpen();
         },
       }
     );
@@ -346,6 +352,15 @@ const FloatBtnGroup = () => {
         isOpen={isLoginOpen}
         onOpen={loginOpen}
         onClose={loginClose}
+      />
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onOpen={confirmOpen}
+        onConfirmClose={confirmClose}
+        onClose={onClose}
+        message={
+          "접수가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다. <br />고객센터:02-561-8008"
+        }
       />
     </div>
   );

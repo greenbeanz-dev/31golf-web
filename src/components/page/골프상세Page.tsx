@@ -83,8 +83,8 @@ export function 골프상세Page({
     };
   }, []);
 
-  const PC_MESSAGE = data?.name + " " + data?.type;
-  const MOBILE_MESSAGE = data?.name;
+  const PC_MESSAGE = data?.name || "" + " " + data?.type;
+  const MOBILE_MESSAGE = data?.name || "";
   // make list from a list except for the last element
   // const MOBILE_CONTENT_NIGHTS = data?.type?.split(" ").slice(0, -1).join(" ");
   // const MOBILE_CONTENT_ROUNDS =
