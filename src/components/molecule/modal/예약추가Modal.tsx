@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { useIsMobile } from "../../../hooks/useIsMobile";
 import CommonModal from "./CommonModal";
+import { ConfirmModal } from "./ConfirmModal";
 
 const customerName = "최경민";
 const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
@@ -73,34 +74,7 @@ const 예약추가Modal = ({
       },
     }
   );
-  const ConfirmModal = ({
-    isOpen,
-    onOpen,
-    onConfirmClose,
-    onClose,
-  }: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onConfirmClose: () => void;
-    onClose: () => void;
-  }) => {
-    return (
-      <CommonModal
-        isOpen={isOpen}
-        onClose={onClose}
-        confirmAction={{
-          action: async () => {
-            onConfirmClose();
-            onClose();
-          },
-          label: "확인",
-        }}
-      >
-        예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다. <br />
-        고객센터:02-561-8008
-      </CommonModal>
-    );
-  };
+
   return (
     <>
       <CommonModal
@@ -232,6 +206,9 @@ const 예약추가Modal = ({
         onOpen={confirmOpen}
         onConfirmClose={confirmClose}
         onClose={onClose}
+        message={
+          "예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다. <br />고객센터:02-561-8008"
+        }
       />
     </>
   );
