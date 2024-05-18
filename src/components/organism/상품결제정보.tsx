@@ -30,12 +30,15 @@ const 상품결제정보 = ({
   note,
 }: 상품결제정보Props) => {
   const formattedDateDeparture = dayjs(dateDeparture).format("YYYY.MM.DD(ddd)");
-  const endDate = dayjs(dateDeparture).add(daysDay - 1, "day");
-  const formattedDateArrival = endDate.format("YYYY.MM.DD(ddd)");
+  const endDate = dateDeparture;
+  if (!isNaN(daysDay)) {
+    endDate.setDate(endDate.getDate() + daysDay - 1);
+  }
+  const formattedDateArrival = dayjs(endDate).format("YYYY.MM.DD(ddd)");
 
   return (
     <>
-      <div className="text-[16px] font-bold">{name}</div>
+      <div className="text-[16px] font-bold">{name.replaceAll("null", "")}</div>
       <div className="pt-2" />
       <div className="flex items-center">
         <div className="text-[14px] font-bold">기간</div>

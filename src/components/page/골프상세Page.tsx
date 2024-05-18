@@ -117,7 +117,9 @@ export function 골프상세Page({
   };
 
   const endDate = new Date(출발일);
-  endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+  if (!isNaN(DAYS_DAY)) {
+    endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+  }
 
   const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
   const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");

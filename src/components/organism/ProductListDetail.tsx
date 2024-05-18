@@ -58,7 +58,7 @@ const ProductListDetailSuspense = () => {
   const { pathname } = router;
 
   const { data } = useProductInfiniteQuery();
-  const [isDay, setIsDay] = useState<boolean>(false);
+  const [isDay, setIsDay] = useState<boolean>(true);
 
   let list = data?.pages
     .map((page) =>
