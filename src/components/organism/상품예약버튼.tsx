@@ -1,8 +1,10 @@
+import LoginModal from "@component/login/LoginModal";
+import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { Dispatch, SetStateAction } from "react";
-import 상품결제정보 from "./상품결제정보";
-import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import { theme } from "../../../pages/_app";
+import useLogin from "../../utils/login/useLogin";
+import 상품결제정보 from "./상품결제정보";
 
 interface 상품예약버튼Props {
   product: {
@@ -29,7 +31,12 @@ const 상품예약버튼 = ({
   setNumPeople,
 }: 상품예약버튼Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const {
+    isOpen: isLoginOpen,
+    onOpen: loginOpen,
+    onClose: loginClose,
+  } = useDisclosure();
+  const { userProfile } = useLogin();
   return (
     <div>
       <상품결제정보
@@ -43,7 +50,6 @@ const 상품예약버튼 = ({
         note="(2~3인 진행 시 별도 문의 부탁드립니다)"
       />
       <div style={{ minHeight: 8 }} />
-
       {isOpen && (
         <예약추가Modal
           reservation={reservation}
@@ -64,11 +70,17 @@ const 상품예약버튼 = ({
           fontWeight: "bold",
         }}
         onClick={() => {
-          onOpen();
+          console.log("123", userProfile);
+          !userProfile.id ? loginOpen() : onOpen();
         }}
       >
         투어 예약하기
       </Button>
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={loginOpen}
+        onClose={loginClose}
+      />
     </div>
   );
 };

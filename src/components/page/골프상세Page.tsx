@@ -49,6 +49,11 @@ export function 골프상세Page({
   const { userProfile } = useLogin();
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isLoginOpen,
+    onOpen: loginOpen,
+    onClose: loginClose,
+  } = useDisclosure();
 
   const productRef = useRef(null);
   const 예약가이드Ref = useRef(null);
@@ -355,7 +360,7 @@ export function 골프상세Page({
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  onOpen();
+                  !userProfile.id ? loginOpen() : onOpen();
                 }}
               >
                 투어 예약하기
@@ -364,7 +369,11 @@ export function 골프상세Page({
           </div>
         )}
       </div>
-      <LoginModalWhenNotLoggedIn />
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={loginOpen}
+        onClose={loginClose}
+      />
     </>
   );
 }
@@ -476,26 +485,6 @@ const Step = ({ number, description1, description2, icon }) => (
   </div>
 );
 
-const LoginModalWhenNotLoggedIn = () => {
-  const { userProfile } = useLogin();
-
-  useEffect(() => {
-    // 로그인을 하지 않은 유저같은 경우엔 로그인 모달 뜨도록 추가
-    if (!userProfile.id) {
-      loginOpen();
-    }
-  }, [userProfile]);
-
-  const {
-    isOpen: isLoginOpen,
-    onOpen: loginOpen,
-    onClose: loginClose,
-  } = useDisclosure();
-
-  return (
-    <LoginModal isOpen={isLoginOpen} onOpen={loginOpen} onClose={loginClose} />
-  );
-};
 // const ButtonList = () => {
 //   const labelList = [
 //     "일정표",
