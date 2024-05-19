@@ -6,8 +6,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { theme } from "../../../pages/_app";
 import getShortPhoneNumber from "../../utils/format/getShortPhoneNumber";
 import useLogin from "../../utils/login/useLogin";
-
-const Login = () => {
+interface LoginProps {
+  useHelperMsg?: boolean;
+}
+const Login = ({ useHelperMsg = false }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLogin, logOut, userProfile } = useLogin();
@@ -30,13 +32,14 @@ const Login = () => {
   return (
     <div className="flex-1 flex-col" style={{ minWidth: "224px" }}>
       <div className="text-xl font-bold">
-        <Button
+        {/* <Button
           onClick={() => {
             logOut();
           }}
         >
           로그아웃
-        </Button>
+        </Button> */}
+
         {isLogin && userProfile.name && (
           <div>
             {userProfile.name}
@@ -47,6 +50,11 @@ const Login = () => {
         <div className="flex flex-col gap-2">
           {!isLogin && (
             <>
+              {useHelperMsg && (
+                <div className="text-red-500 text-sm font-normal">
+                  로그인이 필요합니다 🙂
+                </div>
+              )}
               회원 로그인
               <Input
                 classNames={{
