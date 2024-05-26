@@ -50,6 +50,7 @@ model customer {
   userid            String?       @unique @db.VarChar(255)
   password          String?       @db.VarChar(255)
   verification_code String?       @db.VarChar(255)
+  visit_count       Int?          @default(0)
   manager           manager?      @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fki314oiw4pybhycvpvyhrsf4u2")
   request           request[]
   reservation       reservation[]
