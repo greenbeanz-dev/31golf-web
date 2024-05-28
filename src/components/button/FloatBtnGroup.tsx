@@ -130,7 +130,7 @@ const FloatBtnGroup = () => {
             }
           },
           isLoading: isLoading,
-          label: "추가",
+          label: "접수",
         }}
         closeAction={{
           action: () => {
@@ -158,7 +158,6 @@ const FloatBtnGroup = () => {
                     mainWrapper: ["w-full"],
                   }}
                   value={daysDay}
-                  isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="박"
@@ -183,7 +182,6 @@ const FloatBtnGroup = () => {
                   // {...register("numPeople", {
                   //   valueAsNumber: true,
                   // })}
-                  isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="일"
@@ -206,7 +204,6 @@ const FloatBtnGroup = () => {
                     mainWrapper: ["w-full"],
                   }}
                   value={numTeam}
-                  isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="팀"
@@ -231,7 +228,6 @@ const FloatBtnGroup = () => {
                   // {...register("numPeople", {
                   //   valueAsNumber: true,
                   // })}
-                  isClearable
                   labelPlacement="outside-left"
                   variant="bordered"
                   placeholder="명"
@@ -251,7 +247,6 @@ const FloatBtnGroup = () => {
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                isClearable
                 labelPlacement="outside-left"
                 variant="bordered"
                 placeholder="골프장"
