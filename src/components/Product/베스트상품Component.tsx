@@ -20,7 +20,7 @@ export function 베스트상품Component() {
   const list = data.data?.productList.edges.map((item) => {
     return {
       id: item && item.node.id,
-      type: item && item.node.type,
+      type: (item && item.node.type) || "",
       name: item && item.node.name,
       price: item && item.node.price,
       thumbnailImage: item && item.node.thumbnailImage,

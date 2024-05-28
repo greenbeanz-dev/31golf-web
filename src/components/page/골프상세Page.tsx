@@ -49,6 +49,11 @@ export function 골프상세Page({
   const { userProfile } = useLogin();
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isLoginOpen,
+    onOpen: loginOpen,
+    onClose: loginClose,
+  } = useDisclosure();
 
   const productRef = useRef(null);
   const 예약가이드Ref = useRef(null);
@@ -83,8 +88,8 @@ export function 골프상세Page({
     };
   }, []);
 
-  const PC_MESSAGE = data?.name + " " + data?.type;
-  const MOBILE_MESSAGE = data?.name;
+  const PC_MESSAGE = data?.name || "" + " " + data?.type;
+  const MOBILE_MESSAGE = data?.name || "";
   // make list from a list except for the last element
   // const MOBILE_CONTENT_NIGHTS = data?.type?.split(" ").slice(0, -1).join(" ");
   // const MOBILE_CONTENT_ROUNDS =
@@ -110,6 +115,7 @@ export function 골프상세Page({
     numPeople: numPeople,
     numTeam: Math.floor(numPeople / 4),
     productId: productId,
+    productName: data?.name + " " + data?.type,
     customerId: Number(userProfile.id),
     priceCustom: Number(판매가),
     daysDay: DAYS_DAY,
@@ -117,7 +123,9 @@ export function 골프상세Page({
   };
 
   const endDate = new Date(출발일);
-  endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+  if (!isNaN(DAYS_DAY)) {
+    endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+  }
 
   const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
   const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
@@ -353,7 +361,7 @@ export function 골프상세Page({
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  onOpen();
+                  !userProfile.id ? loginOpen() : onOpen();
                 }}
               >
                 투어 예약하기
@@ -362,7 +370,11 @@ export function 골프상세Page({
           </div>
         )}
       </div>
-      <LoginModalWhenNotLoggedIn />
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={loginOpen}
+        onClose={loginClose}
+      />
     </>
   );
 }
@@ -474,26 +486,6 @@ const Step = ({ number, description1, description2, icon }) => (
   </div>
 );
 
-const LoginModalWhenNotLoggedIn = () => {
-  const { userProfile } = useLogin();
-
-  useEffect(() => {
-    // 로그인을 하지 않은 유저같은 경우엔 로그인 모달 뜨도록 추가
-    if (!userProfile.id) {
-      loginOpen();
-    }
-  }, [userProfile]);
-
-  const {
-    isOpen: isLoginOpen,
-    onOpen: loginOpen,
-    onClose: loginClose,
-  } = useDisclosure();
-
-  return (
-    <LoginModal isOpen={isLoginOpen} onOpen={loginOpen} onClose={loginClose} />
-  );
-};
 // const ButtonList = () => {
 //   const labelList = [
 //     "일정표",

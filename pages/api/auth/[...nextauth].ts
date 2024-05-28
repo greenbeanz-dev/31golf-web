@@ -34,6 +34,7 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
+    maxAge: 1 * 24 * 60 * 60, // 세션 만료기간 24 hours
   },
   providers: [
     CredentialsProvider({
@@ -52,21 +53,39 @@ export const authOptions: NextAuthOptions = {
             },
           });
           console.log({ response });
-          // 가장 큰 customer.id로 정렬
           if (response && response.length > 0) {
             const recentCustomer = response.sort(
               (a, b) => Number(b.id) - Number(a.id)
             );
 
-            // 가장 최근 로그인 정보로 provider 업데이트
+            // 가장 최근 로그인 정보로 provider, 접속횟수, 접속일 업데이트
+            let updateData = {
+              provider: "sns",
+              visit_count: recentCustomer[0].visit_count || 0,
+              updated_at: new Date(),
+            };
+
+            if (recentCustomer[0].updated_at) {
+              const recentVisitDate = new Date(recentCustomer[0].updated_at);
+              recentVisitDate.setHours(0, 0, 0, 0);
+
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+
+              if (recentVisitDate < today)
+                updateData.visit_count =
+                  (recentCustomer[0].visit_count || 0) + 1;
+            } else {
+              updateData.visit_count = (recentCustomer[0].visit_count || 0) + 1;
+            }
+
             const updateProvider = await prisma.customer.update({
               where: {
                 id: recentCustomer[0].id,
               },
-              data: {
-                provider: "provider",
-              },
+              data: updateData,
             });
+
             return {
               id: recentCustomer[0].id ? Number(recentCustomer[0].id) : 0,
               name: recentCustomer[0].name || "",
@@ -221,16 +240,37 @@ export const authOptions: NextAuthOptions = {
             (a, b) => Number(b.id) - Number(a.id)
           );
 
-          // 가장 최근 로그인 정보로 provider 업데이트
+          console.log({ recentCustomer });
+
+          // 가장 최근 로그인 정보로 provider, 접속횟수, 접속일 업데이트
+          let updateData = {
+            provider: "sns",
+            visit_count: recentCustomer[0].visit_count || 0,
+            updated_at: new Date(),
+          };
+
+          // 접속이력이 있는 경우엔 접속횟수 증가
+          if (recentCustomer[0].updated_at) {
+            const recentVisitDate = new Date(recentCustomer[0].updated_at);
+            recentVisitDate.setHours(0, 0, 0, 0);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (recentVisitDate < today)
+              updateData.visit_count = (recentCustomer[0].visit_count || 0) + 1;
+          } else {
+            // 초기 접속인 경우 카운트 증가
+            updateData.visit_count = (recentCustomer[0].visit_count || 0) + 1;
+          }
+
           const updateProvider = await prisma.customer.update({
             where: {
               id: recentCustomer[0].id,
             },
-            data: {
-              provider: "sns",
-            },
+            data: updateData,
           });
-          // console.log({ updateProvider });
+          console.log({ updateProvider });
 
           return {
             ...session,
