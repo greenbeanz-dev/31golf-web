@@ -6,9 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { useIsMobile } from "../../../hooks/useIsMobile";
 import CommonModal from "./CommonModal";
-
-const customerName = "최경민";
-const title = "남해 사우스케이프오너스 C.C 1박 2일 (36홀)";
+import { ConfirmModal } from "./ConfirmModal";
+import useLogin from "../../../utils/login/useLogin";
 
 const 예약추가Modal = ({
   reservation,
@@ -26,6 +25,7 @@ const 예약추가Modal = ({
     numPeople: number;
     numTeam: number;
     productId: number;
+    productName: string;
     customerId: number;
     priceCustom: number;
     daysDay: number;
@@ -36,6 +36,7 @@ const 예약추가Modal = ({
   onClose: () => void;
 }) => {
   const isMobile = useIsMobile();
+  const { userProfile } = useLogin();
   const {
     isOpen: isConfirmOpen,
     onOpen: confirmOpen,
@@ -73,34 +74,7 @@ const 예약추가Modal = ({
       },
     }
   );
-  const ConfirmModal = ({
-    isOpen,
-    onOpen,
-    onConfirmClose,
-    onClose,
-  }: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onConfirmClose: () => void;
-    onClose: () => void;
-  }) => {
-    return (
-      <CommonModal
-        isOpen={isOpen}
-        onClose={onClose}
-        confirmAction={{
-          action: async () => {
-            onConfirmClose();
-            onClose();
-          },
-          label: "확인",
-        }}
-      >
-        예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다. <br />
-        고객센터:02-561-8008
-      </CommonModal>
-    );
-  };
+
   return (
     <>
       <CommonModal
@@ -130,11 +104,12 @@ const 예약추가Modal = ({
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                value={customerName}
+                readOnly
+                value={userProfile.name}
                 type="text"
                 labelPlacement="outside-left"
-                variant="bordered"
-                label="예약자명"
+                variant="flat"
+                label="성함"
               />
               <Input
                 classNames={{
@@ -142,12 +117,29 @@ const 예약추가Modal = ({
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                value={title}
+                readOnly
+                // xxx-xxxx-xxxx 형식으로 변경
+                value={userProfile.phone?.replace(
+                  /(\d{3})(\d{4})(\d{4})/,
+                  "$1-$2-$3"
+                )}
+                type="text"
+                labelPlacement="outside-left"
+                variant="flat"
+                label="휴대폰 번호"
+              />
+              <Input
+                classNames={{
+                  label: "min-w-[7rem]",
+                  input: ["!ring-transparent"],
+                  mainWrapper: ["w-full"],
+                }}
+                value={reservation.productName}
                 readOnly
                 type="text"
                 labelPlacement="outside-left"
-                variant="bordered"
-                label="상품명"
+                variant="flat"
+                label="예약 항목"
               />
               <div
                 className="flex gap-2"
@@ -163,8 +155,9 @@ const 예약추가Modal = ({
                   }}
                   value={reservation.numTeam.toString()}
                   type="number"
+                  readOnly
                   labelPlacement="outside-left"
-                  variant="bordered"
+                  variant="flat"
                   label="팀"
                 />
                 {!isMobile && <div className="w-20" />}
@@ -179,7 +172,7 @@ const 예약추가Modal = ({
                   type="number"
                   readOnly
                   labelPlacement="outside-left"
-                  variant="bordered"
+                  variant="flat"
                   label="인원"
                 />
               </div>
@@ -194,7 +187,7 @@ const 예약추가Modal = ({
                   value={일정}
                   readOnly
                   labelPlacement="outside-left"
-                  variant="bordered"
+                  variant="flat"
                   label="일정"
                 />
               </div>
@@ -207,9 +200,8 @@ const 예약추가Modal = ({
                 value={판매가.toLocaleString()}
                 readOnly
                 labelPlacement="outside-left"
-                variant="bordered"
-                placeholder="판매가"
-                label="판매가"
+                variant="flat"
+                label="금액"
               />
               <Input
                 classNames={{
@@ -220,7 +212,7 @@ const 예약추가Modal = ({
                 value={(판매가 * reservation.numPeople).toLocaleString()}
                 readOnly
                 labelPlacement="outside-left"
-                variant="bordered"
+                variant="flat"
                 label="총 결제 금액"
               />
             </div>
@@ -232,6 +224,9 @@ const 예약추가Modal = ({
         onOpen={confirmOpen}
         onConfirmClose={confirmClose}
         onClose={onClose}
+        message={
+          "예약이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다. <br />고객센터:02-561-8008"
+        }
       />
     </>
   );

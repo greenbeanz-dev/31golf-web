@@ -6,8 +6,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { theme } from "../../../pages/_app";
 import getShortPhoneNumber from "../../utils/format/getShortPhoneNumber";
 import useLogin from "../../utils/login/useLogin";
-
-const Login = () => {
+interface LoginProps {
+  useHelperMsg?: boolean;
+}
+const Login = ({ useHelperMsg = false }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLogin, logOut, userProfile } = useLogin();
@@ -28,25 +30,31 @@ const Login = () => {
   };
 
   return (
-    <div className="flex-1 flex-col" style={{ minWidth: "224px" }}>
+    <div className="flex flex-col min-w-[224px]">
       <div className="text-xl font-bold">
-        <Button
+        {/* <Button
           onClick={() => {
             logOut();
           }}
         >
           로그아웃
-        </Button>
+        </Button> */}
+
         {isLogin && userProfile.name && (
           <div>
             {userProfile.name}
             {getShortPhoneNumber(userProfile.phone)}님 환영합니다.
           </div>
         )}
-        <div className="h-6" />
+        {/* <div className="h-6" /> */}
         <div className="flex flex-col gap-2">
           {!isLogin && (
             <>
+              {useHelperMsg && (
+                <div className="text-red-500 text-sm font-normal">
+                  로그인이 필요합니다 🙂
+                </div>
+              )}
               회원 로그인
               <Input
                 classNames={{
@@ -84,7 +92,7 @@ const Login = () => {
                 로그인
               </Button>
               <div
-                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#ffe500] cursor-pointer"
+                className="flex justify-center items-center h-[56px] w-full rounded-[8px] bg-[#ffe500] cursor-pointer"
                 onClick={() => {
                   login("kakao", {});
                 }}
@@ -101,7 +109,7 @@ const Login = () => {
                 </div>
               </div>
               <div
-                className="flex justify-center items-center h-[48px] w-full rounded-[8px] bg-[#03C75A] cursor-pointer"
+                className="flex justify-center items-center h-[56px] w-full rounded-[8px] bg-[#03C75A] cursor-pointer"
                 onClick={() => {
                   login("naver", {});
                 }}

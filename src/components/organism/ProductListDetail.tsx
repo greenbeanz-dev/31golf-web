@@ -7,8 +7,9 @@ import {
   상품이미지SkeletonComponent,
 } from "@component/Image/상품이미지Component";
 import Repeat from "@component/molecule/Repeat";
-import { Checkbox } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 
 interface ProductListDetailProps {
@@ -53,9 +54,11 @@ const ProductListDetail = ({
 export default ProductListDetail;
 
 const ProductListDetailSuspense = () => {
-  const { data } = useProductInfiniteQuery();
+  const router = useRouter();
+  const { pathname } = router;
 
-  const [isDay, setIsDay] = useState<boolean>(false);
+  const { data } = useProductInfiniteQuery();
+  const [isDay, setIsDay] = useState<boolean>(true);
 
   let list = data?.pages
     .map((page) =>
@@ -89,15 +92,70 @@ const ProductListDetailSuspense = () => {
     );
   }
 
+  const ProductTabBarJeju = ({ setIsDay }) => {
+    const [tab, setTab] = useState("당일상품(당일만)");
+    const navItem = [
+      {
+        label: "당일상품(당일만)",
+      },
+      {
+        label: "2박 이상(당일 제외)",
+      },
+    ];
+
+    return (
+      <Navbar
+        style={{
+          width: "100%",
+          justifyContent: "flex-start", // 탭 왼쪽 정렬
+          overflowX: "auto",
+        }}
+        classNames={{
+          wrapper: ["px-0", "cursor-pointer", "w-full"],
+          item: [
+            "flex",
+            "relative",
+            "h-[30px]",
+            "w-[150px]",
+            "cursor-pointer",
+            "items-center",
+            "justify-center",
+            "data-[active=true]:after:content-['']",
+            "data-[active=true]:after:absolute",
+            "data-[active=true]:after:bottom-0",
+            "data-[active=true]:after:left-0",
+            "data-[active=true]:after:right-0",
+            "data-[active=true]:after:h-[2px]",
+            "data-[active=true]:after:rounded-[2px]",
+            "data-[active=true]:after:bg-[#004964]",
+          ],
+          menu: ["px-0"],
+        }}
+      >
+        <NavbarContent>
+          {navItem.map((item) => {
+            return (
+              <NavbarItem
+                className={`px-4 ${tab === item.label ? "text-[#004964] font-bold" : ""}`}
+                key={item.label}
+                isActive={tab === item.label}
+                onClick={() => {
+                  setTab(item.label);
+                  setIsDay(item.label === "당일상품(당일만)");
+                }}
+              >
+                {item.label}
+              </NavbarItem>
+            );
+          })}
+        </NavbarContent>
+      </Navbar>
+    );
+  };
+
   return (
     <div className="flex flex-col w-full gap-2">
-      <Checkbox
-        id={`checkbox-jeju`}
-        isSelected={isDay}
-        onChange={() => setIsDay(!isDay)}
-      >
-        당일 상품 보기
-      </Checkbox>
+      {pathname === "/jeju" && <ProductTabBarJeju setIsDay={setIsDay} />}
 
       <div className="w-full flex flex-wrap justify-between">
         {list.map((item, idx) => {

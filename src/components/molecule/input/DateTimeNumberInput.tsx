@@ -66,7 +66,7 @@ const DateTimeNumberInput = ({
                   </PopoverContent>
                 </Popover>
               </div>
-              {!readOnly && (
+              {/* {!readOnly && (
                 <div className="cursor-pointer">
                   <Button
                     isIconOnly
@@ -83,7 +83,7 @@ const DateTimeNumberInput = ({
                     <IoMdCloseCircle size={20} />
                   </Button>
                 </div>
-              )}
+              )} */}
             </div>
           </>
         }
