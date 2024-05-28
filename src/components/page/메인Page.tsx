@@ -24,10 +24,10 @@ const 메인Page = () => {
       ) : (
         <>
           <ImageCarousel />
-          <div style={{ minHeight: 32 }}></div>
+          <div className="min-h-[32px]"></div>
         </>
       )}
-      <div className="flex w-full">
+      <div className="flex">
         {isMobile ? (
           <></>
         ) : (
@@ -35,15 +35,13 @@ const 메인Page = () => {
             <Login />
           </>
         )}
-
-        <div style={{ minWidth: isMobile ? 0 : 40 }}></div>
-
+        <div className={isMobile ? "min-w-0" : "min-w-[40px]"}></div>
         {/* 베스트 상품  */}
         <div
           style={{
             flex: isMobile ? 0 : 4,
             width: "100%",
-            maxWidth: isMobile ? "100%" : 900,
+            maxWidth: isMobile ? "100%" : 920,
           }}
         >
           {isMobile && <MobileMenu />}
@@ -55,7 +53,7 @@ const 메인Page = () => {
               삼일골프의 베스트 투어 상품을 만나보세요!
             </div>
           </div>
-          <div style={{ minHeight: 24 }} />
+          <div className="min-h-[24px]" />
           <베스트상품Component />
           <div className={isMobile ? "min-h-[48px]" : "min-h-[36px]"} />
           {/* 투어 전체보기 */}

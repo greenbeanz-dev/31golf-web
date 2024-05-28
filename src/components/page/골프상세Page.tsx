@@ -115,6 +115,7 @@ export function 골프상세Page({
     numPeople: numPeople,
     numTeam: Math.floor(numPeople / 4),
     productId: productId,
+    productName: data?.name + " " + data?.type,
     customerId: Number(userProfile.id),
     priceCustom: Number(판매가),
     daysDay: DAYS_DAY,
