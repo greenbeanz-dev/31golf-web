@@ -253,8 +253,8 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       set판매가(Number(price.replace(/,/g, "")));
       set출발일(slot.start);
     } else {
-      set판매가(Number(0));
-      set출발일(slot.start);
+      // set판매가(Number(0));
+      // set출발일(slot.start);
     }
   };
 
