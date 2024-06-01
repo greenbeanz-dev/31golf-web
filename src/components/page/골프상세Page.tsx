@@ -138,7 +138,10 @@ export function 골프상세Page({
         .map((item) =>
           item.split("_@_").length === 2
             ? item.split("_@_").length > 0
-              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`.replaceAll(
+                  "()",
+                  ""
+                )
               : item.split("_@_")[0]
             : item.split("_@_")[0]
         )
@@ -149,7 +152,10 @@ export function 골프상세Page({
         .map((item) =>
           item.split("_@_").length === 2
             ? item.split("_@_").length > 0
-              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`.replaceAll(
+                  "()",
+                  ""
+                )
               : item.split("_@_")[0]
             : item.split("_@_")[0]
         )
