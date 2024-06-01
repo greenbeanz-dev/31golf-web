@@ -93,13 +93,13 @@ const ProductListDetailSuspense = () => {
   }
 
   const ProductTabBarJeju = ({ setIsDay }) => {
-    const [tab, setTab] = useState("당일상품(당일만)");
+    const [tab, setTab] = useState("당일 18홀");
     const navItem = [
       {
-        label: "당일상품(당일만)",
+        label: "당일 18홀",
       },
       {
-        label: "2박 이상(당일 제외)",
+        label: "1박 2일 (36홀)",
       },
     ];
 
@@ -141,7 +141,7 @@ const ProductListDetailSuspense = () => {
                 isActive={tab === item.label}
                 onClick={() => {
                   setTab(item.label);
-                  setIsDay(item.label === "당일상품(당일만)");
+                  setIsDay(item.label === "당일 18홀");
                 }}
               >
                 {item.label}
