@@ -7,6 +7,7 @@ import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useMediaQuery } from "react-responsive";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import useLogin from "../../utils/login/useLogin";
 import { isMobileSize } from "../../utils/responsive/isMobile";
 interface Props {
   children: React.ReactNode;
@@ -72,9 +73,16 @@ const Layout: React.FC<Props> = ({ children }) => {
           >
             <div className="flex h-8 justify-start" />
             {isMobile ? (
-              <MobileTopBar />
+              <>
+                <LogoutComponent />
+                <MobileTopBar />
+              </>
             ) : (
-              <TopBar />
+              <>
+                <LogoutComponent />
+                <TopBar />
+              </>
+
               // <>
               //   <TopButton />
               //   <TopBar />
@@ -103,4 +111,17 @@ const Layout: React.FC<Props> = ({ children }) => {
   );
 };
 
+const LogoutComponent = () => {
+  const { logOut } = useLogin();
+  return (
+    <div
+      className="flex justify-end text-[#444]"
+      onClick={() => {
+        logOut();
+      }}
+    >
+      로그아웃
+    </div>
+  );
+};
 export default Layout;
