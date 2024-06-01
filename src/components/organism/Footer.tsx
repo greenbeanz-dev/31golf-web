@@ -8,7 +8,6 @@ export const Footer = () => {
     "개인정보처리방침",
     "해외여행약관",
     "해외여행보험약관",
-    "찾아오시는길",
   ];
 
   const firstRow = [
