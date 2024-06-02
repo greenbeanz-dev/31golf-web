@@ -18,7 +18,6 @@ const Layout: React.FC<Props> = ({ children }) => {
       <Suspense fallback={<div></div>}>
         <div className="max-w-[100vw] min-h-[100vh] flex items-center flex-col">
           <div className="w-full max-w-[1200px]">
-            <div className="flex h-8 justify-start" />
             {isMobile ? (
               <>
                 <LogoutComponent />
@@ -26,6 +25,7 @@ const Layout: React.FC<Props> = ({ children }) => {
               </>
             ) : (
               <>
+                <div className="flex h-8 justify-start" />
                 <LogoutComponent />
                 <TopBar />
               </>
@@ -52,9 +52,11 @@ const Layout: React.FC<Props> = ({ children }) => {
 };
 
 const LogoutComponent = () => {
-  const { login, isLogin, logOut, userProfile } = useLogin();
+  const isMobile = useIsMobile();
 
-  if (!isLogin || !userProfile.id) {
+  const { isLogin, logOut, userProfile } = useLogin();
+
+  if (!isLogin || !userProfile.id || isMobile) {
     return null;
   }
 
