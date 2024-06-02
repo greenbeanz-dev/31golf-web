@@ -75,35 +75,47 @@ const 메인Page = () => {
 };
 
 const ImageCarousel = () => {
-  const imageList = [
-    "/images/logo/golf_main.png",
-    "/images/logo/golf_main2.png",
-  ];
+  const image = "/images/logo/golf_main.png";
 
+  // Next Image instead of Carousel
   return (
-    <Carousel
-      showArrows={true}
-      showThumbs={false}
-      showStatus={false}
-      autoPlay={true}
-      infiniteLoop={true}
-    >
-      {imageList.map((image, idx) => {
-        return (
-          <Image
-            priority={true}
-            quality={100}
-            alt={"mainImage"}
-            key={idx}
-            src={image}
-            height={1200}
-            width={400}
-            className={"rounded-3xl"}
-          />
-        );
-      })}
-    </Carousel>
+    <div className="w-full h-[400px]">
+      <Image
+        priority={true}
+        quality={100}
+        alt={"mainImage"}
+        src={image}
+        height={400}
+        width={1200}
+        className={"rounded-3xl"}
+      />
+    </div>
   );
+
+  // return (
+  //   <Carousel
+  //     showArrows={true}
+  //     showThumbs={false}
+  //     showStatus={false}
+  //     autoPlay={true}
+  //     infiniteLoop={true}
+  //   >
+  //     {imageList.map((image, idx) => {
+  //       return (
+  //         <Image
+  //           priority={true}
+  //           quality={100}
+  //           alt={"mainImage"}
+  //           key={idx}
+  //           src={image}
+  //           height={1200}
+  //           width={400}
+  //           className={"rounded-3xl"}
+  //         />
+  //       );
+  //     })}
+  //   </Carousel>
+  // );
 };
 
 const MobileMenu = () => {

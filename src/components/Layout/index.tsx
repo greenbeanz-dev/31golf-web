@@ -52,9 +52,9 @@ const Layout: React.FC<Props> = ({ children }) => {
 };
 
 const LogoutComponent = () => {
-  const { logOut, isLogin } = useLogin();
+  const { login, isLogin, logOut, userProfile } = useLogin();
 
-  if (isLogin) {
+  if (!isLogin || !userProfile.id) {
     return null;
   }
 

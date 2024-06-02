@@ -19,6 +19,7 @@ interface 상품예약버튼Props {
     productId: number;
     productName: string;
     customerId: number;
+    customerName: string;
     priceCustom: number;
     daysDay: number;
     daysNight: number;
