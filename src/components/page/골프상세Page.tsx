@@ -118,6 +118,7 @@ export function 골프상세Page({
     productId: productId,
     productName: data?.name + " " + data?.type,
     customerId: Number(userProfile.id),
+    customerName: userProfile.name || "",
     priceCustom: Number(판매가),
     daysDay: DAYS_DAY,
     daysNight: DAYS_NIGHT,

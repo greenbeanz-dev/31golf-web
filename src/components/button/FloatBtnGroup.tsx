@@ -27,12 +27,12 @@ const FloatBtnGroup = () => {
 
   const BtnGroup = [
     {
-      name: "카카오 채팅",
+      name: "카카오톡",
       icon: <SiKakaotalk size={isMobile ? 20 : 32} />,
       type: "kakao",
     },
     {
-      name: "접수 문의",
+      name: "견적 문의",
       icon: <MdEventNote size={isMobile ? 20 : 32} />,
       type: "request",
     },
@@ -317,13 +317,13 @@ const FloatBtnGroup = () => {
         <div
           style={{
             backgroundColor: getFloatBgColor(group.type),
-            height: isMobile ? 60 : 90,
-            width: isMobile ? 60 : 90,
+            height: isMobile ? 60 : 96,
+            width: isMobile ? 60 : 96,
             // opacity: isMobile ? 0.1 : 0.1,
             // color: "white",
           }}
           key={group.name}
-          className="flex items-center justify-center cursor-pointer rounded"
+          className="flex items-center justify-center cursor-pointer rounded-full"
           onClick={() => {
             handleFloat(group);
           }}
@@ -333,7 +333,7 @@ const FloatBtnGroup = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 5,
+              gap: 6,
               fontSize: isMobile ? 12 : 16,
             }}
           >
@@ -368,8 +368,8 @@ const getFloatBgColor = (type: string) => {
     case "kakao":
       return "#F7E600";
     case "request":
-      return "#4CAF50";
+      return "#F9EFE8";
     case "call":
-      return "#2196F3";
+      return "#A37C5E";
   }
 };

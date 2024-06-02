@@ -3,11 +3,26 @@ import Image from "next/image";
 
 export const Footer = () => {
   const list = [
-    "회사소개",
-    "이용약관",
-    "개인정보처리방침",
-    "해외여행약관",
-    "해외여행보험약관",
+    {
+      title: "회사소개",
+      url: "",
+    },
+    {
+      title: "이용약관",
+      url: "https://obvious-raven-5f6.notion.site/f09ab42a5fd14f558ff643f20d2258b4?pvs=4",
+    },
+    {
+      title: "개인정보처리방침",
+      url: "https://obvious-raven-5f6.notion.site/f09ab42a5fd14f558ff643f20d2258b4?pvs=4",
+    },
+    {
+      title: "해외여행약관",
+      url: "",
+    },
+    {
+      title: "해외여행보험약관",
+      url: "",
+    },
   ];
 
   const firstRow = [
@@ -41,8 +56,16 @@ export const Footer = () => {
           <div className="h-full flex items-center justify-around">
             {list.map((item, index) => (
               <>
-                <div key={index} className="text-sm text-gray-500">
-                  {item}
+                <div
+                  key={index}
+                  className="text-sm text-gray-500 cursor-pointer"
+                  onClick={() => {
+                    if (item.url) {
+                      window.open(item.url, "_blank");
+                    }
+                  }}
+                >
+                  {item.title}
                 </div>
                 {index === list.length - 1 ? null : (
                   <Divider className="h-8" orientation="vertical" />

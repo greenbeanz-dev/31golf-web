@@ -113,6 +113,8 @@ mutation createReservation(
   $daysDay: Int
   $daysNight: Int
   $smsReservation: String
+  $smsReservationSub: String
+  $smsConfirmation: String
   $smsCheckout: String
   $isTransactionEditable: Boolean
   $transactionDeposit: Float
@@ -142,6 +144,8 @@ mutation createReservation(
     daysDay: $daysDay
     daysNight: $daysNight
     smsReservation: $smsReservation
+    smsReservationSub: $smsReservationSub
+    smsConfirmation: $smsConfirmation
     smsCheckout: $smsCheckout
     isTransactionEditable: $isTransactionEditable
     transactionDeposit: $transactionDeposit
