@@ -19,7 +19,6 @@ const navItem = [
 
 export default function Topbar() {
   const { pathname } = useRouter();
-  // const { login, isLogin, logOut, userProfile } = useLogin();
   const router = useRouter();
 
   return (

@@ -1,6 +1,5 @@
 import { Product } from "@/gql/__generated__/graphql";
 import { Skeleton } from "@nextui-org/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
@@ -23,8 +22,8 @@ function 상품이미지Component({
   const router = useRouter();
   return (
     <div
+      className="w-full"
       style={{
-        width: isMobile ? mobileWidth : pcWidth,
         marginBottom: isMobile ? "16px" : "48px",
         cursor: "pointer",
       }}
@@ -32,16 +31,14 @@ function 상품이미지Component({
         router.push(`/detail/${item.id}`);
       }}
     >
-      <Image
+      <img
         alt={"product_image_" + item.id}
-        className="rounded-[24px]"
+        className="rounded-[24px] w-full "
         src={
           item.thumbnailImage
             ? item.thumbnailImage
             : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
         }
-        height={isMobile ? mobileHeight : pcHeight}
-        width={isMobile ? mobileWidth : pcWidth}
       />
       <div className="pt-4" />
       <div className="text-[14px] font-normal truncate leading-6 opacity-70">
