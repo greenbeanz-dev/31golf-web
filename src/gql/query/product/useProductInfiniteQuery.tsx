@@ -15,6 +15,7 @@ const useProductInfiniteQuery = () => {
   const category1 = useProductInfiniteQueryBody((state) => state.category1);
   const category2 = useProductInfiniteQueryBody((state) => state.category2);
   const category3 = useProductInfiniteQueryBody((state) => state.category3);
+  const isSortType = useProductInfiniteQueryBody((state) => state.isSortType);
 
   const requestBody = {
     dateDeparture: dateDeparture?.toISOString(),
@@ -24,6 +25,7 @@ const useProductInfiniteQuery = () => {
     category1: category1 === "선택안함" ? undefined : category1,
     category2: category2,
     category3: category3,
+    isSortType: isSortType,
   };
 
   return useInfiniteQuery({
@@ -36,6 +38,7 @@ const useProductInfiniteQuery = () => {
       category1,
       category2,
       category3,
+      isSortType,
     ],
     queryFn: async ({
       pageParam = {
@@ -71,9 +74,11 @@ type State = {
   category1: string | undefined;
   category2: string | undefined;
   category3: string | undefined;
+  isSortType: "추천순" | "가나다순";
 };
 
 type Actions = {
+  changeSortType: (isSortType: State["isSortType"]) => void;
   changeDateDeparture: (dateDeparture: State["dateDeparture"]) => void;
   changeName: (name: State["name"]) => void;
   changeMemo: (memo: State["memo"]) => void;
@@ -94,6 +99,7 @@ const initialState: State = {
   category2: undefined,
   category3: undefined,
   size: 50,
+  isSortType: "추천순",
 };
 
 export const useProductInfiniteQueryBody = create(
@@ -102,6 +108,11 @@ export const useProductInfiniteQueryBody = create(
     changeDateDeparture: (dateDeparture) => {
       set((state) => {
         state.dateDeparture = dateDeparture;
+      });
+    },
+    changeSortType: (isSortType) => {
+      set((state) => {
+        state.isSortType = isSortType;
       });
     },
     changeName: (name) => {
