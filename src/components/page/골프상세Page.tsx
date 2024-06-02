@@ -174,7 +174,7 @@ export function 골프상세Page({
       <div className="w-full h-full">
         <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
           <div className="flex-1">
-            <div className="min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
+            <div className="md:min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
               <Carousel
                 showArrows={true}
                 showThumbs={false}
@@ -256,9 +256,9 @@ export function 골프상세Page({
         </div>
         <div className="pt-8" />
         {/* 예약 가이드  */}
-        <div className="flex w-full">
-          <div className="flex flex-2 w-full">
-            <div className="w-full">
+        <div className="flex ">
+          <div className="flex flex-2 ">
+            <div className="">
               {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
               <div className="pt-10" />
               <상품일정상세
@@ -323,7 +323,7 @@ export function 골프상세Page({
             className="fixed bottom-0 left-0 w-full rounded-tr-2xl"
             style={{
               display: "block",
-              zIndex: isOpen ? 0 : 9999,
+              zIndex: isOpen ? 0 : 999,
               borderTop: "1px solid #E5E5E5",
               borderTopLeftRadius: "30px",
               borderTopRightRadius: "30px",
