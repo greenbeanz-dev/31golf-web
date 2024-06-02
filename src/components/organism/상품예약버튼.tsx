@@ -45,9 +45,7 @@ const 상품예약버튼 = ({
         setCount={setNumPeople}
         name={product.name}
         price={reservation.priceCustom}
-        dateDeparture={reservation.dateDeparture}
-        daysDay={reservation.daysDay}
-        daysNight={reservation.daysNight}
+        schedule={product.schedule}
         note="(2~3인 진행 시 별도 문의 부탁드립니다)"
       />
       <div style={{ minHeight: 8 }} />
@@ -71,11 +69,15 @@ const 상품예약버튼 = ({
           fontWeight: "bold",
         }}
         onClick={() => {
-          console.log("123", userProfile);
-          !userProfile.id ? loginOpen() : onOpen();
+          const telNumber = "02-561-8008";
+          reservation.priceCustom
+            ? !userProfile.id
+              ? loginOpen()
+              : onOpen()
+            : (window.location.href = `tel:${telNumber}`);
         }}
       >
-        투어 예약하기
+        {reservation.priceCustom ? "투어 예약하기" : "전화 문의"}
       </Button>
       <LoginModal
         isOpen={isLoginOpen}

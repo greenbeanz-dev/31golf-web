@@ -13,9 +13,7 @@ interface 상품결제정보Props {
   setCount: Dispatch<SetStateAction<number>>;
   name: string;
   price: number;
-  dateDeparture: Date;
-  daysDay: number;
-  daysNight: number;
+  schedule: string;
   note: string;
 }
 
@@ -24,18 +22,9 @@ const 상품결제정보 = ({
   setCount,
   name,
   price,
-  dateDeparture,
-  daysDay,
-  daysNight,
+  schedule,
   note,
 }: 상품결제정보Props) => {
-  const formattedDateDeparture = dayjs(dateDeparture).format("YYYY.MM.DD(ddd)");
-  const endDate = dateDeparture;
-  if (!isNaN(daysDay)) {
-    endDate.setDate(endDate.getDate() + daysDay - 1);
-  }
-  const formattedDateArrival = dayjs(endDate).format("YYYY.MM.DD(ddd)");
-
   return (
     <>
       <div className="text-[16px] font-bold">{name.replaceAll("null", "")}</div>
@@ -43,7 +32,7 @@ const 상품결제정보 = ({
       <div className="flex items-center">
         <div className="text-[14px] font-bold">기간</div>
         <div className="pl-2" />
-        <div className="text-[14px]">{`${formattedDateDeparture} ~ ${formattedDateArrival} ${isNaN(daysNight) ? "당일" : `${daysNight}박 ${daysDay}일`} `}</div>
+        <div className="text-[14px]">{schedule}</div>
       </div>
       <div className="pt-1" />
       <div className="text-red-500 text-sm font-normal">{note}</div>
@@ -56,7 +45,7 @@ const 상품결제정보 = ({
             <div className="text-[14px]">성인</div>
             <div className="pl-1" />
             <div className="text-xl font-bold">
-              {(count * price).toLocaleString()}원
+              {price ? `${(count * price).toLocaleString()}원` : "가격 문의"}
             </div>
           </div>
           <div className="flex px-1 gap-5">
@@ -85,7 +74,7 @@ const 상품결제정보 = ({
       <div className="w-full h-9 px-1 justify-end items-center gap-4 inline-flex">
         <div className="text-black text-sm font-normal">총 금액</div>
         <div className="text-red-500 text-2xl font-bold">
-          {(count * price).toLocaleString()} 원
+          {price ? `${(count * price).toLocaleString()} 원` : "가격 문의"}
         </div>
       </div>
     </>

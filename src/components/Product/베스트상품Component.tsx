@@ -64,7 +64,9 @@ export function 베스트상품Component() {
               </div>
               <div className="pt-1" />
               <div className="text-[20px] font-bold text-[#0A7BE4] leading-6 tracking-tight">
-                {(item.price || 0).toLocaleString()}원 ~
+                {item.price
+                  ? `${item.price.toLocaleString()}원 ~`
+                  : "별도 문의"}
               </div>
             </div>
           );
