@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { BiSort } from "react-icons/bi";
-
+import { IoIosArrowDown } from "react-icons/io";
 const SortSelect = () => {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["option1"]));
 
@@ -26,7 +26,7 @@ const SortSelect = () => {
       <Dropdown>
         <DropdownTrigger>
           <Button variant="light" className="capitalize" size="sm">
-            <BiSort /> {selectMap[selectedValue]}
+            <BiSort /> {selectMap[selectedValue]} <IoIosArrowDown />
           </Button>
         </DropdownTrigger>
         <DropdownMenu
