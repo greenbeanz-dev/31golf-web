@@ -33,8 +33,6 @@ const 상품일정상세 = ({
   inclusiveList,
   exclusiveList,
 }: 상품일정상세Props) => {
-  console.log(scheduleList);
-
   const isMobile = useIsMobile();
   return (
     <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>

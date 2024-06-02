@@ -57,9 +57,13 @@
   background-color: #e6e6e6 !important;
 }
 
-/* .rbc-current {
-  background-color: #004964 !important;
-} */
+.rbc-today-deadline {
+  flex: 1 0 0% !important;
+  border: 1px solid white !important;
+  border-radius: 5px !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
 
 /* .rbc-today {
   background-color: #004964 !important;
@@ -68,42 +72,42 @@
 /* .rbc-row-bg {
   background-color: #004964 !important;
   opacity: 0.1;
-}
+} */
 
-.rbc-day-bg {
+/* .rbc-day-bg {
   cursor: pointer;
-}
-
+} */
+/* 
 .rbc-day-bg:active {
   background-color: #004964 !important;
   color: white !important;
-}
-.rbc-date-cell rbc-current {
+} */
+/* .rbc-date-cell rbc-current {
   background-color: #004964 !important;
-}
+} */
 
-.rbc-header {
+/* .rbc-header {
   border-bottom: 1px solid white !important;
-}
-
+} */
+/* 
 .rbc-header + .rbc-header {
   border-left: 1px solid white !important;
-}
+} */
 
-.rbc-month-view {
+/* .rbc-month-view {
   border: 1px solid white !important;
-}
+} */
 
-.rbc-day-bg.rbc-today {
+/* .rbc-day-bg.rbc-today {
   background-color: #004964 !important;
   opacity: 0.1;
-}
+} */
 
-.rbc-toolbar {
+/* .rbc-toolbar {
   display: flex !important;
-}
+} */
 
-.rbc-event-content {
+/* .rbc-event-content {
   text-align: end !important;
   font-size: 12px !important;
 } */
