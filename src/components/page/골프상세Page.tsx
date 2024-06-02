@@ -108,6 +108,7 @@ export function 골프상세Page({
 
   const [판매가, set판매가] = useState<number>(0);
   const [출발일, set출발일] = useState<Date>(new Date());
+  const [schedule, setSchedule] = useState<string>("당일");
 
   const reservationInfo = {
     status: "QUOTATION",
@@ -122,15 +123,19 @@ export function 골프상세Page({
     daysNight: DAYS_NIGHT,
   };
 
-  const endDate = new Date(출발일);
-  if (!isNaN(DAYS_DAY)) {
-    endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
-  }
+  useEffect(() => {
+    const endDate = new Date(출발일);
+    if (!isNaN(DAYS_DAY)) {
+      endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+    }
 
-  const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
-  const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
+    const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
+    const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
 
-  const schedule = `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`;
+    setSchedule(
+      `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`
+    );
+  }, [출발일]);
 
   const inclusiveList = data?.inclusives
     ? data.inclusives
@@ -339,9 +344,7 @@ export function 골프상세Page({
                   setCount={setNumPeople}
                   name={data?.name + " " + data?.type}
                   price={판매가}
-                  dateDeparture={출발일}
-                  daysDay={DAYS_DAY}
-                  daysNight={DAYS_NIGHT}
+                  schedule={schedule}
                   note="(2~3인 진행 시 별도 문의 부탁드립니다)"
                 />
               </div>
@@ -367,10 +370,15 @@ export function 골프상세Page({
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  !userProfile.id ? loginOpen() : onOpen();
+                  const telNumber = "02-561-8008";
+                  판매가
+                    ? !userProfile.id
+                      ? loginOpen()
+                      : onOpen()
+                    : (window.location.href = `tel:${telNumber}`);
                 }}
               >
-                투어 예약하기
+                {판매가 ? "투어 예약하기" : "전화 문의"}
               </Button>
             </div>
           </div>
