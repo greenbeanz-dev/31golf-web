@@ -85,7 +85,7 @@ const 예약추가Modal = ({
           action: async () => {
             createReservation();
           },
-          label: "예약 접수",
+          label: reservation.priceCustom > 0 ? "예약 접수" : "전화 문의",
         }}
         closeAction={{
           action: () => {

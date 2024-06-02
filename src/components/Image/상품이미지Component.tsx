@@ -75,7 +75,7 @@ function 상품이미지Component({
           </>
         )}
         <div className={`text-sky-600 text-xl font-bold`}>
-          {item.price ? item.price.toLocaleString() : "0"}원 ~
+          {item.price ? `${item.price.toLocaleString()}원 ~` : "별도 문의"}
         </div>
       </div>
     </div>

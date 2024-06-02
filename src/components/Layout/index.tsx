@@ -115,12 +115,12 @@ const LogoutComponent = () => {
   const { logOut } = useLogin();
   return (
     <div
-      className="flex justify-end text-[#444]"
+      className="flex justify-end"
       onClick={() => {
         logOut();
       }}
     >
-      로그아웃
+      <div className="text-[#444] cursor-pointer">로그아웃</div>
     </div>
   );
 };
