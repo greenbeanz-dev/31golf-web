@@ -18,7 +18,6 @@ const 메인Page = () => {
 
   return (
     <ErrorBoundary fallback={<div>메인</div>}>
-      {/* <Suspense fallback={<Spinner />}>  suspense 오류뜸  */}
       {isMobile ? (
         <></>
       ) : (

@@ -31,13 +31,13 @@ export default function MobileTopBar() {
         zIndex: 1000, // 가장 상위로올림 (다른 탭과 겹칠 경우를 피하기 위함 )
       }}
     >
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         />
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden pr-3" justify="center">
+      <NavbarContent className=" pr-3" justify="center">
         <NavbarBrand>
           <img
             style={{
@@ -62,7 +62,7 @@ export default function MobileTopBar() {
       </NavbarContent>
 
       {/*  가려서 안보여서 마진줌  */}
-      <NavbarMenu className="mt-10">
+      <NavbarMenu className="mt-20">
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={index}>
             <Link className="w-full" href={item.href} size="lg">

@@ -33,7 +33,7 @@ export function 베스트상품Component() {
   const router = useRouter();
   return (
     <div
-      className={`flex justify-between overflow-x-auto ${isMobile ? "gap-4" : "gap-4"}`}
+      className={`flex w-full max-w-[90vw] justify-between overflow-x-auto ${isMobile ? "gap-4" : "gap-4"}`}
     >
       {list &&
         list.map((item, idx) => {

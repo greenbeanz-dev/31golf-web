@@ -250,8 +250,8 @@ export function 골프상세Page({
         </div>
         <div className="pt-8" />
         {/* 예약 가이드  */}
-        <div className="flex">
-          <div className="flex flex-2">
+        <div className="flex w-full">
+          <div className="flex flex-2 w-full">
             <div className="w-full">
               {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
               <div className="pt-10" />

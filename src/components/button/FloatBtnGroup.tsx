@@ -305,7 +305,7 @@ const FloatBtnGroup = () => {
       style={{
         position: "fixed",
         top: 362,
-        right: isMobile ? 5 : 100,
+        right: isMobile ? 0 : 100,
         width: "90px",
         display: "flex",
         flexDirection: "column",
