@@ -22,9 +22,9 @@ function Detail({
   return (
     <div className="flex flex-col items-center w-full h-full">
       <Head>
-        <title>Home</title>
+        <title>Detail</title>
       </Head>
-      <div className="min-h-10" />
+      <div style={{ height: 20 }} />
       <Suspense fallback={<div></div>}>
         <골프상세Page
           productId={Number(id)}
