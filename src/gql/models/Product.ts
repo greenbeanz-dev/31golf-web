@@ -212,12 +212,23 @@ builder.queryField("productList", (t) =>
       memoNotice: t.arg.string(),
       memoManager: t.arg.string(),
       memoEtc: t.arg.string(),
+      isSortType: t.arg.string(),
     },
     resolve: (query, _parent, _args, _ctx, _info) => {
       const dateDepartureCondition = conditionWithStartDateAndEndDate(
         _args.dateDeparture,
         _args.dateDeparture
       );
+
+      const sortType =
+        _args.isSortType !== "추천순"
+          ? ({
+              name: "asc",
+            } as const)
+          : ({
+              sort: "asc",
+            } as const);
+
       return prisma.product.findMany({
         ...query,
         where: {
@@ -303,10 +314,9 @@ builder.queryField("productList", (t) =>
           ],
         },
         orderBy: [
-          // {
-          //   id: "desc",
-          // },
-          { sort: "asc" },
+          {
+            ...sortType,
+          },
         ],
       });
     },
