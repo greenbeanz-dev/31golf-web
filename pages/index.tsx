@@ -25,7 +25,7 @@ function Home({
         <Head>
           <title>Home</title>
         </Head>
-        <div style={{ height: 40 }} />
+        <div className="min-h-10" />
         <메인Page />
       </div>
       {popUp && <EventPopup popUp={popUp} />}
