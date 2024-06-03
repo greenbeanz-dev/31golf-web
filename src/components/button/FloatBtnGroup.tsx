@@ -1,4 +1,3 @@
-import { Customer } from "@/gql/__generated__/graphql";
 import gqlClient from "@/gql/gqlClient";
 import { CreateRequestQuery } from "@/gql/query/request/crud";
 // import RequestInputModel, {
@@ -27,12 +26,12 @@ const FloatBtnGroup = () => {
 
   const BtnGroup = [
     {
-      name: "카카오 채팅",
+      name: "카카오톡",
       icon: <SiKakaotalk size={isMobile ? 20 : 32} />,
       type: "kakao",
     },
     {
-      name: "접수 문의",
+      name: "견적 문의",
       icon: <MdEventNote size={isMobile ? 20 : 32} />,
       type: "request",
     },
@@ -110,15 +109,9 @@ const FloatBtnGroup = () => {
       // resolver: RequestInputModelResolver,
     });
 
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
-
-    const handleCustomerChange = (customer: Customer) => {
-      setSelectedCustomer(customer);
-    };
-
     return (
       <CommonModal
-        header="접수 추가"
+        header="견적 문의"
         isOpen={isOpen}
         onClose={onClose}
         confirmAction={{
@@ -130,14 +123,14 @@ const FloatBtnGroup = () => {
             }
           },
           isLoading: isLoading,
-          label: "접수",
+          label: "문의하기",
         }}
         closeAction={{
           action: () => {
             onClose();
           },
           isLoading: false,
-          label: "취소",
+          label: "닫기",
         }}
       >
         <div className="flex flex-col w-full gap-4">
@@ -286,7 +279,6 @@ const FloatBtnGroup = () => {
         window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
         break;
       case "request":
-        console.log("userProfile", userProfile);
         if (isEmpty(userProfile)) {
           loginOpen();
         } else {
@@ -305,7 +297,7 @@ const FloatBtnGroup = () => {
       style={{
         position: "fixed",
         top: 362,
-        right: isMobile ? 5 : 100,
+        right: isMobile ? 0 : 100,
         width: "90px",
         display: "flex",
         flexDirection: "column",
@@ -317,13 +309,13 @@ const FloatBtnGroup = () => {
         <div
           style={{
             backgroundColor: getFloatBgColor(group.type),
-            height: isMobile ? 60 : 90,
-            width: isMobile ? 60 : 90,
+            height: isMobile ? 60 : 96,
+            width: isMobile ? 60 : 96,
             // opacity: isMobile ? 0.1 : 0.1,
             // color: "white",
           }}
           key={group.name}
-          className="flex items-center justify-center cursor-pointer rounded"
+          className="flex items-center justify-center cursor-pointer rounded-full"
           onClick={() => {
             handleFloat(group);
           }}
@@ -333,7 +325,7 @@ const FloatBtnGroup = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 5,
+              gap: 6,
               fontSize: isMobile ? 12 : 16,
             }}
           >
@@ -368,8 +360,8 @@ const getFloatBgColor = (type: string) => {
     case "kakao":
       return "#F7E600";
     case "request":
-      return "#4CAF50";
+      return "#F9EFE8";
     case "call":
-      return "#2196F3";
+      return "#A37C5E";
   }
 };

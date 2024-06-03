@@ -108,6 +108,7 @@ export function 골프상세Page({
 
   const [판매가, set판매가] = useState<number>(0);
   const [출발일, set출발일] = useState<Date>(new Date());
+  const [schedule, setSchedule] = useState<string>("당일");
 
   const reservationInfo = {
     status: "QUOTATION",
@@ -117,20 +118,25 @@ export function 골프상세Page({
     productId: productId,
     productName: data?.name + " " + data?.type,
     customerId: Number(userProfile.id),
+    customerName: userProfile.name || "",
     priceCustom: Number(판매가),
     daysDay: DAYS_DAY,
     daysNight: DAYS_NIGHT,
   };
 
-  const endDate = new Date(출발일);
-  if (!isNaN(DAYS_DAY)) {
-    endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
-  }
+  useEffect(() => {
+    const endDate = new Date(출발일);
+    if (!isNaN(DAYS_DAY)) {
+      endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
+    }
 
-  const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
-  const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
+    const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
+    const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
 
-  const schedule = `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`;
+    setSchedule(
+      `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`
+    );
+  }, [출발일]);
 
   const inclusiveList = data?.inclusives
     ? data.inclusives
@@ -138,7 +144,10 @@ export function 골프상세Page({
         .map((item) =>
           item.split("_@_").length === 2
             ? item.split("_@_").length > 0
-              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`.replaceAll(
+                  "()",
+                  ""
+                )
               : item.split("_@_")[0]
             : item.split("_@_")[0]
         )
@@ -149,7 +158,10 @@ export function 골프상세Page({
         .map((item) =>
           item.split("_@_").length === 2
             ? item.split("_@_").length > 0
-              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`
+              ? `${item.split("_@_")[0]} (${item.split("_@_")[1]})`.replaceAll(
+                  "()",
+                  ""
+                )
               : item.split("_@_")[0]
             : item.split("_@_")[0]
         )
@@ -162,7 +174,7 @@ export function 골프상세Page({
       <div className="w-full h-full">
         <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
           <div className="flex-1">
-            <div className="min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
+            <div className="md:min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
               <Carousel
                 showArrows={true}
                 showThumbs={false}
@@ -238,15 +250,20 @@ export function 골프상세Page({
                 set판매가={set판매가}
                 출발일={출발일}
                 set출발일={set출발일}
+                onClick={(date) => {
+                  if (data) {
+                    setShowDetail(true);
+                  }
+                }}
               />
             </Suspense>
           </div>
         </div>
         <div className="pt-8" />
         {/* 예약 가이드  */}
-        <div className="flex">
-          <div className="flex flex-2">
-            <div className="w-full">
+        <div className="flex ">
+          <div className="flex flex-2 ">
+            <div className="">
               {!isMobile && <예약가이드 예약가이드Ref={예약가이드Ref} />}
               <div className="pt-10" />
               <상품일정상세
@@ -305,13 +322,12 @@ export function 골프상세Page({
             }}
           />
         )}
-        {/* 바텀시트  */}
         {isMobile && (
           <div
             className="fixed bottom-0 left-0 w-full rounded-tr-2xl"
             style={{
               display: "block",
-              zIndex: isOpen ? 0 : 9999,
+              zIndex: isOpen ? 0 : 999,
               borderTop: "1px solid #E5E5E5",
               borderTopLeftRadius: "30px",
               borderTopRightRadius: "30px",
@@ -319,7 +335,7 @@ export function 골프상세Page({
             }}
           >
             {showDetail && (
-              <div className="p-4 flex-col justify-start inline-flex">
+              <div className="w-full p-4 flex-col justify-start inline-flex">
                 <div
                   className="flex justify-center"
                   onClick={(e) => {
@@ -333,9 +349,7 @@ export function 골프상세Page({
                   setCount={setNumPeople}
                   name={data?.name + " " + data?.type}
                   price={판매가}
-                  dateDeparture={출발일}
-                  daysDay={DAYS_DAY}
-                  daysNight={DAYS_NIGHT}
+                  schedule={schedule}
                   note="(2~3인 진행 시 별도 문의 부탁드립니다)"
                 />
               </div>
@@ -361,10 +375,15 @@ export function 골프상세Page({
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  !userProfile.id ? loginOpen() : onOpen();
+                  const telNumber = "02-561-8008";
+                  판매가
+                    ? !userProfile.id
+                      ? loginOpen()
+                      : onOpen()
+                    : (window.location.href = `tel:${telNumber}`);
                 }}
               >
-                투어 예약하기
+                {판매가 ? "투어 예약하기" : "전화 문의"}
               </Button>
             </div>
           </div>

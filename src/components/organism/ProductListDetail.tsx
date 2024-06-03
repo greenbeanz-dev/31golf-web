@@ -11,6 +11,7 @@ import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface ProductListDetailProps {
   category1?: string;
@@ -56,6 +57,7 @@ export default ProductListDetail;
 const ProductListDetailSuspense = () => {
   const router = useRouter();
   const { pathname } = router;
+  const isMobile = useIsMobile();
 
   const { data } = useProductInfiniteQuery();
   const [isDay, setIsDay] = useState<boolean>(true);
@@ -93,13 +95,13 @@ const ProductListDetailSuspense = () => {
   }
 
   const ProductTabBarJeju = ({ setIsDay }) => {
-    const [tab, setTab] = useState("당일상품(당일만)");
+    const [tab, setTab] = useState("당일 18홀");
     const navItem = [
       {
-        label: "당일상품(당일만)",
+        label: "당일 18홀",
       },
       {
-        label: "2박 이상(당일 제외)",
+        label: "1박 2일 (36홀)",
       },
     ];
 
@@ -141,7 +143,7 @@ const ProductListDetailSuspense = () => {
                 isActive={tab === item.label}
                 onClick={() => {
                   setTab(item.label);
-                  setIsDay(item.label === "당일상품(당일만)");
+                  setIsDay(item.label === "당일 18홀");
                 }}
               >
                 {item.label}
@@ -157,7 +159,9 @@ const ProductListDetailSuspense = () => {
     <div className="flex flex-col w-full gap-2">
       {pathname === "/jeju" && <ProductTabBarJeju setIsDay={setIsDay} />}
 
-      <div className="w-full flex flex-wrap justify-between">
+      <div
+        className={`w-full grid ${isMobile ? "gap-2" : "gap-4"}  grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]`}
+      >
         {list.map((item, idx) => {
           return (
             <상품이미지Component

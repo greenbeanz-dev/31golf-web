@@ -1,16 +1,16 @@
-import { FaBed, FaCarSide } from "react-icons/fa";
-import { theme } from "../../../pages/_app";
-import { useIsMobile } from "../../hooks/useIsMobile";
-import { FaGolfBallTee } from "react-icons/fa6";
-import { TbFlag3Filled } from "react-icons/tb";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
+import { FaBed, FaCarSide } from "react-icons/fa";
+import { FaGolfBallTee } from "react-icons/fa6";
+import { GiHotMeal } from "react-icons/gi";
+import { IoIosArrowDown } from "react-icons/io";
 import {
   PiForkKnifeFill,
   PiMinusSquareFill,
   PiPlusSquareFill,
 } from "react-icons/pi";
-import { IoIosArrowDown } from "react-icons/io";
-import { GiHotMeal } from "react-icons/gi";
+import { TbFlag3Filled } from "react-icons/tb";
+import { theme } from "../../../pages/_app";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface 상품일정상세Props {
   scheduleList: {
@@ -33,8 +33,6 @@ const 상품일정상세 = ({
   inclusiveList,
   exclusiveList,
 }: 상품일정상세Props) => {
-  console.log(scheduleList);
-
   const isMobile = useIsMobile();
   return (
     <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
@@ -100,7 +98,13 @@ const 상품일정상세 = ({
               </div>
             ))}
           </div>
-          {isMobile && <Divider />}
+
+          {isMobile && (
+            <>
+              <div className="pt-6" />
+              <Divider />
+            </>
+          )}
           <div className="pt-10" />
           <div className="text-xl font-bold">불포함 사항</div>
           <div className="pt-6" />

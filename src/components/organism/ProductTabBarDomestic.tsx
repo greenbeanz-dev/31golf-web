@@ -1,6 +1,7 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { useState } from "react";
 import ProductListDetail from "./ProductListDetail";
+import SortSelect from "./SortSelect";
 
 const navItem = [
   {
@@ -70,6 +71,7 @@ const ProductTabBarDomestic = () => {
           })}
         </NavbarContent>
       </Navbar>
+      <SortSelect />
       <ProductListDetail category1="국내" category2={tab} />
     </>
   );
