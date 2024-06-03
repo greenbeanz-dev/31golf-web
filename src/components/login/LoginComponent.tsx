@@ -32,21 +32,12 @@ const Login = ({ useHelperMsg = false }) => {
   return (
     <div className="flex flex-col min-w-[224px]">
       <div className="text-xl font-bold">
-        {/* <Button
-          onClick={() => {
-            logOut();
-          }}
-        >
-          로그아웃
-        </Button> */}
-
         {isLogin && userProfile.name && (
           <div>
             {userProfile.name}
             {getShortPhoneNumber(userProfile.phone)}님 환영합니다.
           </div>
         )}
-        {/* <div className="h-6" /> */}
         <div className="flex flex-col gap-2">
           {!isLogin && (
             <>

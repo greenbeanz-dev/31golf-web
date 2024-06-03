@@ -13,18 +13,19 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
-const 임시예약마감일 = [1, 2];
 interface I상품캘린더Props {
   판매가: number;
   set판매가: Dispatch<SetStateAction<number>>;
   출발일: Date;
   set출발일: Dispatch<SetStateAction<Date>>;
+  onClick?: (data: any) => void;
 }
 export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   판매가,
   set판매가,
   출발일,
   set출발일,
+  onClick,
 }) => {
   const isMobile = useIsMobile();
 
@@ -73,13 +74,22 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         const eventDate = new Date(elem.date);
         const eventMonth = eventDate.getMonth(); // 이벤트의 월 가져오기
 
-        const offDay = eventMonth + 1 !== selectMonth;
+        const isOffDay = new Date(elem.date) < new Date();
+        const isToday =
+          moment().format("YYYY-MM-DD") ===
+          moment(elem.date).format("YYYY-MM-DD");
+
         return {
-          title: `${(elem.price || 0).toLocaleString()}`,
+          title: isToday
+            ? "오늘"
+            : elem.memo === "INQUIRY"
+              ? "별도 문의"
+              : `${(elem.price || 0).toLocaleString()}`,
           start: new Date(elem.date),
           end: new Date(elem.date),
           extendedProps: {
-            offDay: offDay,
+            isOffDay: isOffDay,
+            memo: elem.memo,
           },
         };
       })
@@ -94,17 +104,17 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const dayOfWeekStyleGetter = (date) => {
     // 추후 예약 가능, 마감에 따라 색 수정
-    const dayOfWeek = moment(date.start).day(); // 0: 일요일, 6: 토요일
+    // const dayOfWeek = moment(date.start).day(); // 0: 일요일, 6: 토요일
     // if (dayOfWeek === 0) {
     //   return {
     //     style: {
-    //       backgroundColor: "red",
+    //       fontColor: "red",
     //     },
     //   };
     // } else if (dayOfWeek === 6) {
     //   return {
     //     style: {
-    //       backgroundColor: "#004964",
+    //       color: "#004964",
     //     },
     //   };
     // }
@@ -183,13 +193,17 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const CustomDateCellWrapper = (props) => {
     const isSelected = isSameDate(props.value, selectedDate);
-    const calendarDate = new Date(props.value).getDate();
+    const isOutDated = new Date(props.value) < new Date();
+    const isOutOfMonth = props.value.getMonth() !== selectMonth - 1;
+    const memo = events?.find((event) => isSameDate(props.value, event.start))
+      ?.extendedProps.memo;
+
     return (
       <div
         className={
           isSelected
             ? `${props.children.props.className}-selected`
-            : 임시예약마감일.includes(calendarDate)
+            : (isOutDated && !isOutOfMonth) || memo == "SOLDOUT"
               ? `${props.children.props.className}-deadline`
               : props.children.props.className
         }
@@ -201,7 +215,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const CustomDateHeader = (props) => {
     const isSelected = isSameDate(props.date, selectedDate);
-    const isOffday = props.isOffRange;
+    const isOffDay = props.isOffRange;
 
     return (
       <div
@@ -210,7 +224,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           fontSize: "12px",
           fontWeight: "700",
           color: isSelected ? "white" : "black",
-          opacity: isOffday ? 0.2 : 1,
+          opacity: isOffDay ? 0.2 : 1,
         }}
       >
         {props.label.startsWith("0")
@@ -222,7 +236,8 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const CustomEventContent = (props) => {
     const isSelected = isSameDate(props.event.start, selectedDate);
-    const ifOffday = props.event.extendedProps.offDay;
+    const isOffDay = props.event.extendedProps.isOffDay;
+    const memo = props.event.extendedProps.memo;
 
     return (
       <div
@@ -231,7 +246,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           fontSize: isMobile ? 10 : 12,
           fontWeight: "400",
           textAlign: "end",
-          opacity: ifOffday ? 0.2 : 1,
+          opacity: (isOffDay && !isSelected) || memo === "SOLDOUT" ? 0.2 : 1,
         }}
       >
         {props.event.title}
@@ -240,10 +255,18 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const handleSlot = (slot) => {
-    const calendarDate = new Date(slot.start).getDate();
-    if (임시예약마감일.includes(calendarDate) || slot.extendedProps?.offDay)
-      return;
+    const isOffDay = events?.find((event) =>
+      isSameDate(slot.start, event.start)
+    )?.extendedProps.isOffDay;
+    const memo = events?.find((event) => isSameDate(slot.start, event.start))
+      ?.extendedProps.memo;
+
+    // 과거 날짜 클릭 시 선택 불가
+    const isOutDated = slot.start < new Date();
+    if (isOutDated) return;
+
     setSelectedDate(slot.start);
+    onClick?.(slot);
 
     const price = events?.find((event) =>
       isSameDate(slot.start, event.start)
@@ -253,8 +276,13 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       set판매가(Number(price.replace(/,/g, "")));
       set출발일(slot.start);
     } else {
-      // set판매가(Number(0));
-      // set출발일(slot.start);
+      set판매가(Number(0));
+      set출발일(slot.start);
+    }
+
+    if (memo === "SOLDOUT") {
+      set판매가(Number(0));
+      set출발일(slot.start);
     }
   };
 
@@ -286,6 +314,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           onSelectEvent={(event, e) => {
             handleSlot(event);
           }}
+          onSelect
           components={{
             toolbar: CustomToolbar,
             month: {

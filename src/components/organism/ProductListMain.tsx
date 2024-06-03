@@ -10,6 +10,7 @@ import Repeat from "@component/molecule/Repeat";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { Suspense, useEffect } from "react";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface ProductListMainProps {
   category1?: string;
@@ -54,7 +55,7 @@ export default ProductListMain;
 
 const ProductListMainSuspense = () => {
   const { data } = useProductInfiniteQuery();
-
+  const isMobile = useIsMobile();
   let list = data?.pages
     .map((page) => page.productList.edges.map((item) => item?.node))
     .flat()
@@ -81,19 +82,23 @@ const ProductListMainSuspense = () => {
   }
 
   return (
-    <div className="w-full flex flex-wrap justify-between">
-      {list.map((item, idx) => {
-        return (
-          <상품이미지Component
-            key={idx}
-            item={item as Product}
-            mobileWidth={160}
-            mobileHeight={160}
-            pcWidth={448}
-            pcHeight={345}
-          />
-        );
-      })}
+    <>
+      <div
+        className={`w-full grid ${isMobile ? "gap-2" : "gap-4"}  grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]`}
+      >
+        {list.map((item, idx) => {
+          return (
+            <상품이미지Component
+              key={idx}
+              item={item as Product}
+              mobileWidth={160}
+              mobileHeight={160}
+              pcWidth={448}
+              pcHeight={345}
+            />
+          );
+        })}
+      </div>
       <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
         <Image
           alt="circle"
@@ -103,6 +108,6 @@ const ProductListMainSuspense = () => {
         />
         투어 상품 더보기
       </Button>
-    </div>
+    </>
   );
 };

@@ -3,11 +3,12 @@ import { CreateReservationQuery } from "@/gql/query/reservation/crud";
 import { CreateReservationProductQuery } from "@/gql/query/reservation_product/crud";
 import { Input, useDisclosure } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useIsMobile } from "../../../hooks/useIsMobile";
+import useLogin from "../../../utils/login/useLogin";
+import getSMSText from "../../../utils/text/getSMSText";
 import CommonModal from "./CommonModal";
 import { ConfirmModal } from "./ConfirmModal";
-import useLogin from "../../../utils/login/useLogin";
 
 const 예약추가Modal = ({
   reservation,
@@ -27,6 +28,7 @@ const 예약추가Modal = ({
     productId: number;
     productName: string;
     customerId: number;
+    customerName: string;
     priceCustom: number;
     daysDay: number;
     daysNight: number;
@@ -58,6 +60,10 @@ const 예약추가Modal = ({
         daysDay: reservation.daysDay,
         daysNight: isNaN(reservation.daysNight) ? 0 : 1,
         isWeb: true,
+        memo: "___!-!___",
+        smsReservation: smsReservation,
+        smsReservationSub: smsReservationSub,
+        smsConfirmation: smsConfirmation,
       });
     },
     {
@@ -75,6 +81,54 @@ const 예약추가Modal = ({
     }
   );
 
+  const [smsReservation, setSmsReservation] = useState(
+    getSMSText({
+      type: "RESERVATION",
+      name: reservation.customerName,
+      numPeople: reservation.numPeople,
+      numTeam: reservation.numTeam,
+      price: reservation.priceCustom || 0,
+      priceCustom: reservation.priceCustom,
+      priceAddon: 0,
+      priceAddonSub: 0,
+      productName: reservation.productName,
+      dateDeparture: reservation.dateDeparture,
+      daysDay: reservation.daysDay,
+    })
+  );
+
+  const [smsReservationSub, setSmsReservationSub] = useState(
+    getSMSText({
+      type: "RESERVATION",
+      name: reservation.customerName,
+      numPeople: reservation.numPeople,
+      numTeam: reservation.numTeam,
+      price: reservation.priceCustom || 0,
+      priceCustom: reservation.priceCustom,
+      priceAddon: 0,
+      priceAddonSub: 0,
+      productName: reservation.productName,
+      dateDeparture: reservation.dateDeparture,
+      daysDay: reservation.daysDay,
+    })
+  );
+
+  const [smsConfirmation, setSmsConfirmation] = useState(
+    getSMSText({
+      type: "CONFIRMATION",
+      name: reservation.customerName,
+      numPeople: reservation.numPeople,
+      numTeam: reservation.numTeam,
+      price: reservation.priceCustom || 0,
+      priceCustom: reservation.priceCustom,
+      priceAddon: 0,
+      priceAddonSub: 0,
+      productName: reservation.productName,
+      dateDeparture: reservation.dateDeparture,
+      daysDay: reservation.daysDay,
+    })
+  );
+
   return (
     <>
       <CommonModal
@@ -85,14 +139,14 @@ const 예약추가Modal = ({
           action: async () => {
             createReservation();
           },
-          label: "예약 접수",
+          label: reservation.priceCustom > 0 ? "예약 접수" : "전화 문의",
         }}
         closeAction={{
           action: () => {
             onClose();
           },
           isLoading: false,
-          label: "취소",
+          label: "닫기",
         }}
       >
         <div className="flex flex-col w-full gap-4">

@@ -5,83 +5,31 @@ import { MobileFooter } from "@component/organism/MobileFooter";
 import TopBar from "@component/organism/TopBar";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useMediaQuery } from "react-responsive";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import { isMobileSize } from "../../utils/responsive/isMobile";
+import useLogin from "../../utils/login/useLogin";
 interface Props {
   children: React.ReactNode;
 }
 const Layout: React.FC<Props> = ({ children }) => {
-  // const { login, isLogin, logOut, userProfile } = useLogin();
-
-  // const isDesktop = useMediaQuery({
-  //   query: "(min-width: 1024px)",
-  // });
-
-  const mobile = useMediaQuery({ query: `(max-width: ${isMobileSize}px)` });
-
   const isMobile = useIsMobile();
-
-  //   const isManager = userProfile?.role === "MANAGER";
-
-  //   const RenderedChildren = match({
-  //     isLogin: isLogin,
-  //     isManager: isManager,
-  //   })
-  //     .with({ isManager: true }, () => {
-  //       return <>{children}</>;
-  //     })
-  //     .with({ isManager: false, isLogin: true }, () => {
-  //       return (
-  //         <div className="flex items-center justify-center w-full h-full">
-  //           로그인하였지만 권한없음, 권한이 필요하면 OOO에게 연락바람
-  //         </div>
-  //       );
-  //     })
-  //     .otherwise(() => {
-  //       return (
-  //         <div className="flex items-center justify-center w-full h-full">
-  //           <Button
-  //             onClick={() => {
-  //               login();
-  //             }}
-  //             variant="bordered"
-  //           >
-  //             로그인
-  //           </Button>
-  //         </div>
-  //       );
-  //     });
 
   return (
     <ErrorBoundary fallback={<div>error</div>}>
       <Suspense fallback={<div></div>}>
-        <div
-          className="max-w-[100vw] min-h-[100vh]"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: isMobile ? "100%" : "1200px",
-              minWidth: isMobile ? "100%" : "1200px",
-            }}
-          >
-            <div className="flex h-8 justify-start" />
+        <div className="max-w-[100vw] min-h-[100vh] flex items-center flex-col">
+          <div className="w-full max-w-[1200px]">
             {isMobile ? (
-              <MobileTopBar />
+              <>
+                <LogoutComponent />
+                <MobileTopBar />
+              </>
             ) : (
-              <TopBar />
-              // <>
-              //   <TopButton />
-              //   <TopBar />
-              // </>
+              <>
+                <div className="flex h-8 justify-start" />
+                <LogoutComponent />
+                <TopBar />
+              </>
             )}
-
-            {/* <main className="h-[calc(100vh-70px)]">{RenderedChildren}</main> */}
             <main
               className="h-full"
               style={{
@@ -103,4 +51,24 @@ const Layout: React.FC<Props> = ({ children }) => {
   );
 };
 
+const LogoutComponent = () => {
+  const isMobile = useIsMobile();
+
+  const { isLogin, logOut, userProfile } = useLogin();
+
+  if (!isLogin || !userProfile.id || isMobile) {
+    return null;
+  }
+
+  return (
+    <div
+      className="flex justify-end"
+      onClick={() => {
+        logOut();
+      }}
+    >
+      <div className="text-[#444] cursor-pointer">로그아웃</div>
+    </div>
+  );
+};
 export default Layout;
