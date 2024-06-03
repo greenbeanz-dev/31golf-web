@@ -18,12 +18,14 @@ interface I상품캘린더Props {
   set판매가: Dispatch<SetStateAction<number>>;
   출발일: Date;
   set출발일: Dispatch<SetStateAction<Date>>;
+  onClick?: (data: any) => void;
 }
 export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   판매가,
   set판매가,
   출발일,
   set출발일,
+  onClick,
 }) => {
   const isMobile = useIsMobile();
 
@@ -264,6 +266,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     if (isOutDated) return;
 
     setSelectedDate(slot.start);
+    onClick?.(slot);
 
     const price = events?.find((event) =>
       isSameDate(slot.start, event.start)

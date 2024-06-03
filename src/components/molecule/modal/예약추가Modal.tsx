@@ -5,10 +5,10 @@ import { Input, useDisclosure } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useIsMobile } from "../../../hooks/useIsMobile";
-import CommonModal from "./CommonModal";
-import { ConfirmModal } from "./ConfirmModal";
 import useLogin from "../../../utils/login/useLogin";
 import getSMSText from "../../../utils/text/getSMSText";
+import CommonModal from "./CommonModal";
+import { ConfirmModal } from "./ConfirmModal";
 
 const 예약추가Modal = ({
   reservation,
@@ -146,7 +146,7 @@ const 예약추가Modal = ({
             onClose();
           },
           isLoading: false,
-          label: "취소",
+          label: "닫기",
         }}
       >
         <div className="flex flex-col w-full gap-4">

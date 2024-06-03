@@ -1,4 +1,3 @@
-import { Customer } from "@/gql/__generated__/graphql";
 import gqlClient from "@/gql/gqlClient";
 import { CreateRequestQuery } from "@/gql/query/request/crud";
 // import RequestInputModel, {
@@ -110,15 +109,9 @@ const FloatBtnGroup = () => {
       // resolver: RequestInputModelResolver,
     });
 
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer>();
-
-    const handleCustomerChange = (customer: Customer) => {
-      setSelectedCustomer(customer);
-    };
-
     return (
       <CommonModal
-        header="접수 추가"
+        header="견적 문의"
         isOpen={isOpen}
         onClose={onClose}
         confirmAction={{
@@ -130,14 +123,14 @@ const FloatBtnGroup = () => {
             }
           },
           isLoading: isLoading,
-          label: "접수",
+          label: "문의하기",
         }}
         closeAction={{
           action: () => {
             onClose();
           },
           isLoading: false,
-          label: "취소",
+          label: "닫기",
         }}
       >
         <div className="flex flex-col w-full gap-4">
@@ -286,7 +279,6 @@ const FloatBtnGroup = () => {
         window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
         break;
       case "request":
-        console.log("userProfile", userProfile);
         if (isEmpty(userProfile)) {
           loginOpen();
         } else {
