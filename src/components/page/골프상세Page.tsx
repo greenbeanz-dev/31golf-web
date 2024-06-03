@@ -1,4 +1,3 @@
-import { MobileMenu } from "@component/Menu/MobileMenu";
 import { 상품캘린더 } from "@component/calendar";
 import LoginModal from "@component/login/LoginModal";
 import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
@@ -175,7 +174,6 @@ export function 골프상세Page({
       <div className="w-full h-full">
         <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
           <div className="flex-1">
-            {isMobile && <MobileMenu />}
             <div className="md:min-w-[640px] max-h-[492px] w-full h-full rounded-[24px] overflow-hidden">
               <Carousel
                 showArrows={true}
@@ -252,6 +250,11 @@ export function 골프상세Page({
                 set판매가={set판매가}
                 출발일={출발일}
                 set출발일={set출발일}
+                onClick={(date) => {
+                  if (data) {
+                    setShowDetail(true);
+                  }
+                }}
               />
             </Suspense>
           </div>
@@ -319,7 +322,6 @@ export function 골프상세Page({
             }}
           />
         )}
-        {/* 바텀시트  */}
         {isMobile && (
           <div
             className="fixed bottom-0 left-0 w-full rounded-tr-2xl"

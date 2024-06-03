@@ -11,7 +11,7 @@ export const MobileFooter = () => {
   const 주소2 = "(낙원동 56-0) 각연빌딩 5층";
 
   return (
-    <div className="flex flex-col items-start p-10 mb-24 md:mb-0">
+    <div className="flex flex-col items-start py-10 px-[3vw] mb-24 md:mb-0">
       <div className="flex flex-col items-start gap-2">
         <div className="flex w-full gap-2">
           <div className="flex">
