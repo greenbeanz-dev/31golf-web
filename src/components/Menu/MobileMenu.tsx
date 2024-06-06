@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { FaMapMarkedAlt, FaTree } from "react-icons/fa";
-import { MdHome } from "react-icons/md";
+import { IoHome } from "react-icons/io5";
 import { PiAirplaneTakeoffFill } from "react-icons/pi";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -11,7 +11,7 @@ export function MobileMenu() {
   const firstRow = [
     {
       label: "처음으로",
-      icon: <MdHome size={32} color={theme.colors.primary} />,
+      icon: <IoHome size={32} color={theme.colors.primary} />,
       href: "",
     },
     {
