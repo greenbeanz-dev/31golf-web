@@ -37,6 +37,16 @@ builder.prismaObject("request", {
       nullable: true,
       resolve: (request) => request.num_team,
     }),
+    daysDay: t.field({
+      type: "Int",
+      nullable: true,
+      resolve: (request) => request.days_day,
+    }),
+    daysNight: t.field({
+      type: "Int",
+      nullable: true,
+      resolve: (request) => request.days_night,
+    }),
     requestContent: t.field({
       type: "String",
       nullable: true,
@@ -72,6 +82,11 @@ builder.prismaObject("request", {
       type: "String",
       nullable: true,
       resolve: (request) => request.row_style,
+    }),
+    schedule: t.field({
+      type: "String",
+      nullable: true,
+      resolve: (request) => request.schedule,
     }),
   }),
 });
