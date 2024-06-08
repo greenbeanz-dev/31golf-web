@@ -151,6 +151,10 @@ class ProductInputModel {
   @IsOptional()
   @IsString()
   thumbnailImage?: string | null;
+
+  @IsOptional()
+  @IsBoolean()
+  isMain?: boolean;
 }
 
 export default ProductInputModel;
