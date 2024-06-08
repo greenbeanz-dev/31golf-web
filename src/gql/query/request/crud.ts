@@ -64,6 +64,10 @@ mutation createRequest(
   $isReservation: Boolean
   $isCanceled: Boolean
   $golfCourse: String
+  $schedule: String
+  $daysDay: Int
+  $daysNight: Int
+  $rowStyle: String
 ) {
   createRequest(
     dateArrival: $dateArrival
@@ -76,6 +80,10 @@ mutation createRequest(
     isReservation: $isReservation
     isCanceled: $isCanceled
     golfCourse: $golfCourse
+    schedule: $schedule
+    daysDay: $daysDay
+    daysNight: $daysNight
+    rowStyle: $rowStyle
   ) {
     id
     createdAt
@@ -90,6 +98,10 @@ mutation createRequest(
     isReservation
     isCanceled
     golfCourse
+    schedule
+    daysDay
+    daysNight
+    rowStyle
   }
 }
 `);

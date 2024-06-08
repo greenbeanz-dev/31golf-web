@@ -19,6 +19,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useLogin from "../../utils/login/useLogin";
 import { isEmpty } from "../../utils/validate/isEmpty";
+import dayjs from "dayjs";
 
 const FloatBtnGroup = () => {
   const { login, isLogin, logOut, userProfile } = useLogin();
@@ -73,6 +74,17 @@ const FloatBtnGroup = () => {
 
     const queryClient = useQueryClient();
 
+    const getSchedules = () => {
+      if (dateDeparture) {
+        return `${dayjs(dateDeparture).format("YY-MM-DD")} ~ ${dayjs(
+          dateDeparture
+        )
+          .add(Number(daysNight), "day")
+          .format("YY-MM-DD")}`;
+      }
+      return "";
+    };
+
     const { mutateAsync: createRequest, isLoading } = useMutation(
       async (requestInputModel: any) => {
         if (!userProfile.id) return;
@@ -80,6 +92,7 @@ const FloatBtnGroup = () => {
           ...requestInputModel,
           customerId: Number(userProfile.id),
           dateDeparture: dateDeparture?.toISOString(),
+          schedule: getSchedules(),
           daysDay: Number(daysDay),
           daysNight: Number(daysNight),
           numTeam: Number(numTeam),
