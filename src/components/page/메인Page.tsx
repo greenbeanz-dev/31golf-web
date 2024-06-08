@@ -59,7 +59,7 @@ const 메인Page = () => {
               삼일골프의 다양한 투어 상품을 만나보세요!
             </div>
           </div>
-          <Suspense fallback={<div>asdasdasdasdasdas</div>}>
+          <Suspense fallback={<div>투어 전체보기</div>}>
             <ProdudctTabBarMain />
           </Suspense>
         </div>

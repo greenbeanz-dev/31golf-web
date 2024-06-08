@@ -88,6 +88,11 @@ builder.prismaObject("product", {
       nullable: true,
       resolve: (product) => product.is_best,
     }),
+    isMain: t.field({
+      type: "Boolean",
+      nullable: true,
+      resolve: (product) => product.is_main,
+    }),
     courseId: t.field({
       type: "BigInt",
       nullable: true,
@@ -205,6 +210,7 @@ builder.queryField("productList", (t) =>
       isActive: t.arg.boolean(),
       isWeb: t.arg.boolean(),
       isBest: t.arg.boolean(),
+      isMain: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -244,6 +250,9 @@ builder.queryField("productList", (t) =>
             //   : {},
             _args.isBest !== null && _args.isBest !== undefined
               ? { is_best: _args.isBest }
+              : {},
+            _args.isMain !== null && _args.isMain !== undefined
+              ? { is_main: _args.isMain }
               : {},
             dateDepartureCondition
               ? {
@@ -447,6 +456,7 @@ builder.mutationField("createProduct", (t) =>
       isActive: t.arg.boolean(),
       isWeb: t.arg.boolean(),
       isBest: t.arg.boolean(),
+      isMain: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -536,6 +546,7 @@ builder.mutationField("updateProductById", (t) =>
       isActive: t.arg.boolean(),
       isWeb: t.arg.boolean(),
       isBest: t.arg.boolean(),
+      isMain: t.arg.boolean(),
       courseId: t.arg.int(),
       category1: t.arg.string(),
       category2: t.arg.string(),
@@ -578,6 +589,7 @@ builder.mutationField("updateProductById", (t) =>
           is_active: _args.isActive,
           is_web: _args.isWeb,
           is_best: _args.isBest,
+          is_main: _args.isMain,
           course_id: _args.courseId,
           category_1: _args.category1,
           category_2: _args.category2,
