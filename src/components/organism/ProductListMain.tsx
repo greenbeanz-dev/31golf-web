@@ -23,13 +23,6 @@ const ProductListMain = ({
   category2,
   category3,
 }: ProductListMainProps) => {
-  useEffect(() => {
-    useProductInfiniteQueryBody.getState().changeCategory1(category1);
-    useProductInfiniteQueryBody.getState().changeCategory2(category2);
-    useProductInfiniteQueryBody.getState().changeCategory3(category3);
-    useProductInfiniteQueryBody.getState().changeIsMain(true);
-  }, [category1, category2, category3]);
-
   return (
     <div className="w-full">
       <Suspense
@@ -46,7 +39,11 @@ const ProductListMain = ({
           </div>
         }
       >
-        <ProductListMainSuspense />
+        <ProductListMainSuspense
+          category1={category1}
+          category2={category2}
+          category3={category3}
+        />
       </Suspense>
     </div>
   );
@@ -54,8 +51,20 @@ const ProductListMain = ({
 
 export default ProductListMain;
 
-const ProductListMainSuspense = () => {
-  const { data } = useProductInfiniteQuery();
+const ProductListMainSuspense = ({
+  category1,
+  category2,
+  category3,
+}: ProductListMainProps) => {
+  const { data, hasNextPage, fetchNextPage } = useProductInfiniteQuery();
+  useEffect(() => {
+    useProductInfiniteQueryBody.getState().changeCategory1(category1);
+    useProductInfiniteQueryBody.getState().changeCategory2(category2);
+    useProductInfiniteQueryBody.getState().changeCategory3(category3);
+    useProductInfiniteQueryBody.getState().changeIsMain(true);
+    useProductInfiniteQueryBody.getState().changeSize(4);
+  }, [category1, category2, category3]);
+
   const isMobile = useIsMobile();
   let list = data?.pages
     .map((page) => page.productList.edges.map((item) => item?.node))
@@ -64,8 +73,7 @@ const ProductListMainSuspense = () => {
       return {
         ...item,
       };
-    })
-    .slice(0, 4);
+    });
 
   if (list === undefined || list.length === 0) {
     return (
@@ -100,15 +108,22 @@ const ProductListMainSuspense = () => {
           );
         })}
       </div>
-      <Button className="w-full h-12 bg-[#004964] text-white font-bold leading-6">
-        <Image
-          alt="circle"
-          src={"/images/logo/add-circle.png"}
-          width={24}
-          height={24}
-        />
-        투어 상품 더보기
-      </Button>
+      {hasNextPage && (
+        <Button
+          className="w-full h-12 bg-[#004964] text-white font-bold leading-6"
+          onClick={() => {
+            fetchNextPage();
+          }}
+        >
+          <Image
+            alt="circle"
+            src={"/images/logo/add-circle.png"}
+            width={24}
+            height={24}
+          />
+          투어 상품 더보기
+        </Button>
+      )}
     </>
   );
 };
