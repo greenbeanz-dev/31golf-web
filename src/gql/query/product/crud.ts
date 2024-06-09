@@ -10,6 +10,7 @@ query productListInfinityQuery(
   $isActive: Boolean,
   $isWeb: Boolean,
   $isBest: Boolean,
+  $isMain: Boolean,
   $courseId: Int,
   $category1: String,
   $category2: String,
@@ -28,6 +29,7 @@ query productListInfinityQuery(
     isActive: $isActive
     isWeb: $isWeb
     isBest: $isBest
+    isMain: $isMain
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -59,6 +61,7 @@ query productListInfinityQuery(
         isActive
         isWeb
         isBest
+        isMain
         course {
           id
           name
@@ -101,6 +104,7 @@ mutation createProduct(
   $isActive: Boolean
   $isWeb: Boolean
   $isBest: Boolean
+  $isMain: Boolean
   $courseId: Int
   $category1: String
   $category2: String
@@ -133,6 +137,7 @@ mutation createProduct(
     isActive: $isActive
     isWeb: $isWeb
     isBest: $isBest
+    isMain: $isMain
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -199,6 +204,7 @@ mutation updateProductById(
   $isActive: Boolean
   $isWeb: Boolean
   $isBest: Boolean
+  $isMain: Boolean
   $courseId: Int
   $category1: String
   $category2: String
@@ -232,6 +238,7 @@ mutation updateProductById(
     isActive: $isActive
     isWeb: $isWeb
     isBest: $isBest
+    isMain: $isMain
     courseId: $courseId
     category1: $category1
     category2: $category2
@@ -264,6 +271,7 @@ mutation updateProductById(
     isActive
     isWeb
     isBest
+    isMain
     courseId
     category1
     category2
@@ -271,7 +279,7 @@ mutation updateProductById(
     memoNotice
     memoManager
     memoEtc
-    type
+  type
     inclusives
     exclusives
     summary

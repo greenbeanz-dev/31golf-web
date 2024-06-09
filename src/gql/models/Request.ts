@@ -37,6 +37,16 @@ builder.prismaObject("request", {
       nullable: true,
       resolve: (request) => request.num_team,
     }),
+    daysDay: t.field({
+      type: "Int",
+      nullable: true,
+      resolve: (request) => request.days_day,
+    }),
+    daysNight: t.field({
+      type: "Int",
+      nullable: true,
+      resolve: (request) => request.days_night,
+    }),
     requestContent: t.field({
       type: "String",
       nullable: true,
@@ -72,6 +82,11 @@ builder.prismaObject("request", {
       type: "String",
       nullable: true,
       resolve: (request) => request.row_style,
+    }),
+    schedule: t.field({
+      type: "String",
+      nullable: true,
+      resolve: (request) => request.schedule,
     }),
   }),
 });
@@ -138,6 +153,10 @@ builder.mutationField("createRequest", (t) =>
       isReservation: t.arg.boolean(),
       isCanceled: t.arg.boolean(),
       golfCourse: t.arg.string(),
+      schedule: t.arg.string(),
+      daysDay: t.arg.int(),
+      daysNight: t.arg.int(),
+      rowStyle: t.arg.string(),
     },
     resolve: async (query, _parent, _args, _ctx): Promise<any> => {
       const result = await prisma.request.create({
@@ -153,8 +172,12 @@ builder.mutationField("createRequest", (t) =>
           is_reservation: _args.isReservation,
           is_canceled: _args.isCanceled,
           golf_course: _args.golfCourse,
+          schedule: _args.schedule,
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
+          days_day: _args.daysDay,
+          days_night: _args.daysNight,
+          row_style: _args.rowStyle,
         },
       });
 

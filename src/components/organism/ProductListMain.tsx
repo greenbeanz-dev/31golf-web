@@ -27,6 +27,7 @@ const ProductListMain = ({
     useProductInfiniteQueryBody.getState().changeCategory1(category1);
     useProductInfiniteQueryBody.getState().changeCategory2(category2);
     useProductInfiniteQueryBody.getState().changeCategory3(category3);
+    useProductInfiniteQueryBody.getState().changeIsMain(true);
   }, [category1, category2, category3]);
 
   return (

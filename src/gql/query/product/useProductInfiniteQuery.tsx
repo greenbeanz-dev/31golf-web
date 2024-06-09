@@ -12,6 +12,7 @@ const useProductInfiniteQuery = () => {
   const name = useProductInfiniteQueryBody((state) => state.name);
   const memo = useProductInfiniteQueryBody((state) => state.memo);
   const isActive = useProductInfiniteQueryBody((state) => state.isActive);
+  const isMain = useProductInfiniteQueryBody((state) => state.isMain);
   const category1 = useProductInfiniteQueryBody((state) => state.category1);
   const category2 = useProductInfiniteQueryBody((state) => state.category2);
   const category3 = useProductInfiniteQueryBody((state) => state.category3);
@@ -22,6 +23,7 @@ const useProductInfiniteQuery = () => {
     name: name,
     memo: memo,
     isActive: isActive,
+    isMain: isMain,
     category1: category1 === "선택안함" ? undefined : category1,
     category2: category2,
     category3: category3,
@@ -35,6 +37,7 @@ const useProductInfiniteQuery = () => {
       name,
       memo,
       isActive,
+      isMain,
       category1,
       category2,
       category3,
@@ -45,6 +48,7 @@ const useProductInfiniteQuery = () => {
         first: size,
         ...requestBody,
         isActive,
+        isMain,
       },
     }) => {
       const response = await gqlClient.request(
@@ -71,6 +75,7 @@ type State = {
   memo: string;
   size: number;
   isActive: boolean | undefined;
+  isMain: boolean | undefined;
   category1: string | undefined;
   category2: string | undefined;
   category3: string | undefined;
@@ -84,6 +89,7 @@ type Actions = {
   changeMemo: (memo: State["memo"]) => void;
   changeSize: (size: State["size"]) => void;
   changeIsActive: (isActive: State["isActive"]) => void;
+  changeIsMain: (isActive: State["isMain"]) => void;
   changeCategory1: (category1: State["category1"]) => void;
   changeCategory2: (category2: State["category2"]) => void;
   changeCategory3: (category3: State["category3"]) => void;
@@ -95,6 +101,7 @@ const initialState: State = {
   name: "",
   memo: "",
   isActive: undefined,
+  isMain: undefined,
   category1: undefined,
   category2: undefined,
   category3: undefined,
@@ -133,6 +140,11 @@ export const useProductInfiniteQueryBody = create(
     changeIsActive: (isActive) => {
       set((state) => {
         state.isActive = isActive;
+      });
+    },
+    changeIsMain: (isMain) => {
+      set((state) => {
+        state.isMain = isMain;
       });
     },
     changeCategory1: (category1) => {

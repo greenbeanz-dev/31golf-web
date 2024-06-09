@@ -84,7 +84,9 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
             ? "오늘"
             : elem.memo === "INQUIRY"
               ? "별도 문의"
-              : `${(elem.price || 0).toLocaleString()}`,
+              : elem.memo === "SOLDOUT"
+                ? "예약 마감"
+                : `${(elem.price || 0).toLocaleString()}`,
           start: new Date(elem.date),
           end: new Date(elem.date),
           extendedProps: {
@@ -246,7 +248,11 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           fontSize: isMobile ? 10 : 12,
           fontWeight: "400",
           textAlign: "end",
-          opacity: (isOffDay && !isSelected) || memo === "SOLDOUT" ? 0.2 : 1,
+          opacity:
+            (isOffDay || memo === "SOLDOUT" || memo === "INQUIRY") &&
+            !isSelected
+              ? 0.2
+              : 1,
         }}
       >
         {props.event.title}

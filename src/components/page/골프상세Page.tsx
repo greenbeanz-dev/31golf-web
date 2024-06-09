@@ -185,7 +185,15 @@ export function 골프상세Page({
                 {productImageList &&
                   [
                     ...(data?.thumbnailImage
-                      ? [{ url: data.thumbnailImage }, ...productImageList]
+                      ? // 썸네일과 이미지 중복 제거
+                        Array.from(
+                          new Map(
+                            [
+                              { url: data.thumbnailImage },
+                              ...productImageList,
+                            ].map((item) => [item["url"], item])
+                          ).values()
+                        )
                       : [...productImageList]),
                   ].map((image, idx) => {
                     return (
