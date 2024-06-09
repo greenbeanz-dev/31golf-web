@@ -60,6 +60,7 @@ const useProductInfiniteQuery = () => {
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage.productList.pageInfo.hasNextPage) return false;
       return {
+        first: size,
         after: lastPage.productList.pageInfo.endCursor,
         ...requestBody,
       };
