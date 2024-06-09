@@ -60,7 +60,8 @@ const ProductListDetailSuspense = () => {
   const isMobile = useIsMobile();
 
   const { data } = useProductInfiniteQuery();
-  const [isDay, setIsDay] = useState<boolean>(true);
+  // 제주인 경우만 당일 상품을 보여줌
+  const [isDay, setIsDay] = useState<boolean>(pathname === "/jeju");
 
   let list = data?.pages
     .map((page) =>
