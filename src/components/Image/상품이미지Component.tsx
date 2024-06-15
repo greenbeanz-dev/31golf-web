@@ -45,7 +45,7 @@ function 상품이미지Component({
         {item.summary}
       </div>
       <div className="pt-1" />
-      <div className="text-[16px] font-bold leading-6">{`${item.name} ${item.type}`}</div>
+      <div className="text-[16px] font-bold truncate leading-6">{`${item.name} ${item.type}`}</div>
       <div className="min-h-2" />
       {!isMobile && (
         <div className="flex gap-1">
