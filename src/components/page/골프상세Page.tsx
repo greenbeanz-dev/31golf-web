@@ -130,8 +130,8 @@ export function 골프상세Page({
       endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
     }
 
-    const formatted출발일 = dayjs(출발일).format("YYYY.MM.DD(ddd)");
-    const formatted도착일 = dayjs(endDate).format("YYYY.MM.DD(ddd)");
+    const formatted출발일 = dayjs(출발일).format("YY.MM.DD(ddd)");
+    const formatted도착일 = dayjs(endDate).format("YY.MM.DD(ddd)");
 
     setSchedule(
       `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`
