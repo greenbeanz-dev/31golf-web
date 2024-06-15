@@ -62,7 +62,6 @@ const ProductListMainSuspense = ({
     useProductInfiniteQueryBody.getState().changeCategory2(category2);
     useProductInfiniteQueryBody.getState().changeCategory3(category3);
     useProductInfiniteQueryBody.getState().changeIsMain(true);
-    useProductInfiniteQueryBody.getState().changeSize(4);
   }, [category1, category2, category3]);
 
   const isMobile = useIsMobile();
