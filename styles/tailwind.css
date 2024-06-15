@@ -46,16 +46,21 @@ svg {
 
 input {
   border: none;
+  /* iOS 에서 16px 이하의 input 에서 자동 zoom 되는 문제가 있어서 조치하였음. */
+  font-size: 16px;
 }
 input:focus {
   outline: none;
+  font-size: 16px;
 }
 textarea {
   border: none;
+  font-size: 16px;
 }
 
 textarea:focus {
   outline: none;
+  font-size: 16px;
 }
 a {
   text-decoration: none;
