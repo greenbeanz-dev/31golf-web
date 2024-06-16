@@ -5,9 +5,8 @@ import { Suspense } from "react";
 
 export function 국내골프Page() {
   return (
-    <>
+    <div className="flex flex-col w-full">
       <MobileMenu />
-
       <div className="flex flex-col w-full gap-2">
         <div className="text-xl font-bold">국내골프 전체보기</div>
         <div className="text-[16px] font-normal">
@@ -17,6 +16,6 @@ export function 국내골프Page() {
           <ProductTabBarDomestic />
         </Suspense>
       </div>
-    </>
+    </div>
   );
 }
