@@ -39,7 +39,7 @@ export function 베스트상품Component() {
         list.map((item, idx) => {
           return (
             <div
-              className="cursor-pointer h-[350px]"
+              className="cursor-pointer h-[320px]"
               key={idx}
               style={{
                 width: isMobile ? 256 : 292,
@@ -60,7 +60,7 @@ export function 베스트상품Component() {
               <div className="min-h-4" />
               <div className="text-[16px] font-bold leading-6">{`${item.name} ${item.type}`}</div>
               <div className="pt-1" />
-              <div className="text-[16px] font-normal w-full overflow-ellipsis overflow-hidden leading-normal tracking-tight opacity-70">
+              <div className="text-[16px] font-normal w-full overflow-ellipsis truncate overflow-hidden leading-normal tracking-tight opacity-70">
                 {item.summary}
               </div>
               <div className="pt-1" />
