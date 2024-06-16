@@ -35,7 +35,7 @@ export function MobileMenu() {
   if (!isMobile) return null;
   return (
     <div>
-      <div className="flex justify-start items-center gap-1">
+      <div className="flex justify-between items-center gap-1">
         {firstRow.map((item, idx) => (
           <div
             key={idx}
@@ -49,7 +49,7 @@ export function MobileMenu() {
           </div>
         ))}
       </div>
-      <div style={{ minHeight: 16 }} />
+      <div className="min-h-8" />
     </div>
   );
 }
