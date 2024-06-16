@@ -190,11 +190,11 @@ export function 회원가입Page() {
           mainWrapper: ["w-full"],
         }}
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        type="text"
+        onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ""))}
+        inputMode="numeric"
         labelPlacement="outside-left"
         variant="bordered"
-        label="휴대폰번호"
+        label="휴대폰번호(-제외)"
       />
       {isSendCode && !isVertify && (
         <>
