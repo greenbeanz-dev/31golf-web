@@ -5,7 +5,7 @@ import { Suspense } from "react";
 
 export function 제주골프Page() {
   return (
-    <>
+    <div className="flex flex-col w-full">
       <MobileMenu />
       <div className="flex flex-col w-full gap-2">
         <div className="text-xl font-bold">제주골프 전체보기</div>
@@ -16,6 +16,6 @@ export function 제주골프Page() {
           <ProductTabBarJeju />
         </Suspense>
       </div>
-    </>
+    </div>
   );
 }

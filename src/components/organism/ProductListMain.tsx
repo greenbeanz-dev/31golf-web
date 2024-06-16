@@ -11,6 +11,7 @@ import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { Suspense, useEffect } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import router from "next/router";
 
 interface ProductListMainProps {
   category1?: string;
@@ -57,6 +58,7 @@ const ProductListMainSuspense = ({
   category3,
 }: ProductListMainProps) => {
   const { data, hasNextPage, fetchNextPage } = useProductInfiniteQuery();
+
   useEffect(() => {
     useProductInfiniteQueryBody.getState().changeCategory1(category1);
     useProductInfiniteQueryBody.getState().changeCategory2(category2);
@@ -89,6 +91,18 @@ const ProductListMainSuspense = ({
     );
   }
 
+  const routeDetailPage = () => {
+    if (category1 === "국내") {
+      if (category2 === "제주도") {
+        router.push("/jeju");
+      } else {
+        router.push("/domestic");
+      }
+    } else {
+      router.push("/overseas");
+    }
+  };
+
   return (
     <>
       <div
@@ -107,11 +121,11 @@ const ProductListMainSuspense = ({
           );
         })}
       </div>
-      {hasNextPage && (
+      {list.length > 0 && (
         <Button
           className="w-full h-12 bg-[#004964] text-white font-bold leading-6"
           onClick={() => {
-            fetchNextPage();
+            routeDetailPage();
           }}
         >
           <Image
