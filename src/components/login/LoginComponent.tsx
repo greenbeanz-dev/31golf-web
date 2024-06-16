@@ -15,6 +15,11 @@ const Login = ({ useHelperMsg = false }) => {
   const { login, isLogin, logOut, userProfile } = useLogin();
   const router = useRouter();
 
+  const handlePassword = (e) => {
+    const numericValue = e.target.value.replace(/[^0-9]/g, "").replace("-", "");
+    setPassword(numericValue);
+  };
+
   const handleSubmit = async () => {
     if (id === "" || password === "") {
       return alert("정보를 입력해 주세요.");
@@ -64,12 +69,11 @@ const Login = ({ useHelperMsg = false }) => {
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                placeholder="휴대폰번호"
+                inputMode="numeric"
+                placeholder="휴대폰번호(-제외)"
                 size={"sm"}
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+                onChange={handlePassword}
               />
               <Button
                 className="flex justify-center items-center h-[48px] w-full rounded-[8px]"
