@@ -25,6 +25,7 @@ const ProductListDetail = ({
   category3,
 }: ProductListDetailProps) => {
   useEffect(() => {
+    useProductInfiniteQueryBody.getState().reset();
     useProductInfiniteQueryBody.getState().changeCategory1(category1);
     useProductInfiniteQueryBody.getState().changeCategory2(category2);
     useProductInfiniteQueryBody.getState().changeCategory3(category3);

@@ -9,9 +9,9 @@ import {
 import Repeat from "@component/molecule/Repeat";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
+import router from "next/router";
 import { Suspense, useEffect } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import router from "next/router";
 
 interface ProductListMainProps {
   category1?: string;
@@ -57,9 +57,10 @@ const ProductListMainSuspense = ({
   category2,
   category3,
 }: ProductListMainProps) => {
-  const { data, hasNextPage, fetchNextPage } = useProductInfiniteQuery();
+  const { data } = useProductInfiniteQuery();
 
   useEffect(() => {
+    useProductInfiniteQueryBody.getState().reset();
     useProductInfiniteQueryBody.getState().changeCategory1(category1);
     useProductInfiniteQueryBody.getState().changeCategory2(category2);
     useProductInfiniteQueryBody.getState().changeCategory3(category3);
