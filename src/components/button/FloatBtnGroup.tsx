@@ -79,7 +79,7 @@ const FloatBtnGroup = () => {
         return `${dayjs(dateDeparture).format("YY-MM-DD")} ~ ${dayjs(
           dateDeparture
         )
-          .add(Number(daysNight), "day")
+          .add(Number(daysNight) - 1, "day")
           .format("YY-MM-DD")}`;
       }
       return "";
