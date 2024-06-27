@@ -13,22 +13,22 @@ export function MobileMenu() {
   const firstRow = [
     {
       label: "처음으로",
-      icon: <TbHome size={32} color="#EC992A" />,
+      icon: <TbHome size={32} color={theme.colors.primary} />,
       href: "",
     },
     {
       label: "국내골프",
-      icon: <TbGolf size={32} color="#006F83" />,
+      icon: <TbGolf size={32} color={theme.colors.primary} />,
       href: "domestic",
     },
     {
       label: "제주골프",
-      icon: <TbBeach size={32} color="#3EBC8A" />,
+      icon: <TbBeach size={32} color={theme.colors.primary} />,
       href: "jeju",
     },
     {
       label: "해외골프",
-      icon: <FaPlaneDeparture size={32} color="##9FD3F4" />,
+      icon: <FaPlaneDeparture size={32} color={theme.colors.primary} />,
       href: "overseas",
     },
   ];
@@ -40,7 +40,7 @@ export function MobileMenu() {
         {firstRow.map((item, idx) => (
           <div
             key={idx}
-            className="flex flex-col items-center gap-2 py-4 w-20  rounded-xl border-2"
+            className="flex flex-col items-center gap-2 py-4 w-20 rounded-xl border-2 border-[#004964] cursor-pointer"
             onClick={() => {
               router.push(`/${item.href}`);
             }}
