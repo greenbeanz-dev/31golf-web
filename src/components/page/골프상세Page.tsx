@@ -430,8 +430,8 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
         <IoIosArrowRoundForward size={24} />
         <Step
           number="3단계"
-          description1="담당자가 고객님께 유선 상담진행"
-          description2="예약 가능 (계약금 및 상품가 결제)"
+          description1="담당자가 유선 상담진행"
+          description2="예약 가능 (결제 진행)"
           description3="예약 불가 (취소 및 환불)"
           icon={<FaCheckToSlot size={32} color={theme.colors.primary} />}
         />

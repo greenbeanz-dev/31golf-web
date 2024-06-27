@@ -5,6 +5,7 @@ import { TbBeach } from "react-icons/tb";
 import { TbPlaneDeparture } from "react-icons/tb";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { FaPlaneDeparture } from "react-icons/fa";
 
 export function MobileMenu() {
   const isMobile = useIsMobile();
@@ -27,7 +28,7 @@ export function MobileMenu() {
     },
     {
       label: "해외골프",
-      icon: <TbPlaneDeparture size={32} color={theme.colors.primary} />,
+      icon: <FaPlaneDeparture size={32} color="#EC992A" />,
       href: "overseas",
     },
   ];
