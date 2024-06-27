@@ -416,28 +416,29 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
       <div className="w-full flex flex-grow justify-start items-center gap-1 inline-flex">
         <Step
           number="1단계"
-          description1="예약 신청"
-          description2=" 및 비용 결제"
+          description1="예약 신청 및 접수"
+          description2=""
           icon={<FaRegCalendarPlus size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="2단계"
-          description1="골프장 및 숙박시설"
+          description1="담당자 골프장 및 숙박시설"
           description2="예약 가능 여부 확인"
           icon={<BsBuildingFillCheck size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="3단계"
-          description1="예약 가능 (예약 완료)"
-          description2="예약 불가 (자동 취소 및 환불)"
+          description1="담당자가 고객님께 유선 상담진행"
+          description2="예약 가능 (계약금 및 상품가 결제)"
+          description3="예약 불가 (취소 및 환불)"
           icon={<FaCheckToSlot size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
         <Step
           number="4단계"
-          description1="골프 투어 "
+          description1="골프 투어"
           description2="GO GO~"
           icon={<FaGolfBallTee size={32} color={theme.colors.primary} />}
         />
@@ -490,7 +491,13 @@ const GolfDetail = () => {
   );
 };
 
-const Step = ({ number, description1, description2, icon }) => (
+const Step = ({
+  number,
+  description1,
+  description2,
+  description3 = "",
+  icon,
+}) => (
   <div
     className="flex-grow py-8 bg-white rounded-2xl shadow border border-black border-opacity-10 flex-col justify-start items-center gap-4 inline-flex"
     style={{
@@ -509,6 +516,11 @@ const Step = ({ number, description1, description2, icon }) => (
       <div className="text-center text-black text-opacity-70 text-sm font-normal font-['Noto Sans'] leading-tight">
         {description2}
       </div>
+      {description3.length > 0 && (
+        <div className="text-center text-black text-opacity-70 text-sm font-normal font-['Noto Sans'] leading-tight">
+          {description3}
+        </div>
+      )}
     </div>
   </div>
 );
