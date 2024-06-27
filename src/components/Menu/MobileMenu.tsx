@@ -13,22 +13,22 @@ export function MobileMenu() {
   const firstRow = [
     {
       label: "처음으로",
-      icon: <TbHome size={32} color={theme.colors.primary} />,
+      icon: <TbHome size={32} color="#EC992A" />,
       href: "",
     },
     {
       label: "국내골프",
-      icon: <TbGolf size={32} color={theme.colors.primary} />,
+      icon: <TbGolf size={32} color="#006F83" />,
       href: "domestic",
     },
     {
       label: "제주골프",
-      icon: <TbBeach size={32} color={theme.colors.primary} />,
+      icon: <TbBeach size={32} color="#3EBC8A" />,
       href: "jeju",
     },
     {
       label: "해외골프",
-      icon: <FaPlaneDeparture size={32} color="#EC992A" />,
+      icon: <FaPlaneDeparture size={32} color="##9FD3F4" />,
       href: "overseas",
     },
   ];
