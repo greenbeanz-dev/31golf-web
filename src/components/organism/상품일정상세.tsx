@@ -36,53 +36,55 @@ const 상품일정상세 = ({
   const isMobile = useIsMobile();
   return (
     <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
-      <div
-        className="flex flex-2 items-start"
-        style={{
-          flex: 2,
-          alignItems: "flex-start",
-        }}
-      >
-        <div className="w-full">
-          <div className="text-xl font-bold">일정 상세</div>
-          {isMobile && <div className="pt-6" />}
-          <Accordion variant="light" selectionMode="multiple">
-            {scheduleList.map((data, index) => (
-              <AccordionItem
-                key={index}
-                title={`${data.title}일차`}
-                indicator={
-                  <IoIosArrowDown size={24} color={theme.colors.primary} />
-                }
-              >
-                <div className="flex flex-col gap-2">
-                  {data.detailedSchedule.map((item, idx) => (
-                    <div key={idx}>
-                      <PlanItem
-                        key={idx}
-                        icon={item.icon}
-                        description={item.description}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="pt-4" />
-                <div className="flex flex-col gap-2">
-                  {data.basicItems.map((item, idx) => (
-                    <div key={idx}>
-                      <GuideInfo
-                        icon={item.icon}
-                        description={item.description}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </AccordionItem>
-            ))}
-          </Accordion>
+      {scheduleList.length > 0 && (
+        <div
+          className="flex flex-2 items-start"
+          style={{
+            flex: 2,
+            alignItems: "flex-start",
+          }}
+        >
+          <div className="w-full">
+            <div className="text-xl font-bold">일정 상세</div>
+            {isMobile && <div className="pt-6" />}
+            <Accordion variant="light" selectionMode="multiple">
+              {scheduleList.map((data, index) => (
+                <AccordionItem
+                  key={index}
+                  title={`${data.title}일차`}
+                  indicator={
+                    <IoIosArrowDown size={24} color={theme.colors.primary} />
+                  }
+                >
+                  <div className="flex flex-col gap-2">
+                    {data.detailedSchedule.map((item, idx) => (
+                      <div key={idx}>
+                        <PlanItem
+                          key={idx}
+                          icon={item.icon}
+                          description={item.description}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pt-4" />
+                  <div className="flex flex-col gap-2">
+                    {data.basicItems.map((item, idx) => (
+                      <div key={idx}>
+                        <GuideInfo
+                          icon={item.icon}
+                          description={item.description}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+          <div className="pl-8" />
         </div>
-      </div>
-      <div className="pl-8" />
+      )}
       <div className="flex flex-1">
         <div className="w-full">
           {isMobile && <div className="pt-6" />}

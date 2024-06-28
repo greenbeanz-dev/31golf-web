@@ -97,13 +97,13 @@ const ProductListDetailSuspense = () => {
   }
 
   const ProductTabBarJeju = ({ setIsDay }) => {
-    const [tab, setTab] = useState("당일 18홀");
+    const [tab, setTab] = useState("1박 2일 (36홀)");
     const navItem = [
       {
-        label: "당일 18홀",
+        label: "1박 2일 (36홀)",
       },
       {
-        label: "1박 2일 (36홀)",
+        label: "당일 18홀",
       },
     ];
 
