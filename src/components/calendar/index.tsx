@@ -50,18 +50,21 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   }, []);
 
   const [calendarWidth, setCalendarWidth] = useState(0);
+  const [calendarY, setCalendarY] = useState(0);
 
-  // 캘린더 width를 읽어옴
+  // 캘린더 width, Y를 읽어옴
   useEffect(() => {
     const updateWidth = () => {
       const calendarElement = document.querySelector(".rbc-calendar");
+
       if (calendarElement) {
         setCalendarWidth((calendarElement as any).offsetWidth);
+        setCalendarY(calendarElement.getBoundingClientRect().y);
       }
     };
     setTimeout(() => {
       updateWidth(); // 초기 렌더링시 width를 가져오기 위해 delay를 둠
-    }, 100);
+    }, 200);
     window.addEventListener("resize", updateWidth);
     return () => {
       window.removeEventListener("resize", updateWidth);
@@ -353,7 +356,8 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           }}
         />
       </div>
-      {list && list.length === 0 && (
+      {/* width, Y가 초기값일 때는 보여주지 않음(화면 전환을 부드럽게 보이기 위해)  */}
+      {list && list.length === 0 && calendarWidth !== 0 && calendarY !== 0 && (
         <div
           onClick={() => {
             window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
@@ -364,10 +368,10 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
             width: calendarWidth,
             height: 250,
             position: "absolute",
-            top: isMobile ? 300 : 350,
+            top: calendarY + 100,
             backgroundColor: theme.colors.primary,
             color: "white",
-            fontSize: "30px",
+            fontSize: isMobile ? "20px" : "30px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
