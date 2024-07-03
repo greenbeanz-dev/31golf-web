@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface I상품캘린더Props {
@@ -46,6 +47,25 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         (element as HTMLElement).style.color = "blue";
       }
     });
+  }, []);
+
+  const [calendarWidth, setCalendarWidth] = useState(0);
+
+  // 캘린더 width를 읽어옴
+  useEffect(() => {
+    const updateWidth = () => {
+      const calendarElement = document.querySelector(".rbc-calendar");
+      if (calendarElement) {
+        setCalendarWidth((calendarElement as any).offsetWidth);
+      }
+    };
+    setTimeout(() => {
+      updateWidth(); // 초기 렌더링시 width를 가져오기 위해 delay를 둠
+    }, 100);
+    window.addEventListener("resize", updateWidth);
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
   }, []);
 
   const changeProductId = useProductPriceCalendarInfiniteQueryBody(
@@ -261,6 +281,8 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const handleSlot = (slot) => {
+    if (list && list.length == 0) return; // 데이터가 없을경우 선택 불가
+
     const isOffDay = events?.find((event) =>
       isSameDate(slot.start, event.start)
     )?.extendedProps.isOffDay;
@@ -304,8 +326,8 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   }
 
   return (
-    <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10">
-      <div style={{ height: 354 }}>
+    <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10 w-100">
+      <div style={{ height: 354, width: "100%" }}>
         <Calendar
           backgroundColor={"#fff"}
           localizer={localizer}
@@ -331,6 +353,34 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           }}
         />
       </div>
+      {list && list.length === 0 && (
+        <div
+          onClick={() => {
+            window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
+          }}
+          style={{
+            zIndex: 100,
+            opacity: 0.9,
+            width: calendarWidth,
+            height: 250,
+            position: "absolute",
+            top: isMobile ? 300 : 350,
+            backgroundColor: theme.colors.primary,
+            color: "white",
+            fontSize: "30px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            padding: "20px",
+          }}
+        >
+          골프장 오픈 전 일정입니다. <br />
+          사전접수 가능 합니다.
+          <br />
+          고객센터로 연락주세요.
+        </div>
+      )}
     </div>
   );
 };
