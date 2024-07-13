@@ -84,6 +84,7 @@ query productListInfinityQuery(
         courseAddress
         cancellationPolicy
         thumbnailImage
+        sort
       }
     }
   }
