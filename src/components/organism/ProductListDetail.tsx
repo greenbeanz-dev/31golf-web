@@ -62,24 +62,21 @@ const ProductListDetailSuspense = () => {
 
   const { data } = useProductInfiniteQuery();
   // 제주인 경우만 당일 상품을 보여줌
-  const [isDay, setIsDay] = useState<boolean>(pathname === "/jeju");
+  const [isDay, setIsDay] = useState<boolean | undefined>(
+    pathname === "/jeju" ? false : undefined
+  );
 
   let list = data?.pages
-    .map((page) =>
-      page.productList.edges
-        .map((item) => item?.node)
-        .filter((product) =>
-          isDay
-            ? product?.type?.includes("당일")
-            : !product?.type?.includes("당일")
-        )
-    )
+    .map((page) => page.productList.edges.map((item) => item?.node))
     .flat()
     .map((item, index) => {
       return {
         ...item,
       };
     });
+
+  let listIsDay = list?.filter((product) => product?.type?.includes("당일"));
+  let listIsNight = list?.filter((product) => !product?.type?.includes("당일"));
 
   if (list === undefined || list.length === 0) {
     return (
@@ -96,8 +93,8 @@ const ProductListDetailSuspense = () => {
     );
   }
 
-  const ProductTabBarJeju = ({ setIsDay }) => {
-    const [tab, setTab] = useState("1박 2일 (36홀)");
+  const ProductTabBarJeju = ({ isDay, setIsDay }) => {
+    const [tab, setTab] = useState(isDay ? "당일 18홀" : "1박 2일 (36홀)");
     const navItem = [
       {
         label: "1박 2일 (36홀)",
@@ -159,23 +156,52 @@ const ProductListDetailSuspense = () => {
 
   return (
     <div className="flex flex-col w-full gap-2">
-      {pathname === "/jeju" && <ProductTabBarJeju setIsDay={setIsDay} />}
+      {pathname === "/jeju" && (
+        <ProductTabBarJeju isDay={isDay} setIsDay={setIsDay} />
+      )}
 
       <div
         className={`w-full grid ${isMobile ? "gap-2" : "gap-4"}  grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]`}
       >
-        {list.map((item, idx) => {
-          return (
-            <상품이미지Component
-              key={idx}
-              item={item as Product}
-              mobileWidth={160}
-              mobileHeight={160}
-              pcWidth={384}
-              pcHeight={295}
-            />
-          );
-        })}
+        {isDay === undefined &&
+          list?.map((item, idx) => {
+            return (
+              <상품이미지Component
+                key={idx}
+                item={item as Product}
+                mobileWidth={160}
+                mobileHeight={160}
+                pcWidth={384}
+                pcHeight={295}
+              />
+            );
+          })}
+        {isDay === true &&
+          listIsDay?.map((item, idx) => {
+            return (
+              <상품이미지Component
+                key={idx}
+                item={item as Product}
+                mobileWidth={160}
+                mobileHeight={160}
+                pcWidth={384}
+                pcHeight={295}
+              />
+            );
+          })}
+        {isDay === false &&
+          listIsNight?.map((item, idx) => {
+            return (
+              <상품이미지Component
+                key={idx}
+                item={item as Product}
+                mobileWidth={160}
+                mobileHeight={160}
+                pcWidth={384}
+                pcHeight={295}
+              />
+            );
+          })}
       </div>
     </div>
   );
