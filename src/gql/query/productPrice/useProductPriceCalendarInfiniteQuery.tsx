@@ -9,12 +9,20 @@ const useProductPriceCalendarInfiniteQuery = () => {
     (state) => state.productId
   );
   const date = useProductPriceCalendarInfiniteQueryBody((state) => state.date);
+  const startDate = useProductPriceCalendarInfiniteQueryBody(
+    (state) => state.startDate
+  );
+  const endDate = useProductPriceCalendarInfiniteQueryBody(
+    (state) => state.endDate
+  );
   const memo = useProductPriceCalendarInfiniteQueryBody((state) => state.memo);
 
   const requestBody = {
     productId: productId ? Number(productId) : undefined,
     dateDeparture: date?.toISOString(),
     memo: memo,
+    startDate: startDate,
+    endDate: endDate,
   };
 
   return useInfiniteQuery({
@@ -24,6 +32,8 @@ const useProductPriceCalendarInfiniteQuery = () => {
       productId,
       date?.toISOString(),
       memo,
+      startDate,
+      endDate,
     ],
     queryFn: async ({
       pageParam = {
@@ -46,19 +56,26 @@ export default useProductPriceCalendarInfiniteQuery;
 type State = {
   productId: string;
   date: Date | undefined;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   memo: string;
 };
 
 type Actions = {
   changeProductId: (productId: State["productId"]) => void;
   changeDate: (date: State["date"]) => void;
+  changeStartDate: (date: State["startDate"]) => void;
+  changeEndDate: (date: State["endDate"]) => void;
   changeMemo: (memo: State["memo"]) => void;
+
   reset: () => void;
 };
 
 const initialState: State = {
   productId: "",
   date: undefined,
+  startDate: undefined,
+  endDate: undefined,
   memo: "",
 };
 
@@ -75,6 +92,16 @@ export const useProductPriceCalendarInfiniteQueryBody = create(
         state.date = date;
       });
     },
+    changeStartDate: (date) => {
+      set((state) => {
+        state.startDate = date;
+      });
+    },
+    changeEndDate: (date) => {
+      set((state) => {
+        state.endDate = date;
+      });
+    },
     changeMemo: (memo) => {
       set((state) => {
         state.memo = memo;
@@ -85,6 +112,8 @@ export const useProductPriceCalendarInfiniteQueryBody = create(
         state.productId = initialState.productId;
         state.date = initialState.date;
         state.memo = initialState.memo;
+        state.startDate = initialState.startDate;
+        state.endDate = initialState.endDate;
       });
     },
   }))
