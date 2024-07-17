@@ -30,6 +30,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 }) => {
   const isMobile = useIsMobile();
 
+  const [selectYear, setSelectYear] = useState<number>(0);
   const [selectMonth, setSelectMonth] = useState<number>(0);
 
   const router = useRouter();
@@ -93,33 +94,38 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   const events = useMemo(() => {
     return (
       list &&
-      list.map((elem) => {
-        const eventDate = new Date(elem.date);
-        const eventMonth = eventDate.getMonth(); // 이벤트의 월 가져오기
+      list
+        .filter((elem) => {
+          const eventDate = new Date(elem.date);
+          const eventMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
+          const eventYear = eventDate.getFullYear();
 
-        const isOffDay = new Date(elem.date) < new Date();
-        const isToday =
-          moment().format("YYYY-MM-DD") ===
-          moment(elem.date).format("YYYY-MM-DD");
+          return eventMonth === selectMonth && eventYear === selectYear;
+        })
+        .map((elem) => {
+          const isOffDay = new Date(elem.date) < new Date();
+          const isToday =
+            moment().format("YYYY-MM-DD") ===
+            moment(elem.date).format("YYYY-MM-DD");
 
-        return {
-          title: isToday
-            ? "오늘"
-            : elem.memo === "INQUIRY"
-              ? "별도 문의"
-              : elem.memo === "SOLDOUT"
-                ? "예약 마감"
-                : `${(elem.price || 0).toLocaleString()}`,
-          start: new Date(elem.date),
-          end: new Date(elem.date),
-          extendedProps: {
-            isOffDay: isOffDay,
-            memo: elem.memo,
-          },
-        };
-      })
+          return {
+            title: isToday
+              ? "오늘"
+              : elem.memo === "INQUIRY"
+                ? "별도 문의"
+                : elem.memo === "SOLDOUT"
+                  ? "예약 마감"
+                  : `${(elem.price || 0).toLocaleString()}`,
+            start: new Date(elem.date),
+            end: new Date(elem.date),
+            extendedProps: {
+              isOffDay: isOffDay,
+              memo: elem.memo,
+            },
+          };
+        })
     );
-  }, [list, selectMonth]);
+  }, [list, selectMonth, selectYear]);
 
   const localizer = momentLocalizer(moment);
   const formats = {
@@ -183,7 +189,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     const date = new Date(toolbar.date);
     const label = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
     setSelectMonth(date.getMonth() + 1);
-
+    setSelectYear(date.getFullYear());
     return (
       <div>
         <div
@@ -357,34 +363,37 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         />
       </div>
       {/* width, Y가 초기값일 때는 보여주지 않음(화면 전환을 부드럽게 보이기 위해)  */}
-      {list && list.length === 0 && calendarWidth !== 0 && calendarY !== 0 && (
-        <div
-          onClick={() => {
-            window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
-          }}
-          style={{
-            zIndex: 100,
-            opacity: 0.9,
-            width: calendarWidth,
-            height: 250,
-            position: "absolute",
-            top: calendarY + 100,
-            backgroundColor: theme.colors.primary,
-            color: "white",
-            fontSize: isMobile ? "20px" : "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            padding: "20px",
-          }}
-        >
-          골프장 오픈 전 일정입니다. <br />
-          사전접수 가능 합니다.
-          <br />
-          고객센터로 연락주세요.
-        </div>
-      )}
+      {events &&
+        events.length === 0 &&
+        calendarWidth !== 0 &&
+        calendarY !== 0 && (
+          <div
+            onClick={() => {
+              window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
+            }}
+            style={{
+              zIndex: 100,
+              opacity: 0.9,
+              width: calendarWidth,
+              height: 250,
+              position: "absolute",
+              top: calendarY + 100,
+              backgroundColor: theme.colors.primary,
+              color: "white",
+              fontSize: isMobile ? "20px" : "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "20px",
+            }}
+          >
+            골프장 오픈 전 일정입니다. <br />
+            사전접수 가능 합니다.
+            <br />
+            고객센터로 연락주세요.
+          </div>
+        )}
     </div>
   );
 };
