@@ -34,8 +34,6 @@ builder.queryField("productPriceList", (t) =>
     cursor: "id",
     args: {
       productId: t.arg.int(),
-      startDate: t.arg({ type: "DateTime" }),
-      endDate: t.arg({ type: "DateTime" }),
     },
     defaultSize: 100,
     maxSize: 1000,
@@ -44,10 +42,6 @@ builder.queryField("productPriceList", (t) =>
         ...query,
         where: {
           product_id: Number(_args.productId),
-          date: {
-            gte: _args.startDate,
-            lt: _args.endDate,
-          },
         },
       });
     },

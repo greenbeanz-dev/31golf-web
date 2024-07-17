@@ -4,17 +4,11 @@ export const ProductPriceListInfinityQuery = gql(`
 query productPriceListInfinityQuery(
   $first: Int,
   $after: ID,
-  $productId: Int,
-  $startDate: DateTime,
-  $endDate: DateTime
-  ) {
+  $productId: Int,) {
   productPriceList(
     first: $first
     after: $after
-    productId: $productId
-    startDate: $startDate
-    endDate: $endDate
-    ) {
+    productId: $productId) {
     pageInfo {
       endCursor
       hasNextPage

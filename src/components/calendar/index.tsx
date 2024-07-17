@@ -75,14 +75,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     (state) => state.changeProductId
   );
 
-  const changeStartDate = useProductPriceCalendarInfiniteQueryBody(
-    (state) => state.changeStartDate
-  );
-
-  const changeEndDate = useProductPriceCalendarInfiniteQueryBody(
-    (state) => state.changeEndDate
-  );
-
   const [renderCalendar, setRenderCalendar] = useState(false);
 
   const { data, fetchNextPage, hasNextPage } =
@@ -97,8 +89,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         date: item?.date ? dayjs(item.date).format("YYYY-MM-DD") : "",
       };
     });
-
-  const [toolBarDate, setToolBarDate] = useState(new Date());
 
   const events = useMemo(() => {
     return (
@@ -129,7 +119,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         };
       })
     );
-  }, [list, toolBarDate]);
+  }, [list, selectMonth]);
 
   const localizer = momentLocalizer(moment);
   const formats = {
@@ -161,7 +151,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       },
     };
   };
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const isSameDate = (date, selectedDate) => {
     const calendarDay = new Date(date).getDay();
@@ -183,20 +173,17 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
     const goToNext = () => {
       console.log("NEXT");
-      console.log({ toolBarDate });
       toolbar.onNavigate("NEXT");
+    };
+
+    const goToToday = () => {
+      toolbar.onNavigate("TODAY");
     };
 
     const date = new Date(toolbar.date);
     const label = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
     setSelectMonth(date.getMonth() + 1);
 
-    useEffect(() => {
-      if (toolbar.date) {
-        setToolBarDate(toolbar.date);
-        toolbar.onNavigate("DATE", toolbar.date);
-      }
-    }, [toolbar.onNavigate]);
     return (
       <div>
         <div
@@ -331,19 +318,11 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   useEffect(() => {
-    if (productId) {
-      changeProductId(productId.toString());
-      // TODO 이거 추가하면 렌더링이 잘 안되는 이슈가 있음 수정 필요함
-      const startDate = moment(toolBarDate).startOf("month").toDate();
-      const endDate = moment(toolBarDate).endOf("month").toDate();
-      changeStartDate(startDate);
-      changeEndDate(endDate);
-    }
-
+    if (productId) changeProductId(productId.toString());
     setTimeout(() => {
       setRenderCalendar(true);
     }, 100); // 0.1초 후에 렌더링되도록 지연시킴 (캘린더 toolbar가 동작하지 않는 이슈로 인해 추가함)
-  }, [toolBarDate]);
+  }, []);
 
   if (!renderCalendar) {
     return null;
@@ -365,9 +344,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           onSelectSlot={handleSlot}
           onSelectEvent={(event, e) => {
             handleSlot(event);
-          }}
-          onNavigate={(date) => {
-            // setNavigateDate(date);
           }}
           onSelect
           components={{
