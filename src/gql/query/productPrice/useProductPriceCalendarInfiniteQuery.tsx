@@ -27,7 +27,7 @@ const useProductPriceCalendarInfiniteQuery = () => {
     ],
     queryFn: async ({
       pageParam = {
-        first: 30,
+        first: 99999,
         ...requestBody,
       },
     }) => await gqlClient.request(ProductPriceListInfinityQuery, pageParam),
