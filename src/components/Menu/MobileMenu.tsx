@@ -60,7 +60,7 @@ export function MobileMenu() {
           }}
         >
           <TiHome size={32} color="#EC992A" />
-          <div className={`text-sm text-[#EC992A]`}>처음으로</div>
+          <div className={`text-sm`}>처음으로</div>
         </div>
         <div
           className={`flex flex-col items-center gap-2 py-4 w-20 rounded-xl border-2 border-[#3EBC8A] cursor-pointer`}
@@ -69,7 +69,7 @@ export function MobileMenu() {
           }}
         >
           <IoGolf size={32} color="#3EBC8A" />
-          <div className={`text-sm text-[#3EBC8A]`}>국내골프</div>
+          <div className={`text-sm`}>국내골프</div>
         </div>
         <div
           className={`flex flex-col items-center gap-2 py-4 w-20 rounded-xl border-2 border-[#984E5F] cursor-pointer`}
@@ -78,7 +78,7 @@ export function MobileMenu() {
           }}
         >
           <FaUmbrellaBeach size={32} color="#984E5F" />
-          <div className={`text-sm text-[#984E5F]`}>제주골프</div>
+          <div className={`text-sm`}>제주골프</div>
         </div>
         <div
           className={`flex flex-col items-center gap-2 py-4 w-20 rounded-xl border-2 border-[#9FD3F4] cursor-pointer`}
@@ -87,7 +87,7 @@ export function MobileMenu() {
           }}
         >
           <FaPlaneDeparture size={32} color="#9FD3F4" />
-          <div className={`text-sm text-[#9FD3F4]`}>해외골프</div>
+          <div className={`text-sm`}>해외골프</div>
         </div>
       </div>
       <div className="min-h-8" />
