@@ -77,6 +77,12 @@ const ProductListMainSuspense = ({
       };
     });
 
+  if (category2 !== "제주도") {
+    list = list?.filter(
+      (item) => item?.category1 === category1 && item?.category2 !== "제주도"
+    );
+  }
+
   if (list === undefined || list.length === 0) {
     return (
       <div className="flex flex-col grow w-full h-[432px] items-center justify-center">
