@@ -214,7 +214,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           </span>
           <IoIosArrowForward size={24} color="#000000" onClick={goToNext} />
         </div>
-        <div className="w-28 h-4 justify-start items-start gap-2 inline-flex">
+        <div className="w-32 h-4 justify-start items-start gap-2 inline-flex">
           <StatusIcon color="bg-sky-900 bg-opacity-10" label="예약 가능" />
           <StatusIcon color="bg-black bg-opacity-20" label="마감" />
         </div>
