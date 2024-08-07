@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import dayjs from "dayjs";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { BsBuildingFillCheck } from "react-icons/bs";
 import {
@@ -47,6 +48,8 @@ export function 골프상세Page({
   productImageList,
 }: 골프상세PageProps) {
   const { userProfile } = useLogin();
+  const router = useRouter();
+
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -216,10 +219,28 @@ export function 골프상세Page({
           <div className="flex-1">
             <Breadcrumbs size="lg">
               {data?.category1 && (
-                <BreadcrumbItem className="text-black text-opacity-70">{`${data?.category1}골프`}</BreadcrumbItem>
+                <BreadcrumbItem
+                  className="text-black text-opacity-70"
+                  onClick={() => {
+                    if (data?.category1 === "국내") {
+                      router.push("/domestic");
+                    } else if (data?.category1 === "해외") {
+                      router.push("/overseas");
+                    }
+                  }}
+                >{`${data?.category1}골프`}</BreadcrumbItem>
               )}
               {data?.category2 && (
-                <BreadcrumbItem className="text-black text-opacity-70">
+                <BreadcrumbItem
+                  className="text-black text-opacity-70"
+                  onClick={() => {
+                    if (data?.category1 === "국내") {
+                      router.push("/domestic?category=" + data?.category2);
+                    } else if (data?.category1 === "해외") {
+                      router.push("/overseas?category=" + data?.category2);
+                    }
+                  }}
+                >
                   {data?.category2}
                 </BreadcrumbItem>
               )}

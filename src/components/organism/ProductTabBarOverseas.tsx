@@ -1,5 +1,6 @@
 import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import ProductListDetail from "./ProductListDetail";
 import SortSelect from "./SortSelect";
 
@@ -19,7 +20,9 @@ const navItem = [
 ];
 
 const ProductTabBarOverseas = () => {
-  const [tab, setTab] = useState("동남아");
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category") || navItem[0].label;
+  const router = useRouter();
 
   return (
     <>
@@ -55,11 +58,11 @@ const ProductTabBarOverseas = () => {
           {navItem.map((item) => {
             return (
               <NavbarItem
-                className={`px-4 ${tab === item.label ? "text-[#004964] font-bold" : ""}`}
+                className={`px-4 ${category === item.label ? "text-[#004964] font-bold" : ""}`}
                 key={item.label}
-                isActive={tab === item.label}
+                isActive={category === item.label}
                 onClick={() => {
-                  setTab(item.label);
+                  router.push(`/overseas?category=${item.label}`);
                 }}
               >
                 {item.label}
@@ -69,7 +72,7 @@ const ProductTabBarOverseas = () => {
         </NavbarContent>
       </Navbar>
       <SortSelect />
-      <ProductListDetail category1="해외" category2={tab} />
+      <ProductListDetail category1="해외" category2={category} />
     </>
   );
 };
