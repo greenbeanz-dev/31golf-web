@@ -7,6 +7,7 @@ import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useLogin from "../../utils/login/useLogin";
+import getShortPhoneNumber from "../../utils/format/getShortPhoneNumber";
 interface Props {
   children: React.ReactNode;
 }
@@ -67,7 +68,18 @@ const LogoutComponent = () => {
         logOut();
       }}
     >
-      <div className="text-[#444] cursor-pointer">로그아웃</div>
+      <div className="text-xl text-blue-700">
+        {isLogin && userProfile.name && (
+          <div>
+            {userProfile.name}
+            {getShortPhoneNumber(userProfile.phone)}님 환영합니다
+          </div>
+        )}
+      </div>
+      <div className="pl-10" />
+      <div className="text-xl text-[#444] font-bold cursor-pointer">
+        로그아웃
+      </div>
     </div>
   );
 };
