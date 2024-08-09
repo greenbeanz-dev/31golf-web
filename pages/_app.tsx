@@ -6,12 +6,12 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import dayjs from "dayjs";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useState } from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "reflect-metadata";
@@ -19,6 +19,11 @@ import "../styles/custom-calendar.css";
 import "../styles/global.css";
 import "../styles/tailwind.css";
 dayjs.locale("ko");
+
+(BigInt.prototype as any).toJSON = function () {
+  const int = Number.parseInt(this.toString());
+  return int ?? this.toString();
+};
 
 export const theme = {
   colors: {

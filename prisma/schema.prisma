@@ -46,7 +46,7 @@ model customer {
   is_villain        Boolean?      @default(false)
   birth_day         DateTime?     @db.Date
   manager_id        BigInt?
-  provider          String?       @db.VarChar
+  provider          String?       @db.VarChar(255)
   userid            String?       @unique @db.VarChar(255)
   password          String?       @db.VarChar(255)
   verification_code String?       @db.VarChar(255)
@@ -97,7 +97,7 @@ model product {
   cost                Float?
   created_at          DateTime?             @db.Timestamp(6)
   date_departure      DateTime?             @db.Timestamp(6)
-  is_block            Boolean
+  is_block            Boolean?
   price               Float?
   updated_at          DateTime?             @db.Timestamp(6)
   manager_id          BigInt?
@@ -182,7 +182,6 @@ model reservation {
   is_transaction_editable Boolean?
   is_web                  Boolean?
   product_name            String?
-  message_history         message_history[]
   payment                 payment[]
   request                 request[]
   manager                 manager?              @relation(fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk1w6gpc1lfmlb953goyfvg3so9")
@@ -281,13 +280,12 @@ model inclusive {
 }
 
 model message_history {
-  id             BigInt       @id @default(autoincrement())
+  id             BigInt    @id @default(autoincrement())
   content        String?
-  send_date      DateTime?    @db.Timestamp(6)
-  status         String?      @db.VarChar(255)
-  type           String?      @db.VarChar(255)
+  send_date      DateTime? @db.Timestamp(6)
+  status         String?   @db.VarChar(255)
+  type           String?   @db.VarChar(255)
   reservation_id BigInt?
-  reservation    reservation? @relation(fields: [reservation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fkagsp6gehtvtkdb3hri7cx9r1o")
 }
 
 model product_attraction {

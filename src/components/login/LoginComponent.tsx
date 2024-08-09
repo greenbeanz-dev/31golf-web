@@ -1,19 +1,17 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, CircularProgress, Input } from "@nextui-org/react";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import Link from "next/link";
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { theme } from "../../../pages/_app";
-import getShortPhoneNumber from "../../utils/format/getShortPhoneNumber";
+import usePopupList from "../../service/webSetting/usePopupList";
 import useLogin from "../../utils/login/useLogin";
-interface LoginProps {
-  useHelperMsg?: boolean;
-}
+
 const Login = ({ useHelperMsg = false }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLogin, logOut, userProfile } = useLogin();
-  const router = useRouter();
+  const { login, isLogin } = useLogin();
 
   const handlePassword = (e) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, "").replace("-", "");
@@ -25,7 +23,7 @@ const Login = ({ useHelperMsg = false }) => {
       return alert("정보를 입력해 주세요.");
     }
 
-    const result = await login("credentials", {
+    await login("credentials", {
       name: id,
       phone: password,
       provider: "credentials",
@@ -122,9 +120,41 @@ const Login = ({ useHelperMsg = false }) => {
               </div>
             </>
           )}
+          <ErrorBoundary fallback={<></>}>
+            <Suspense
+              fallback={
+                <div className="w-full flex items-center justify-center min-h-20">
+                  <CircularProgress />
+                </div>
+              }
+            >
+              <BannerWhenUserLoginIn />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
     </div>
   );
 };
 export default Login;
+
+const BannerWhenUserLoginIn = () => {
+  const { data } = usePopupList();
+  const banner = data?.find((item) => item.type === "BANNER_LEFT");
+
+  if (!banner || !banner.image) return null;
+
+  return (
+    <div className="mt-24">
+      <Link href={banner?.url || ""}>
+        <Image
+          className="rounded"
+          src={banner.image}
+          alt="banner"
+          width={240}
+          height={360}
+        />
+      </Link>
+    </div>
+  );
+};
