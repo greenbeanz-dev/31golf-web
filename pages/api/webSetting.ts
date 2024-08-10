@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
+BigInt.prototype["toJSON"] = function () {
+  return this.toString();
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -20,6 +23,7 @@ export default async function handler(
         allPopupList.map((item) => {
           return {
             ...item,
+            id: item.id.toString(),
             display_begin: item.display_begin?.toLocaleString(),
             display_end: item.display_end?.toLocaleDateString(),
           };
