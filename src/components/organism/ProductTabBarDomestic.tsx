@@ -17,9 +17,9 @@ const navItem = [
   {
     label: "경상도",
   },
-  {
-    label: "제주도",
-  },
+  // {
+  //   label: "제주도",
+  // },
 ];
 
 const ProductTabBarDomestic = () => {

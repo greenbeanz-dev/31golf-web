@@ -3,10 +3,12 @@ import { 베스트상품Component } from "@component/Product/베스트상품Comp
 import Login from "@component/login/LoginComponent";
 import ProdudctTabBarMain from "@component/organism/ProdudctTabBarMain";
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useIsMobile } from "../../hooks/useIsMobile";
+import usePopupList from "../../service/webSetting/usePopupList";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -17,7 +19,7 @@ const 메인Page = () => {
         <></>
       ) : (
         <>
-          <ImageCarousel />
+          <MainBanner />
           <div className="min-h-[32px]"></div>
         </>
       )}
@@ -69,48 +71,26 @@ const 메인Page = () => {
   );
 };
 
-const ImageCarousel = () => {
-  const image = "/images/logo/golf_main.png";
+const MainBanner = () => {
+  const { data } = usePopupList();
+  const banner = data?.find((item) => item.type === "BANNER_MAIN");
 
-  // Next Image instead of Carousel
+  const bannerUrl = banner?.image || "/images/logo/golf_main.png";
   return (
     <div className="w-full h-[400px]">
-      <Image
-        priority={true}
-        quality={100}
-        alt={"mainImage"}
-        src={image}
-        height={400}
-        width={1200}
-        className={"rounded-3xl"}
-      />
+      <Link href={banner?.url || ""}>
+        <Image
+          priority={true}
+          quality={100}
+          alt={"mainImage"}
+          src={bannerUrl}
+          height={400}
+          width={1200}
+          className={"rounded-3xl object-fill"}
+        />
+      </Link>
     </div>
   );
-
-  // return (
-  //   <Carousel
-  //     showArrows={true}
-  //     showThumbs={false}
-  //     showStatus={false}
-  //     autoPlay={true}
-  //     infiniteLoop={true}
-  //   >
-  //     {imageList.map((image, idx) => {
-  //       return (
-  //         <Image
-  //           priority={true}
-  //           quality={100}
-  //           alt={"mainImage"}
-  //           key={idx}
-  //           src={image}
-  //           height={1200}
-  //           width={400}
-  //           className={"rounded-3xl"}
-  //         />
-  //       );
-  //     })}
-  //   </Carousel>
-  // );
 };
 
 export default 메인Page;
