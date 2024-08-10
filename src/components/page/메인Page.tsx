@@ -18,10 +18,10 @@ const 메인Page = () => {
       {isMobile ? (
         <></>
       ) : (
-        <>
+        <ErrorBoundary fallback={<></>}>
           <MainBanner />
           <div className="min-h-[32px]"></div>
-        </>
+        </ErrorBoundary>
       )}
       <div className="flex">
         {isMobile ? (
