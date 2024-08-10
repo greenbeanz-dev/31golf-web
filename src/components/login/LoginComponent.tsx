@@ -1,4 +1,9 @@
-import { Button, CircularProgress, Input } from "@nextui-org/react";
+import {
+  Button,
+  ButtonProps,
+  CircularProgress,
+  Input,
+} from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useState } from "react";
@@ -7,11 +12,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { theme } from "../../../pages/_app";
 import usePopupList from "../../service/webSetting/usePopupList";
 import useLogin from "../../utils/login/useLogin";
+import styled from "styled-components";
+import { Icon } from "@component/icon/Icon";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const Login = ({ useHelperMsg = false }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLogin } = useLogin();
+  const { login, isLogin, userProfile } = useLogin();
+  const isMobile = useIsMobile();
 
   const handlePassword = (e) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, "").replace("-", "");
@@ -34,13 +43,33 @@ const Login = ({ useHelperMsg = false }) => {
 
   return (
     <div className="flex flex-col min-w-[224px]">
-      <div className="text-xl font-bold">
+      <div className="w-full text-xl font-bold">
         {/* {isLogin && userProfile.name && (
           <div>
             {userProfile.name}
             {getShortPhoneNumber(userProfile.phone)}님 환영합니다.
           </div>
         )} */}
+        {/* 로그인하고 난 후, 카카오톡 상담을 받을 수 있는 버튼으로 대체 */}
+        {isLogin && userProfile.name && (
+          <div className="flex-col gap-2">
+            <div className="text-[14px] font-medium">
+              365일 카톡상담/전화연결 가능합니다 👋
+            </div>
+            <div
+              className="flex justify-center items-center h-[56px] w-full rounded-[8px] bg-[#ffeb00] cursor-pointer"
+              onClick={() => {
+                window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
+              }}
+            >
+              <Icon icon={"kakaoLogo"} size={24} priority={true} />
+              <div className="pl-2" />
+              <div className="text-[20px] font-semibold text-black text-center opacity-85 leading-none">
+                빠른 상담
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col gap-2">
           {!isLogin && (
             <>
@@ -120,17 +149,19 @@ const Login = ({ useHelperMsg = false }) => {
               </div>
             </>
           )}
-          <ErrorBoundary fallback={<></>}>
-            <Suspense
-              fallback={
-                <div className="w-full flex items-center justify-center min-h-20">
-                  <CircularProgress />
-                </div>
-              }
-            >
-              <BannerWhenUserLoginIn />
-            </Suspense>
-          </ErrorBoundary>
+          {!isMobile && (
+            <ErrorBoundary fallback={<></>}>
+              <Suspense
+                fallback={
+                  <div className="w-full flex items-center justify-center min-h-20">
+                    <CircularProgress />
+                  </div>
+                }
+              >
+                <BannerWhenUserLoginIn />
+              </Suspense>
+            </ErrorBoundary>
+          )}
         </div>
       </div>
     </div>
@@ -148,7 +179,7 @@ const BannerWhenUserLoginIn = () => {
     <div className="mt-24">
       <Link href={banner?.url || ""}>
         <Image
-          className="rounded"
+          className="rounded-[20px]"
           src={banner.image}
           alt="banner"
           width={240}
@@ -158,3 +189,19 @@ const BannerWhenUserLoginIn = () => {
     </div>
   );
 };
+
+const StyledButton = styled.button<{
+  fullWidth: ButtonProps["fullWidth"];
+}>`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-height: 3rem;
+  min-width: 4rem;
+  border-radius: 8px;
+  width: ${(props) => (props.fullWidth ? "100%" : "auto")};
+  color: #000000;
+  background-color: #ffe500;
+`;
