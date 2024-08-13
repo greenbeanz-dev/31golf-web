@@ -9,6 +9,7 @@ dayjs.extend(localizedFormat);
 dayjs.locale(koLocale);
 
 interface 상품결제정보Props {
+  minCount: number;
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   name: string;
@@ -18,6 +19,7 @@ interface 상품결제정보Props {
 }
 
 const 상품결제정보 = ({
+  minCount,
   count,
   setCount,
   name,
@@ -54,7 +56,8 @@ const 상품결제정보 = ({
               size={24}
               color={theme.colors.primary}
               onClick={() => {
-                if (count > 4) setCount(count - 1);
+                // if (count > 4) setCount(count - 1);
+                if (count > minCount) setCount(count - 1);
               }}
             />
             <div className="text-[20px] font-bold">{count}명</div>
