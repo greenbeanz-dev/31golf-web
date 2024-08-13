@@ -92,10 +92,14 @@ const 상품일정상세 = ({
           <div className="pt-6" />
           <div className="flex flex-col gap-1">
             {inclusiveList.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <PiPlusSquareFill size={18} color={theme.colors.primary} />
+              <div key={idx} className="flex items-start gap-2">
+                <div className="min-w-[16px]">
+                  <PiPlusSquareFill size={18} color={theme.colors.primary} />
+                </div>
                 <div className="text-[14px] opacity-70 leading-none">
-                  {item}
+                  공동물인처한 품질, 민사, 성유(김품, 인당 550)
+                  3인시인당공동물인처한 품질, 민사, 성유(김품, 인당 550)
+                  3인시인당
                 </div>
               </div>
             ))}
@@ -112,8 +116,10 @@ const 상품일정상세 = ({
           <div className="pt-6" />
           <div className="flex flex-col gap-1">
             {exclusiveList.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <PiMinusSquareFill size={16} color={theme.colors.secondary} />
+              <div key={idx} className="flex items-start gap-2">
+                <div className="min-w-[16px]">
+                  <PiMinusSquareFill size={16} color={theme.colors.secondary} />
+                </div>
                 <div className="text-[14px] opacity-70 leading-none">
                   {item}
                 </div>

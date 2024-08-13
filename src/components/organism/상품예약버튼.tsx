@@ -10,6 +10,7 @@ interface 상품예약버튼Props {
   product: {
     name: string;
     schedule: string;
+    category1: string;
   };
   reservation: {
     status: string;
@@ -42,6 +43,7 @@ const 상품예약버튼 = ({
   return (
     <div>
       <상품결제정보
+        minCount={product.category1 === "해외" ? 2 : 4}
         count={reservation.numPeople}
         setCount={setNumPeople}
         name={product.name}
