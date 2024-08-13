@@ -78,8 +78,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const [renderCalendar, setRenderCalendar] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage } =
-    useProductPriceCalendarInfiniteQuery();
+  const { data } = useProductPriceCalendarInfiniteQuery();
 
   let list = data?.pages
     .map((page) => page.productPriceList.edges.map((item) => item?.node))
@@ -180,10 +179,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     const goToNext = () => {
       console.log("NEXT");
       toolbar.onNavigate("NEXT");
-    };
-
-    const goToToday = () => {
-      toolbar.onNavigate("TODAY");
     };
 
     const date = new Date(toolbar.date);
@@ -292,9 +287,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   const handleSlot = (slot) => {
     if (list && list.length == 0) return; // 데이터가 없을경우 선택 불가
 
-    const isOffDay = events?.find((event) =>
-      isSameDate(slot.start, event.start)
-    )?.extendedProps.isOffDay;
     const memo = events?.find((event) => isSameDate(slot.start, event.start))
       ?.extendedProps.memo;
 
@@ -302,6 +294,12 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     const isOutDated = slot.start < new Date();
     if (isOutDated) return;
 
+    router.replace({
+      query: {
+        ...router.query,
+        date: moment(slot.start).format("YYYY-MM-DD"),
+      },
+    });
     setSelectedDate(slot.start);
     onClick?.(slot);
 
@@ -330,6 +328,22 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     }, 100); // 0.1초 후에 렌더링되도록 지연시킴 (캘린더 toolbar가 동작하지 않는 이슈로 인해 추가함)
   }, []);
 
+  const date = new Date(router?.query.date as string);
+  const targetSlot = events?.find((event) => isSameDate(date, event.start));
+
+  useEffect(() => {
+    if (targetSlot) {
+      handleSlot(targetSlot);
+    }
+  }, [targetSlot?.title]);
+
+  useEffect(() => {
+    if (date) {
+      setSelectYear(date.getFullYear());
+      setSelectMonth(date.getMonth() + 1);
+    }
+  }, [date]);
+
   if (!renderCalendar) {
     return null;
   }
@@ -338,6 +352,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10 w-100">
       <div style={{ height: 354, width: "100%" }}>
         <Calendar
+          defaultDate={date || new Date()}
           backgroundColor={"#fff"}
           localizer={localizer}
           events={events}

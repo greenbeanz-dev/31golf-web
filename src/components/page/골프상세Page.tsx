@@ -104,7 +104,7 @@ export function 골프상세Page({
       : Number(data?.type?.split("박")[0]);
   const DAYS_DAY = data?.type?.includes("당일")
     ? 1
-    : Number(data?.type?.split("박")[1][0]);
+    : Number(data?.type?.split("박")[1]?.[0]);
 
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
