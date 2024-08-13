@@ -328,7 +328,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     }, 100); // 0.1초 후에 렌더링되도록 지연시킴 (캘린더 toolbar가 동작하지 않는 이슈로 인해 추가함)
   }, []);
 
-  const date = new Date(router?.query.date as string);
+  const date = new Date((router?.query?.date as string) || new Date());
   const targetSlot = events?.find((event) => isSameDate(date, event.start));
 
   useEffect(() => {
@@ -352,7 +352,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10 w-100">
       <div style={{ height: 354, width: "100%" }}>
         <Calendar
-          defaultDate={date || new Date()}
+          defaultDate={date}
           backgroundColor={"#fff"}
           localizer={localizer}
           events={events}
