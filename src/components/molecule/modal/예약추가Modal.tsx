@@ -18,7 +18,7 @@ const 예약추가Modal = ({
   isOpen,
   onClose,
 }: {
-  판매가: number;
+  판매가?: number;
   일정: string;
   reservation: {
     status: string;
@@ -29,7 +29,7 @@ const 예약추가Modal = ({
     productName: string;
     customerId: number;
     customerName: string;
-    priceCustom: number;
+    priceCustom?: number;
     daysDay: number;
     daysNight: number;
   };
@@ -139,7 +139,10 @@ const 예약추가Modal = ({
           action: async () => {
             createReservation();
           },
-          label: reservation.priceCustom > 0 ? "예약 접수" : "전화 문의",
+          label:
+            reservation.priceCustom && reservation.priceCustom > 0
+              ? "예약 접수"
+              : "전화 문의",
         }}
         closeAction={{
           action: () => {
@@ -251,7 +254,7 @@ const 예약추가Modal = ({
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                value={판매가.toLocaleString()}
+                value={Number(판매가).toLocaleString()}
                 readOnly
                 labelPlacement="outside-left"
                 variant="flat"
@@ -263,7 +266,9 @@ const 예약추가Modal = ({
                   input: ["!ring-transparent"],
                   mainWrapper: ["w-full"],
                 }}
-                value={(판매가 * reservation.numPeople).toLocaleString()}
+                value={(
+                  Number(판매가) * reservation.numPeople
+                ).toLocaleString()}
                 readOnly
                 labelPlacement="outside-left"
                 variant="flat"
