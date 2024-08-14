@@ -99,9 +99,7 @@ const 상품일정상세 = ({
                   color={theme.colors.primary}
                 />
                 <div className="text-[14px] opacity-70 leading-none">
-                  공동물인처한 품질, 민사, 성유(김품, 인당 550)
-                  3인시인당공동물인처한 품질, 민사, 성유(김품, 인당 550)
-                  3인시인당
+                  {item}
                 </div>
               </div>
             ))}
@@ -140,13 +138,28 @@ const GuideInfo = ({ icon, description }) => {
   return (
     <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
       <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
-        {icon === "hotel" ? (
+        {icon === "car" && <FaCarSide size={16} color={theme.colors.primary} />}
+        {icon === "flag" && (
+          <TbFlag3Filled size={16} color={theme.colors.primary} />
+        )}
+        {icon === "golf" && (
+          <FaGolfBallTee size={16} color={theme.colors.primary} />
+        )}
+        {icon === "hotel" && <FaBed size={16} color={theme.colors.primary} />}
+        {icon === "meal" && (
+          <GiHotMeal size={16} color={theme.colors.primary} />
+        )}
+        {/* {icon === "hotel" ? (
           <FaBed size={16} color={theme.colors.primary} />
         ) : (
           <GiHotMeal size={16} color={theme.colors.primary} />
-        )}
+        )} */}
         <div className="flex items-center text-black text-opacity-70 text-sm font-normal">
-          {icon === "hotel" ? "숙소" : "식사"}
+          {icon === "car" && "이동"}
+          {icon === "flag" && "일정"}
+          {icon === "golf" && "골프"}
+          {icon === "hotel" && "숙소"}
+          {icon === "meal" && "식사"}
         </div>
       </div>
       <div className="flex items-center grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
