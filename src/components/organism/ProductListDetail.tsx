@@ -7,7 +7,7 @@ import {
   상품이미지SkeletonComponent,
 } from "@component/Image/상품이미지Component";
 import Repeat from "@component/molecule/Repeat";
-import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, cn } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
@@ -161,7 +161,11 @@ const ProductListDetailSuspense = () => {
       )}
 
       <div
-        className={`w-full grid ${isMobile ? "gap-2" : "gap-4"}  grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]`}
+        className={cn(
+          `w-full grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_3fr))]`,
+          isMobile ? "gap-2" : "gap-4",
+          list?.length < 3 && "md:grid-cols-[repeat(2,_minmax(300px,_384px))]"
+        )}
       >
         {isDay === undefined &&
           list?.map((item, idx) => {
