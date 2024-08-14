@@ -15,6 +15,7 @@ import useLogin from "../../utils/login/useLogin";
 import styled from "styled-components";
 import { Icon } from "@component/icon/Icon";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { SiKakaotalk } from "react-icons/si";
 
 const Login = ({ useHelperMsg = false }) => {
   const [id, setId] = useState("");
@@ -53,8 +54,8 @@ const Login = ({ useHelperMsg = false }) => {
         {/* 로그인하고 난 후, 카카오톡 상담을 받을 수 있는 버튼으로 대체 */}
         {isLogin && userProfile.name && (
           <div className="flex-col gap-2">
-            <div className="text-[14px] font-medium">
-              365일 카톡상담/전화연결 가능합니다 👋
+            <div className="text-[14px] font-bold">
+              365일 카톡상담/전화연결 가능합니다 👇
             </div>
             <div
               className="flex justify-center items-center h-[56px] w-full rounded-[8px] bg-[#ffeb00] cursor-pointer"
@@ -62,7 +63,8 @@ const Login = ({ useHelperMsg = false }) => {
                 window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
               }}
             >
-              <Icon icon={"kakaoLogo"} size={24} priority={true} />
+              {/* <Icon icon={"kakaoLogo"} size={24} priority={true} /> */}
+              <SiKakaotalk size={24} />
               <div className="pl-2" />
               <div className="text-[20px] font-semibold text-black text-center opacity-85 leading-none">
                 빠른 상담
