@@ -47,7 +47,7 @@ const 상품결제정보 = ({
             <div className="text-[14px]">성인</div>
             <div className="pl-1" />
             <div className="text-xl font-bold">
-              {price ? `${(count * price).toLocaleString()}원` : "가격 문의"}
+              {price ? `${price.toLocaleString()}원` : "가격 문의"}
             </div>
           </div>
           <div className="flex px-1 gap-5">
