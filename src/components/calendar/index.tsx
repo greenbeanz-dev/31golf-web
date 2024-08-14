@@ -1,11 +1,12 @@
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
 
 import useProductPriceCalendarInfiniteQuery, {
   useProductPriceCalendarInfiniteQueryBody,
 } from "@/gql/query/productPrice/useProductPriceCalendarInfiniteQuery";
+import { cn } from "@nextui-org/react";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -30,47 +31,18 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 }) => {
   const isMobile = useIsMobile();
 
-  const [selectYear, setSelectYear] = useState<number>(0);
-  const [selectMonth, setSelectMonth] = useState<number>(0);
+  const [selectMonth, setSelectMonth] = useState<number>(
+    new Date().getMonth() + 1
+  );
 
-  const router = useRouter();
-  const { id: productId } = router.query;
-
-  useEffect(() => {
-    const elements = document.querySelectorAll(
-      'span[role="columnheader"][aria-sort="none"]'
-    );
-    elements.forEach((element) => {
-      if (element.textContent && element.textContent.includes("일")) {
-        (element as HTMLElement).style.color = "red";
-      }
-      if (element.textContent && element.textContent.includes("토")) {
-        (element as HTMLElement).style.color = "blue";
-      }
-    });
-  }, []);
-
+  const events = useProductPriceCalendarInfiniteQueryBody(
+    (state) => state.list
+  );
   const [calendarWidth, setCalendarWidth] = useState(0);
   const [calendarY, setCalendarY] = useState(0);
 
-  // 캘린더 width, Y를 읽어옴
-  useEffect(() => {
-    const updateWidth = () => {
-      const calendarElement = document.querySelector(".rbc-calendar");
-
-      if (calendarElement) {
-        setCalendarWidth((calendarElement as any).offsetWidth);
-        setCalendarY(calendarElement.getBoundingClientRect().y);
-      }
-    };
-    setTimeout(() => {
-      updateWidth(); // 초기 렌더링시 width를 가져오기 위해 delay를 둠
-    }, 200);
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, []);
+  const router = useRouter();
+  const { id: productId } = router.query;
 
   const changeProductId = useProductPriceCalendarInfiniteQueryBody(
     (state) => state.changeProductId
@@ -78,161 +50,33 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   const [renderCalendar, setRenderCalendar] = useState(false);
 
-  const { data } = useProductPriceCalendarInfiniteQuery();
-
-  let list = data?.pages
-    .map((page) => page.productPriceList.edges.map((item) => item?.node))
-    .flat()
-    .map((item, index) => {
-      return {
-        ...item,
-        date: item?.date ? dayjs(item.date).format("YYYY-MM-DD") : "",
-      };
-    });
-
-  const events = useMemo(() => {
-    return (
-      list &&
-      list
-        .filter((elem) => {
-          const eventDate = new Date(elem.date);
-          const eventMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
-          const eventYear = eventDate.getFullYear();
-
-          return eventMonth === selectMonth && eventYear === selectYear;
-        })
-        .map((elem) => {
-          const isOffDay = new Date(elem.date) < new Date();
-          const isToday =
-            moment().format("YYYY-MM-DD") ===
-            moment(elem.date).format("YYYY-MM-DD");
-
-          return {
-            title: isToday
-              ? "오늘"
-              : elem.memo === "INQUIRY"
-                ? "별도 문의"
-                : elem.memo === "SOLDOUT"
-                  ? "예약 마감"
-                  : `${(elem.price || 0).toLocaleString()}`,
-            start: new Date(elem.date),
-            end: new Date(elem.date),
-            extendedProps: {
-              isOffDay: isOffDay,
-              memo: elem.memo,
-            },
-          };
-        })
-    );
-  }, [list, selectMonth, selectYear]);
-
   const localizer = momentLocalizer(moment);
   const formats = {
     monthHeaderFormat: (date, culture, localizer) =>
       localizer.format(date, "MMMM YYYY", culture),
   };
 
-  const dayOfWeekStyleGetter = (date) => {
-    // 추후 예약 가능, 마감에 따라 색 수정
-    // const dayOfWeek = moment(date.start).day(); // 0: 일요일, 6: 토요일
-    // if (dayOfWeek === 0) {
-    //   return {
-    //     style: {
-    //       fontColor: "red",
-    //     },
-    //   };
-    // } else if (dayOfWeek === 6) {
-    //   return {
-    //     style: {
-    //       color: "#004964",
-    //     },
-    //   };
-    // }
-
-    return {
-      style: {
-        backgroundColor: "transparent",
-        color: "#000",
-      },
-    };
-  };
   const [selectedDate, setSelectedDate] = useState(null);
-
-  const isSameDate = (date, selectedDate) => {
-    const calendarDay = new Date(date).getDay();
-    const calendarDate = new Date(date).getDate();
-
-    const selectedDay = selectedDate && new Date(selectedDate).getDay();
-    const selectDate = selectedDate && new Date(selectedDate).getDate();
-
-    const isSame =
-      `${calendarDay}_${calendarDate}` === `${selectedDay}_${selectDate}`;
-
-    return isSame;
-  };
-
-  const CustomToolbar = (toolbar) => {
-    const goToBack = () => {
-      toolbar.onNavigate("PREV");
-    };
-
-    const goToNext = () => {
-      console.log("NEXT");
-      toolbar.onNavigate("NEXT");
-    };
-
-    const date = new Date(toolbar.date);
-    const label = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
-    setSelectMonth(date.getMonth() + 1);
-    setSelectYear(date.getFullYear());
-    return (
-      <div>
-        <div
-          className=""
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <span className="flex gap-2 items-center">
-            <IoIosArrowBack size={24} color="#000000" onClick={goToBack} />
-          </span>
-          <span
-            className="rbc-toolbar-label text-opacity-70"
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-            }}
-          >
-            {label}
-          </span>
-          <IoIosArrowForward size={24} color="#000000" onClick={goToNext} />
-        </div>
-        <div className="w-32 h-4 justify-start items-start gap-2 inline-flex">
-          <StatusIcon color="bg-sky-900 bg-opacity-10" label="예약 가능" />
-          <StatusIcon color="bg-black bg-opacity-20" label="마감" />
-        </div>
-      </div>
-    );
-  };
 
   const CustomDateCellWrapper = (props) => {
     const isSelected = isSameDate(props.value, selectedDate);
     const isOutDated = new Date(props.value) < new Date();
+    const isToday =
+      moment().format("YYYY-MM-DD") ===
+      moment(props.value).format("YYYY-MM-DD");
     const isOutOfMonth = props.value.getMonth() !== selectMonth - 1;
     const memo = events?.find((event) => isSameDate(props.value, event.start))
       ?.extendedProps.memo;
 
     return (
       <div
-        className={
-          isSelected
-            ? `${props.children.props.className}-selected`
-            : (isOutDated && !isOutOfMonth) || memo == "SOLDOUT"
-              ? `${props.children.props.className}-deadline`
-              : props.children.props.className
-        }
+        className={cn(
+          "flex-1 border border-white border-solid rounded-md bg-[#004964]/10",
+          isOutDated && !isOutOfMonth && "!bg-black/20",
+          (isOutOfMonth || isToday) && "!bg-white/10",
+          memo === "SOLDOUT" && "!bg-black/20",
+          isSelected && "!bg-[#004964]"
+        )}
       >
         {props.children}
       </div>
@@ -285,7 +129,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const handleSlot = (slot) => {
-    if (list && list.length == 0) return; // 데이터가 없을경우 선택 불가
+    if (events && events.length == 0) return; // 데이터가 없을경우 선택 불가
 
     const memo = events?.find((event) => isSameDate(slot.start, event.start))
       ?.extendedProps.memo;
@@ -294,12 +138,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     const isOutDated = slot.start < new Date();
     if (isOutDated) return;
 
-    router.replace({
-      query: {
-        ...router.query,
-        date: moment(slot.start).format("YYYY-MM-DD"),
-      },
-    });
     setSelectedDate(slot.start);
     onClick?.(slot);
 
@@ -328,21 +166,38 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     }, 100); // 0.1초 후에 렌더링되도록 지연시킴 (캘린더 toolbar가 동작하지 않는 이슈로 인해 추가함)
   }, []);
 
-  const date = new Date((router?.query?.date as string) || new Date());
-  const targetSlot = events?.find((event) => isSameDate(date, event.start));
-
   useEffect(() => {
-    if (targetSlot) {
-      handleSlot(targetSlot);
-    }
-  }, [targetSlot?.title]);
+    const elements = document.querySelectorAll(
+      'span[role="columnheader"][aria-sort="none"]'
+    );
+    elements.forEach((element) => {
+      if (element.textContent && element.textContent.includes("일")) {
+        (element as HTMLElement).style.color = "red";
+      }
+      if (element.textContent && element.textContent.includes("토")) {
+        (element as HTMLElement).style.color = "blue";
+      }
+    });
+  }, []);
 
+  // 캘린더 width, Y를 읽어옴
   useEffect(() => {
-    if (date) {
-      setSelectYear(date.getFullYear());
-      setSelectMonth(date.getMonth() + 1);
-    }
-  }, [date]);
+    const updateWidth = () => {
+      const calendarElement = document.querySelector(".rbc-calendar");
+
+      if (calendarElement) {
+        setCalendarWidth((calendarElement as any).offsetWidth);
+        setCalendarY(calendarElement.getBoundingClientRect().y);
+      }
+    };
+    setTimeout(() => {
+      updateWidth(); // 초기 렌더링시 width를 가져오기 위해 delay를 둠
+    }, 200);
+    window.addEventListener("resize", updateWidth);
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   if (!renderCalendar) {
     return null;
@@ -350,9 +205,12 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10 w-100">
+      <Suspense>
+        <PriceLoader />
+      </Suspense>
       <div style={{ height: 354, width: "100%" }}>
         <Calendar
-          defaultDate={date}
+          defaultDate={new Date()}
           backgroundColor={"#fff"}
           localizer={localizer}
           events={events}
@@ -368,7 +226,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
           }}
           onSelect
           components={{
-            toolbar: CustomToolbar,
+            toolbar: (toolbar) => CustomToolbar(toolbar, setSelectMonth),
             month: {
               dateCellWrapper: CustomDateCellWrapper,
               dateHeader: CustomDateHeader,
@@ -383,6 +241,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
         calendarWidth !== 0 &&
         calendarY !== 0 && (
           <div
+            className="cursor-pointer"
             onClick={() => {
               window.open("https://pf.kakao.com/_GxmjIxj/chat", "_blank");
             }}
@@ -419,3 +278,116 @@ const StatusIcon = ({ color, label }) => (
     <div className="text-black text-opacity-70 text-xs font-bold">{label}</div>
   </div>
 );
+
+const dayOfWeekStyleGetter = (date) => {
+  return {
+    style: {
+      backgroundColor: "transparent",
+      color: "#000",
+    },
+  };
+};
+
+const isSameDate = (date, selectedDate) => {
+  if (!selectedDate) return false;
+  return moment(date).isSame(selectedDate, "day");
+};
+
+const CustomToolbar = (toolbar, setSelectMonth) => {
+  const goToBack = () => {
+    const date = new Date(toolbar.date);
+    const momentDate = moment(date).subtract(1, "months");
+    useProductPriceCalendarInfiniteQueryBody
+      .getState()
+      .changeDate(momentDate.toDate());
+    setSelectMonth(momentDate.toDate().getMonth() + 1);
+    toolbar.onNavigate("PREV");
+  };
+
+  const goToNext = () => {
+    const date = new Date(toolbar.date);
+    const momentDate = moment(date).add(1, "months");
+    useProductPriceCalendarInfiniteQueryBody
+      .getState()
+      .changeDate(momentDate.toDate());
+
+    setSelectMonth(momentDate.toDate().getMonth() + 1);
+    toolbar.onNavigate("NEXT");
+  };
+
+  const date = new Date(toolbar.date);
+  const label = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
+
+  return (
+    <div>
+      <div
+        className=""
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <span className="flex gap-2 items-center">
+          <IoIosArrowBack size={24} color="#000000" onClick={goToBack} />
+        </span>
+        <span
+          className="rbc-toolbar-label text-opacity-70"
+          style={{
+            fontSize: 20,
+            fontWeight: 700,
+          }}
+        >
+          {label}
+        </span>
+        <IoIosArrowForward size={24} color="#000000" onClick={goToNext} />
+      </div>
+      <div className="w-32 h-4 justify-start items-start gap-2 inline-flex">
+        <StatusIcon color="bg-sky-900 bg-opacity-10" label="예약 가능" />
+        <StatusIcon color="bg-black bg-opacity-20" label="마감" />
+      </div>
+    </div>
+  );
+};
+
+const PriceLoader = () => {
+  const date = useProductPriceCalendarInfiniteQueryBody((state) => state.date);
+  const { data, isLoading } = useProductPriceCalendarInfiniteQuery();
+
+  let list = data?.pages
+    .map((page) => page.productPriceList.edges.map((item) => item?.node))
+    .flat()
+    .map((item, index) => {
+      return {
+        ...item,
+        date: item?.date ? dayjs(item.date).format("YYYY-MM-DD") : "",
+      };
+    });
+
+  const events = (list || []).map((elem) => {
+    const isOffDay = new Date(elem.date) < new Date();
+    const isToday =
+      moment().format("YYYY-MM-DD") === moment(elem.date).format("YYYY-MM-DD");
+
+    return {
+      title: isToday
+        ? "오늘"
+        : elem.memo === "INQUIRY"
+          ? "별도 문의"
+          : elem.memo === "SOLDOUT"
+            ? "예약 마감"
+            : `${(elem.price || 0).toLocaleString()}`,
+      start: new Date(elem.date),
+      end: new Date(elem.date),
+      extendedProps: {
+        isOffDay: isOffDay,
+        memo: elem.memo,
+      },
+    };
+  });
+
+  useEffect(() => {
+    useProductPriceCalendarInfiniteQueryBody.getState().changeList(events);
+  }, [date, isLoading, events.length]);
+  return null;
+};
