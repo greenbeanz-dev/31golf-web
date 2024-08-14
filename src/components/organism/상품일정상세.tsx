@@ -35,10 +35,10 @@ const 상품일정상세 = ({
 }: 상품일정상세Props) => {
   const isMobile = useIsMobile();
   return (
-    <div className={`flex ${isMobile ? "flex-col" : "flex-row"}`}>
+    <div className={`flex ${isMobile ? "flex-col" : "flex-row"} max-w-[816px]`}>
       {scheduleList.length > 0 && (
         <div
-          className="flex flex-2 items-start"
+          className="flex flex-2 items-start max-w-[512px]"
           style={{
             flex: 2,
             alignItems: "flex-start",

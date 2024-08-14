@@ -13,7 +13,7 @@ interface 상품결제정보Props {
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
   name: string;
-  price: number;
+  price?: number;
   schedule: string;
   note: string;
 }
@@ -47,7 +47,11 @@ const 상품결제정보 = ({
             <div className="text-[14px]">성인</div>
             <div className="pl-1" />
             <div className="text-xl font-bold">
-              {price ? `${price.toLocaleString()}원` : "가격 문의"}
+              {price === undefined
+                ? ""
+                : price === 0
+                  ? "가격 문의"
+                  : `${price.toLocaleString()}원`}
             </div>
           </div>
           <div className="flex px-1 gap-5">
@@ -75,9 +79,15 @@ const 상품결제정보 = ({
       <div className="pt-2" />
       {/* 총 금액  */}
       <div className="w-full h-9 px-1 justify-end items-center gap-4 inline-flex">
-        <div className="text-black text-sm font-normal">총 금액</div>
+        {Number(price) > 0 && (
+          <div className="text-black text-sm font-normal">총 금액</div>
+        )}
         <div className="text-red-500 text-2xl font-bold">
-          {price ? `${(count * price).toLocaleString()} 원` : "가격 문의"}
+          {price === undefined
+            ? ""
+            : price === 0
+              ? "가격 문의"
+              : `${(count * price).toLocaleString()}원`}
         </div>
       </div>
     </>

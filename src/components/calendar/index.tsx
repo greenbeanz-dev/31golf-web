@@ -15,8 +15,8 @@ import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface I상품캘린더Props {
-  판매가: number;
-  set판매가: Dispatch<SetStateAction<number>>;
+  판매가?: number;
+  set판매가: Dispatch<SetStateAction<number | undefined>>;
   출발일: Date;
   set출발일: Dispatch<SetStateAction<Date>>;
   onClick?: (data: any) => void;
