@@ -1,15 +1,17 @@
 import LoginModal from "@component/login/LoginModal";
 import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import { Button, useDisclosure } from "@nextui-org/react";
-import { Dispatch, SetStateAction } from "react";
+import { useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useCopyToClipboard } from "usehooks-ts";
 import { theme } from "../../../pages/_app";
 import useLogin from "../../utils/login/useLogin";
 import 상품결제정보 from "./상품결제정보";
-
 interface 상품예약버튼Props {
   product: {
     name: string;
     schedule: string;
+    category1: string;
   };
   reservation: {
     status: string;
@@ -42,6 +44,7 @@ const 상품예약버튼 = ({
   return (
     <div>
       <상품결제정보
+        minCount={product.category1 === "해외" ? 2 : 4}
         count={reservation.numPeople}
         setCount={setNumPeople}
         name={product.name}
@@ -80,6 +83,7 @@ const 상품예약버튼 = ({
       >
         {reservation.priceCustom ? "투어 예약하기" : "전화 문의"}
       </Button>
+      <공유하기버튼 />
       <LoginModal
         isOpen={isLoginOpen}
         onOpen={loginOpen}
@@ -90,3 +94,45 @@ const 상품예약버튼 = ({
 };
 
 export default 상품예약버튼;
+
+const 공유하기버튼 = () => {
+  const searchParams = useSearchParams();
+  const date = searchParams.get("date");
+  const [copiedText, copy] = useCopyToClipboard();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    const text = window.location.href;
+    copy(text)
+      .then(() => {})
+      .catch((error) => {
+        console.error("Failed to copy!", error);
+      });
+  };
+
+  useEffect(() => {
+    if (copiedText?.includes(date as string)) {
+      setIsCopied(true);
+    } else {
+      setIsCopied(false);
+    }
+  }, [copiedText, date]);
+
+  return (
+    <Button
+      className="mt-2"
+      size="lg"
+      style={{
+        width: "100%",
+        height: 48,
+        backgroundColor: theme.colors.secondary,
+        opacity: 0.8,
+        color: "white",
+        fontWeight: "bold",
+      }}
+      onClick={handleCopy}
+    >
+      {isCopied ? "복사 완료" : "공유하기"}
+    </Button>
+  );
+};

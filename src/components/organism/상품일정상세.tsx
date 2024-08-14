@@ -93,7 +93,11 @@ const 상품일정상세 = ({
           <div className="flex flex-col gap-1">
             {inclusiveList.map((item, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <PiPlusSquareFill size={18} color={theme.colors.primary} />
+                <PiPlusSquareFill
+                  className="min-w-[18px]"
+                  size={18}
+                  color={theme.colors.primary}
+                />
                 <div className="text-[14px] opacity-70 leading-none">
                   {item}
                 </div>
@@ -113,7 +117,11 @@ const 상품일정상세 = ({
           <div className="flex flex-col gap-1">
             {exclusiveList.map((item, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <PiMinusSquareFill size={16} color={theme.colors.secondary} />
+                <PiMinusSquareFill
+                  className="min-w-4"
+                  size={16}
+                  color={theme.colors.secondary}
+                />
                 <div className="text-[14px] opacity-70 leading-none">
                   {item}
                 </div>
@@ -130,13 +138,28 @@ const GuideInfo = ({ icon, description }) => {
   return (
     <div className="w-96 h-9 justify-start items-center gap-4 inline-flex">
       <div className="h-9 px-4 py-2 bg-[#004964] bg-opacity-10 rounded-xl justify-center items-center gap-2 flex">
-        {icon === "hotel" ? (
+        {icon === "car" && <FaCarSide size={16} color={theme.colors.primary} />}
+        {icon === "flag" && (
+          <TbFlag3Filled size={16} color={theme.colors.primary} />
+        )}
+        {icon === "golf" && (
+          <FaGolfBallTee size={16} color={theme.colors.primary} />
+        )}
+        {icon === "hotel" && <FaBed size={16} color={theme.colors.primary} />}
+        {icon === "meal" && (
+          <GiHotMeal size={16} color={theme.colors.primary} />
+        )}
+        {/* {icon === "hotel" ? (
           <FaBed size={16} color={theme.colors.primary} />
         ) : (
           <GiHotMeal size={16} color={theme.colors.primary} />
-        )}
+        )} */}
         <div className="flex items-center text-black text-opacity-70 text-sm font-normal">
-          {icon === "hotel" ? "숙소" : "식사"}
+          {icon === "car" && "이동"}
+          {icon === "flag" && "일정"}
+          {icon === "golf" && "골프"}
+          {icon === "hotel" && "숙소"}
+          {icon === "meal" && "식사"}
         </div>
       </div>
       <div className="flex items-center grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
@@ -146,28 +169,27 @@ const GuideInfo = ({ icon, description }) => {
   );
 };
 
-const PlanItem = ({ icon, description }) => (
-  <div className="h-14 p-2 bg-black bg-opacity-5 rounded-xl justify-between items-center inline-flex w-full">
-    <div className="h-10 justify-start items-center gap-2 flex">
-      <div className="w-10 h-10 bg-white rounded-xl justify-center items-center gap-2.5 flex">
-        {icon === "car" ? (
-          <FaCarSide size={24} color={theme.colors.primary} />
-        ) : icon === "golf" ? (
-          <FaGolfBallTee size={24} color={theme.colors.primary} />
-        ) : icon === "flag" ? (
-          <TbFlag3Filled size={24} color={theme.colors.primary} />
-        ) : (
-          <PiForkKnifeFill size={24} color={theme.colors.primary} />
-        )}
+const PlanItem = ({ icon, description }) => {
+  return (
+    <div className="min-h-14 p-2 bg-black bg-opacity-5 rounded-xl justify-between items-center inline-flex w-full">
+      <div className="min-h-10 justify-start items-start gap-2 flex">
+        <div className="w-10 h-10 bg-white rounded-xl justify-center items-center gap-2.5 flex">
+          {icon === "car" ? (
+            <FaCarSide size={24} color={theme.colors.primary} />
+          ) : icon === "golf" ? (
+            <FaGolfBallTee size={24} color={theme.colors.primary} />
+          ) : icon === "flag" ? (
+            <TbFlag3Filled size={24} color={theme.colors.primary} />
+          ) : (
+            <PiForkKnifeFill size={24} color={theme.colors.primary} />
+          )}
+        </div>
+        <div className="text-black text-base whitespace-pre-wrap mt-2">
+          {description}
+        </div>
       </div>
-      <div className="text-black text-base">{description}</div>
     </div>
-    {/* <div className="h-5 pr-2 justify-between items-center flex">
-      <div className="w-12 text-right text-black text-opacity-70 text-sm font-normal">
-        {time}:00
-      </div>
-    </div> */}
-  </div>
-);
+  );
+};
 
 export default 상품일정상세;

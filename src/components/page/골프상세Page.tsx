@@ -104,7 +104,7 @@ export function 골프상세Page({
       : Number(data?.type?.split("박")[0]);
   const DAYS_DAY = data?.type?.includes("당일")
     ? 1
-    : Number(data?.type?.split("박")[1][0]);
+    : Number(data?.type?.split("박")[1]?.[0]);
 
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
@@ -329,6 +329,7 @@ export function 골프상세Page({
                     product={{
                       name: data?.name + " " + data?.type,
                       schedule: schedule,
+                      category1: data?.category1 || "",
                     }}
                     reservation={reservationInfo}
                     setNumPeople={setNumPeople}
@@ -374,6 +375,7 @@ export function 골프상세Page({
                   <MdKeyboardArrowDown size={24} />
                 </div>
                 <상품결제정보
+                  minCount={data?.category1 === "해외" ? 2 : 4}
                   count={numPeople}
                   setCount={setNumPeople}
                   name={data?.name + " " + data?.type}
