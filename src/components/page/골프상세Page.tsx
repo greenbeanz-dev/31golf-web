@@ -109,7 +109,7 @@ export function 골프상세Page({
   const [showDetail, setShowDetail] = useState(false);
   const [numPeople, setNumPeople] = useState<number>(4);
 
-  const [판매가, set판매가] = useState<number>(0);
+  const [판매가, set판매가] = useState<number>();
   const [출발일, set출발일] = useState<Date>(new Date());
   const [schedule, setSchedule] = useState<string>("당일");
 
@@ -122,10 +122,11 @@ export function 골프상세Page({
     productName: data?.name + " " + data?.type,
     customerId: Number(userProfile.id),
     customerName: userProfile.name || "",
-    priceCustom: Number(판매가),
+    priceCustom: 판매가,
     daysDay: DAYS_DAY,
     daysNight: DAYS_NIGHT,
   };
+  console.log(판매가);
 
   useEffect(() => {
     const endDate = new Date(출발일);
@@ -441,6 +442,7 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
           number="1단계"
           description1="예약 신청 및 접수"
           description2=""
+          description3=""
           icon={<FaRegCalendarPlus size={32} color={theme.colors.primary} />}
         />
         <IoIosArrowRoundForward size={24} />
@@ -522,7 +524,7 @@ const Step = ({
   icon,
 }) => (
   <div
-    className="flex-grow py-8 bg-white rounded-2xl shadow border border-black border-opacity-10 flex-col justify-start items-center gap-4 inline-flex"
+    className="flex-grow min-h-[196px] py-8 bg-white rounded-2xl shadow border border-black border-opacity-10 flex-col justify-start items-center gap-4 inline-flex"
     style={{
       minWidth: 180,
       maxWidth: 180,
