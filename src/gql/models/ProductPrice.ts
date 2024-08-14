@@ -1,3 +1,4 @@
+import moment from "moment";
 import prisma from "../../lib/prisma";
 import { builder } from "../builder";
 
@@ -34,14 +35,33 @@ builder.queryField("productPriceList", (t) =>
     cursor: "id",
     args: {
       productId: t.arg.int(),
+      dateDeparture: t.arg.string(),
     },
     defaultSize: 100,
     maxSize: 1000,
     resolve: (query, _parent, _args, _ctx, _info) => {
+      const dateDeparture = _args.dateDeparture
+        ? moment(_args.dateDeparture)
+        : moment();
+
+      const startOfRange = dateDeparture.clone().subtract(1, "months").date(21);
+      const endOfRange = dateDeparture
+        .clone()
+        .add(1, "months")
+        .date(7)
+        .endOf("day");
+
       return prisma.product_price.findMany({
         ...query,
         where: {
           product_id: Number(_args.productId),
+          date: {
+            gte: startOfRange.toISOString(),
+            lte: endOfRange.toISOString(),
+          },
+        },
+        orderBy: {
+          date: "asc",
         },
       });
     },
