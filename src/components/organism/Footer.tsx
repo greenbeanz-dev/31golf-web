@@ -17,11 +17,11 @@ export const Footer = () => {
     },
     {
       title: "해외여행약관",
-      url: "",
+      url: "https://obvious-raven-5f6.notion.site/0c13af4d0e664027a48f76a2023169c3",
     },
     {
       title: "해외여행보험약관",
-      url: "",
+      url: "https://obvious-raven-5f6.notion.site/9aaac302f3e64dab8e5d6a89f185bf17?pvs=4",
     },
   ];
 
