@@ -126,7 +126,6 @@ export function 골프상세Page({
     daysDay: DAYS_DAY,
     daysNight: DAYS_NIGHT,
   };
-  console.log(판매가);
 
   useEffect(() => {
     const endDate = new Date(출발일);
@@ -274,7 +273,7 @@ export function 골프상세Page({
             <div className="pt-2" />
             <div className="text-[16px] opacity-70">{data?.summary}</div>
             <div className="pt-[10px]" />
-            <Suspense fallback={<div></div>}>
+            <Suspense>
               <상품캘린더
                 판매가={판매가}
                 set판매가={set판매가}

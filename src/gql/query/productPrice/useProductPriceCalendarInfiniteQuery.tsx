@@ -11,6 +11,9 @@ const useProductPriceCalendarInfiniteQuery = () => {
   const date = useProductPriceCalendarInfiniteQueryBody((state) => state.date);
   const memo = useProductPriceCalendarInfiniteQueryBody((state) => state.memo);
 
+  const month = date?.getMonth();
+  const year = date?.getFullYear();
+
   const requestBody = {
     productId: productId ? Number(productId) : undefined,
     dateDeparture: date?.toISOString(),
@@ -18,16 +21,10 @@ const useProductPriceCalendarInfiniteQuery = () => {
   };
 
   return useInfiniteQuery({
-    queryKey: [
-      "productPriceList",
-      "calendar",
-      productId,
-      date?.toISOString(),
-      memo,
-    ],
+    queryKey: ["productPriceList", productId, month, year, memo],
     queryFn: async ({
       pageParam = {
-        first: 99999,
+        first: 100,
         ...requestBody,
       },
     }) => await gqlClient.request(ProductPriceListInfinityQuery, pageParam),
@@ -38,6 +35,7 @@ const useProductPriceCalendarInfiniteQuery = () => {
         ...requestBody,
       };
     },
+    cacheTime: 60000,
   });
 };
 
@@ -47,12 +45,22 @@ type State = {
   productId: string;
   date: Date | undefined;
   memo: string;
+  list: {
+    title: string;
+    start: Date;
+    end: Date;
+    extendedProps: {
+      isOffDay: boolean;
+      memo: string | null | undefined;
+    };
+  }[];
 };
 
 type Actions = {
   changeProductId: (productId: State["productId"]) => void;
   changeDate: (date: State["date"]) => void;
   changeMemo: (memo: State["memo"]) => void;
+  changeList: (list: State["list"]) => void;
   reset: () => void;
 };
 
@@ -60,6 +68,7 @@ const initialState: State = {
   productId: "",
   date: undefined,
   memo: "",
+  list: [],
 };
 
 export const useProductPriceCalendarInfiniteQueryBody = create(
@@ -78,6 +87,11 @@ export const useProductPriceCalendarInfiniteQueryBody = create(
     changeMemo: (memo) => {
       set((state) => {
         state.memo = memo;
+      });
+    },
+    changeList: (list) => {
+      set((state) => {
+        state.list = list;
       });
     },
     reset: () => {

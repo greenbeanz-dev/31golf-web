@@ -22,7 +22,7 @@ function 상품이미지Component({
   const router = useRouter();
   return (
     <div
-      className="w-full max-w-[400px]"
+      className="w-full "
       style={{
         marginBottom: isMobile ? "16px" : "48px",
         cursor: "pointer",
