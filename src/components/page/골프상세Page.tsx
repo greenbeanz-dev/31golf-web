@@ -381,7 +381,7 @@ export function 골프상세Page({
                   name={data?.name + " " + data?.type}
                   price={판매가}
                   schedule={schedule}
-                  note="(2~3인 진행 시 별도 문의 부탁드립니다)"
+                  note="(2~3인 진행 시 별도 문의 / 2인 조인가능)"
                 />
               </div>
             )}

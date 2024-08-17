@@ -55,7 +55,7 @@ const 상품예약버튼 = ({
         name={product.name}
         price={reservation.priceCustom}
         schedule={product.schedule}
-        note="(2~3인 진행 시 별도 문의 부탁드립니다)"
+        note="(2~3인 진행 시 별도 문의 / 2인 조인가능)"
       />
       <div style={{ minHeight: 8 }} />
       {isOpen && (
