@@ -13,11 +13,10 @@ import { theme } from "../../../pages/_app";
 import usePopupList from "../../service/webSetting/usePopupList";
 import useLogin from "../../utils/login/useLogin";
 import styled from "styled-components";
-import { Icon } from "@component/icon/Icon";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { SiKakaotalk } from "react-icons/si";
 
-const Login = ({ useHelperMsg = false }) => {
+const Login = ({ useHelperMsg = false, banner = true }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLogin, userProfile } = useLogin();
@@ -151,7 +150,7 @@ const Login = ({ useHelperMsg = false }) => {
               </div>
             </>
           )}
-          {!isMobile && (
+          {!isMobile && banner && (
             <ErrorBoundary fallback={<></>}>
               <Suspense
                 fallback={
