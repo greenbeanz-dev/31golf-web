@@ -40,7 +40,7 @@ const LoginModal = ({
         label: "닫기",
       }}
     >
-      <Login useHelperMsg={true} />
+      <Login useHelperMsg={true} banner={false} />
     </CommonModal>
   );
 };
