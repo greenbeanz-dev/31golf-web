@@ -57,6 +57,9 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
   };
 
   const [selectedDate, setSelectedDate] = useState(null);
+  const eventsInSelectMonth = events.filter(
+    (event) => event.start.getMonth() === selectMonth - 1
+  );
 
   const CustomDateCellWrapper = (props) => {
     const isSelected = isSameDate(props.value, selectedDate);
@@ -199,13 +202,6 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log(events);
-    console.log(events.length);
-    console.log(calendarWidth);
-    console.log(calendarY);
-  }, [events]);
-
   if (!renderCalendar) {
     return null;
   }
@@ -244,7 +240,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
       </div>
       {/* width, Y가 초기값일 때는 보여주지 않음(화면 전환을 부드럽게 보이기 위해)  */}
       {events &&
-        events.length === 0 &&
+        eventsInSelectMonth.length === 0 &&
         calendarWidth !== 0 &&
         calendarY !== 0 && (
           <div

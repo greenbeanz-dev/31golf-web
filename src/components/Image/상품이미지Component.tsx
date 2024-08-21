@@ -35,6 +35,7 @@ function 상품이미지Component({
         className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3]`}
       >
         <Image
+          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           className="rounded-[24px]"
           alt={"product_image_" + item.id}
           src={
@@ -42,7 +43,7 @@ function 상품이미지Component({
               ? item.thumbnailImage
               : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
           }
-          layout="fill"
+          fill
         ></Image>
       </div>
 
