@@ -199,6 +199,13 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
     };
   }, []);
 
+  useEffect(() => {
+    console.log(events);
+    console.log(events.length);
+    console.log(calendarWidth);
+    console.log(calendarY);
+  }, [events]);
+
   if (!renderCalendar) {
     return null;
   }
