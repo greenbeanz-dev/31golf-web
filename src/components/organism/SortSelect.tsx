@@ -5,6 +5,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Selection,
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { BiSort } from "react-icons/bi";
@@ -35,15 +36,29 @@ const SortSelect = () => {
           disallowEmptySelection
           selectionMode="single"
           selectedKeys={selectedKeys}
-          onSelectionChange={(keys: any) => {
-            setSelectedKeys(keys);
-            useProductInfiniteQueryBody
-              .getState()
-              .changeSortType(selectMap[selectedValue]);
+          onSelect={(key: any) => {
+            console.log("list", key);
+          }}
+          onSelectionChange={(keys: Selection) => {
+            setSelectedKeys(keys as any);
           }}
         >
-          <DropdownItem key="option1">추천순</DropdownItem>
-          <DropdownItem key="option2">가나다순</DropdownItem>
+          <DropdownItem
+            key="option1"
+            onClick={() => {
+              useProductInfiniteQueryBody.getState().changeSortType("추천순");
+            }}
+          >
+            추천순
+          </DropdownItem>
+          <DropdownItem
+            key="option2"
+            onClick={() => {
+              useProductInfiniteQueryBody.getState().changeSortType("가나다순");
+            }}
+          >
+            가나다순
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
