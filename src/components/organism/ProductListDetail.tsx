@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { useSearchParams } from "next/navigation";
 
 interface ProductListDetailProps {
   category1?: string;
@@ -59,11 +60,13 @@ const ProductListDetailSuspense = () => {
   const router = useRouter();
   const { pathname } = router;
   const isMobile = useIsMobile();
+  const searchParams = useSearchParams();
+  const jejuListType = searchParams.get("type") || "1박 2일(36홀)";
 
   const { data } = useProductInfiniteQuery();
   // 제주인 경우만 당일 상품을 보여줌
   const [isDay, setIsDay] = useState<boolean | undefined>(
-    pathname === "/jeju" ? false : undefined
+    jejuListType === "당일(18홀)"
   );
 
   let list = data?.pages
@@ -77,6 +80,10 @@ const ProductListDetailSuspense = () => {
 
   let listIsDay = list?.filter((product) => product?.type?.includes("당일"));
   let listIsNight = list?.filter((product) => !product?.type?.includes("당일"));
+
+  useEffect(() => {
+    setIsDay(jejuListType === "당일(18홀)");
+  }, [jejuListType]);
 
   if (list === undefined || list.length === 0) {
     return (
@@ -93,73 +100,8 @@ const ProductListDetailSuspense = () => {
     );
   }
 
-  const ProductTabBarJeju = ({ isDay, setIsDay }) => {
-    const [tab, setTab] = useState(isDay ? "당일 18홀" : "1박 2일 (36홀)");
-    const navItem = [
-      {
-        label: "1박 2일 (36홀)",
-      },
-      {
-        label: "당일 18홀",
-      },
-    ];
-
-    return (
-      <Navbar
-        style={{
-          width: "100%",
-          justifyContent: "flex-start", // 탭 왼쪽 정렬
-          overflowX: "auto",
-        }}
-        classNames={{
-          wrapper: ["px-0", "cursor-pointer", "w-full"],
-          item: [
-            "flex",
-            "relative",
-            "h-[30px]",
-            "w-[150px]",
-            "cursor-pointer",
-            "items-center",
-            "justify-center",
-            "data-[active=true]:after:content-['']",
-            "data-[active=true]:after:absolute",
-            "data-[active=true]:after:bottom-0",
-            "data-[active=true]:after:left-0",
-            "data-[active=true]:after:right-0",
-            "data-[active=true]:after:h-[2px]",
-            "data-[active=true]:after:rounded-[2px]",
-            "data-[active=true]:after:bg-[#004964]",
-          ],
-          menu: ["px-0"],
-        }}
-      >
-        <NavbarContent>
-          {navItem.map((item) => {
-            return (
-              <NavbarItem
-                className={`px-4 ${tab === item.label ? "text-[#004964] font-bold" : ""}`}
-                key={item.label}
-                isActive={tab === item.label}
-                onClick={() => {
-                  setTab(item.label);
-                  setIsDay(item.label === "당일 18홀");
-                }}
-              >
-                {item.label}
-              </NavbarItem>
-            );
-          })}
-        </NavbarContent>
-      </Navbar>
-    );
-  };
-
   return (
     <div className="flex flex-col w-full gap-2">
-      {pathname === "/jeju" && (
-        <ProductTabBarJeju isDay={isDay} setIsDay={setIsDay} />
-      )}
-
       <div
         className={cn(
           `w-full grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] md:grid-cols-[repeat(auto-fit,_minmax(300px,_3fr))]`,
