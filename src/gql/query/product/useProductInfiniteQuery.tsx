@@ -55,6 +55,16 @@ const useProductInfiniteQuery = () => {
         ProductListInfinityQuery,
         pageParam
       );
+      // postgresql 한글정렬 불가능 이슈로 인해 가나다순은 클라이언트에서 정렬
+      if (isSortType === "가나다순") {
+        (
+          response.productList &&
+          response.productList.edges &&
+          response.productList.edges
+        ).sort((a: any, b: any) => {
+          return a?.node?.name?.localeCompare(b?.node?.name, "ko-KR");
+        });
+      }
       return response;
     },
     getNextPageParam: (lastPage, pages) => {
