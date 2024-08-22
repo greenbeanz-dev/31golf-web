@@ -227,13 +227,10 @@ builder.queryField("productList", (t) =>
       );
 
       const sortType =
-        _args.isSortType !== "추천순"
-          ? ({
-              name: "asc",
-            } as const)
-          : ({
-              sort: "asc",
-            } as const);
+        _args.isSortType === "추천순" &&
+        ({
+          name: "asc",
+        } as const);
 
       return prisma.product.findMany({
         ...query,
