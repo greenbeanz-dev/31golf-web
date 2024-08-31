@@ -5,7 +5,7 @@ function JejuPage() {
   return (
     <div className="flex flex-col items-start w-full h-full">
       <Head>
-        <title>제주골프</title>
+        <title>31골프 - 제주골프</title>
       </Head>
       <div style={{ height: 20 }} />
       <제주골프Page />
