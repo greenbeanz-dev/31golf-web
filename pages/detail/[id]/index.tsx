@@ -22,7 +22,7 @@ function Detail({
   return (
     <div className="flex flex-col items-center w-full h-full">
       <Head>
-        <title>Detail</title>
+        <title>국내/해외골프는 역시 31골프</title>
       </Head>
       <div style={{ height: 20 }} />
       <Suspense fallback={<div></div>}>
