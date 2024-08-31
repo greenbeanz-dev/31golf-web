@@ -5,7 +5,7 @@ function OverseasPage() {
   return (
     <div className="flex flex-col items-start w-full h-full">
       <Head>
-        <title>해외골프</title>
+        <title>31골프 - 해외골프</title>
       </Head>
       <div style={{ height: 20 }} />
       <해외골프Page />
