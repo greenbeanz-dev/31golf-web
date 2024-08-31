@@ -5,7 +5,7 @@ function DomesticPage() {
   return (
     <div className="flex flex-col items-start w-full h-full">
       <Head>
-        <title>국내골프</title>
+        <title>31골프 - 국내골프</title>
       </Head>
       <div style={{ height: 20 }} />
       <국내골프Page />

@@ -5,7 +5,7 @@ function Home() {
   return (
     <div className="flex flex-col w-full h-full">
       <Head>
-        <title>회원가입</title>
+        <title>국내/해외골프는 역시 31골프</title>
       </Head>
       <div style={{ minHeight: 40 }} />
       <회원가입Page />
