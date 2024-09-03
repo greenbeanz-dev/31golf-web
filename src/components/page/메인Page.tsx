@@ -13,6 +13,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useIsMobile } from "../../hooks/useIsMobile";
 import usePopupList from "../../service/webSetting/usePopupList";
+import { Skeleton } from "@nextui-org/react";
 
 const 메인Page = () => {
   const isMobile = useIsMobile();
@@ -107,7 +108,14 @@ export default 메인Page;
 const MainBannerSkeleton = () => {
   return (
     <div className="w-full h-[400px]">
-      <Image
+      <Skeleton
+        className="rounded-3xl"
+        style={{
+          width: 1200,
+          height: 400,
+        }}
+      />
+      {/* <Image
         priority={true}
         quality={100}
         alt={"mainImage"}
@@ -115,7 +123,7 @@ const MainBannerSkeleton = () => {
         height={400}
         width={1200}
         className={"rounded-3xl object-fill"}
-      />
+      /> */}
     </div>
   );
 };
