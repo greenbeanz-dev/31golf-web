@@ -106,7 +106,7 @@ const 상품이미지SkeletonComponent = ({
           width: isMobile ? mobileWidth : pcWidth,
           height: isMobile ? mobileHeight : pcHeight,
         }}
-      ></Skeleton>
+      />
       <div className="pt-6" />
       <Skeleton className="h-32 rounded-2xl" />
       <div className="pt-6" />

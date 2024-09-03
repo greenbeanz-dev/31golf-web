@@ -147,7 +147,7 @@ const GuideInfo = ({ icon, description }) => {
         )}
         {icon === "hotel" && <FaBed size={16} color={theme.colors.primary} />}
         {icon === "meal" && (
-          <GiHotMeal size={16} color={theme.colors.primary} />
+          <PiForkKnifeFill size={16} color={theme.colors.primary} />
         )}
         {/* {icon === "hotel" ? (
           <FaBed size={16} color={theme.colors.primary} />
@@ -180,6 +180,8 @@ const PlanItem = ({ icon, description }) => {
             <FaGolfBallTee size={24} color={theme.colors.primary} />
           ) : icon === "flag" ? (
             <TbFlag3Filled size={24} color={theme.colors.primary} />
+          ) : icon === "hotel" ? (
+            <FaBed size={24} color={theme.colors.primary} />
           ) : (
             <PiForkKnifeFill size={24} color={theme.colors.primary} />
           )}
