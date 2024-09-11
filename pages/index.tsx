@@ -24,6 +24,10 @@ function Home({
       <div className="flex flex-col items-center w-full h-full">
         <Head>
           <title>국내/해외골프는 역시 31골프</title>
+          <link
+            rel="shortcut icon"
+            href="http://www.31golf.com/favicon.ico"
+          ></link>
         </Head>
         <div className="min-h-10" />
         <메인Page />
