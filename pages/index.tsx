@@ -28,6 +28,14 @@ function Home({
             rel="shortcut icon"
             href="http://www.31golf.com/favicon.ico"
           ></link>
+          <meta
+            name="naver-site-verification"
+            content="08ba381fe75c153d92e20403a5d7e706eb6eadda"
+          />
+          <meta
+            name="naver-site-verification"
+            content="08ba381fe75c153d92e20403a5d7e706eb6eadda"
+          />
         </Head>
         <div className="min-h-10" />
         <메인Page />
