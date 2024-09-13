@@ -1,7 +1,6 @@
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
-import { FaBed, FaCarSide } from "react-icons/fa";
+import { FaBed, FaCarSide, FaPlane } from "react-icons/fa";
 import { FaGolfBallTee } from "react-icons/fa6";
-import { GiHotMeal } from "react-icons/gi";
 import { IoIosArrowDown } from "react-icons/io";
 import {
   PiForkKnifeFill,
@@ -149,6 +148,7 @@ const GuideInfo = ({ icon, description }) => {
         {icon === "meal" && (
           <PiForkKnifeFill size={16} color={theme.colors.primary} />
         )}
+        {icon === "plane" && <FaPlane size={16} color={theme.colors.primary} />}
         {/* {icon === "hotel" ? (
           <FaBed size={16} color={theme.colors.primary} />
         ) : (
@@ -160,6 +160,7 @@ const GuideInfo = ({ icon, description }) => {
           {icon === "golf" && "골프"}
           {icon === "hotel" && "숙소"}
           {icon === "meal" && "식사"}
+          {icon === "plane" && "항공"}
         </div>
       </div>
       <div className="flex items-center grow shrink basis-0 text-black text-opacity-70 text-sm font-normal">
@@ -182,6 +183,8 @@ const PlanItem = ({ icon, description }) => {
             <TbFlag3Filled size={24} color={theme.colors.primary} />
           ) : icon === "hotel" ? (
             <FaBed size={24} color={theme.colors.primary} />
+          ) : icon === "plane" ? (
+            <FaPlane size={24} color={theme.colors.primary} />
           ) : (
             <PiForkKnifeFill size={24} color={theme.colors.primary} />
           )}
