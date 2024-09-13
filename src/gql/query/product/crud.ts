@@ -57,6 +57,7 @@ query productListInfinityQuery(
         managerId
         name
         memo
+        note
         fax
         isActive
         isWeb
