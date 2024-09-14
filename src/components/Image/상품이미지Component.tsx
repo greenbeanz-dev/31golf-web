@@ -48,14 +48,28 @@ function 상품이미지Component({
       </div>
 
       <div className="pt-4" />
-      <div className="text-[14px] font-normal truncate leading-6 opacity-70">
-        {item.summary}
+      <div className="flex items-end gap-1">
+        {item.note && item.note.length > 0 && (
+          <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
+            <div className="text-[14px] font-normal text-white leading-5">
+              {item.note}
+            </div>
+          </div>
+        )}
+        <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
+          <div className="text-[14px] font-normal text-white leading-5">
+            강력추천추천추천추천
+          </div>
+        </div>
+        <div className="text-[14px] font-normal truncate leading-6 opacity-70">
+          {item.summary}
+        </div>
       </div>
       <div className="pt-1" />
       <div className="text-[16px] font-bold truncate leading-6">{`${item.name} ${item.type}`}</div>
       <div className="min-h-2" />
       {!isMobile && (
-        <div className="flex gap-1">
+        <div className="flex items-center gap-1">
           {item.inclusives &&
             item.inclusives.split(",").map((content, idx) => (
               <div key={idx} className="relative inline-block">
