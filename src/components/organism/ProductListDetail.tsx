@@ -7,12 +7,12 @@ import {
   상품이미지SkeletonComponent,
 } from "@component/Image/상품이미지Component";
 import Repeat from "@component/molecule/Repeat";
-import { Navbar, NavbarContent, NavbarItem, cn } from "@nextui-org/react";
+import { cn } from "@nextui-org/react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import { useSearchParams } from "next/navigation";
 
 interface ProductListDetailProps {
   category1?: string;
