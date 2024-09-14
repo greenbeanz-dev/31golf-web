@@ -49,18 +49,13 @@ function 상품이미지Component({
 
       <div className="pt-4" />
       <div className="flex items-end gap-1">
-        {item.note && item.note.length > 0 && (
+        {item.note && item.note !== "NONE" && (
           <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
             <div className="w-max text-[14px] font-normal text-white leading-5">
               {item.note}
             </div>
           </div>
         )}
-        <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
-          <div className="w-max text-[14px] font-normal text-white leading-5">
-            강력추천추천추천추천
-          </div>
-        </div>
         <div className="text-[14px] font-normal truncate leading-6 opacity-70">
           {item.summary}
         </div>
