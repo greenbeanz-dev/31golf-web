@@ -37,7 +37,7 @@ const 상품일정상세 = ({
     <div className={`flex ${isMobile ? "flex-col" : "flex-row"} max-w-[816px]`}>
       {scheduleList.length > 0 && (
         <div
-          className="flex flex-2 items-start max-w-[512px]"
+          className="flex flex-2 items-start md:max-w-[512px]"
           style={{
             flex: 2,
             alignItems: "flex-start",
