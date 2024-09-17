@@ -32,7 +32,7 @@ function 상품이미지Component({
       }}
     >
       <div
-        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3]`}
+        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[384px]`}
       >
         <Image
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
@@ -48,19 +48,28 @@ function 상품이미지Component({
       </div>
 
       <div className="pt-4" />
-      <div className="text-[14px] font-normal truncate leading-6 opacity-70">
-        {item.summary}
+      <div className="flex items-end gap-1">
+        {item.note && item.note !== "NONE" && (
+          <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
+            <div className="w-max text-[14px] font-normal text-white leading-5">
+              {item.note}
+            </div>
+          </div>
+        )}
+        <div className="text-[14px] font-normal truncate leading-6 opacity-70">
+          {item.summary}
+        </div>
       </div>
       <div className="pt-1" />
       <div className="text-[16px] font-bold truncate leading-6">{`${item.name} ${item.type}`}</div>
       <div className="min-h-2" />
       {!isMobile && (
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-scroll overflow-y-hidden scrollbar-hide pb-1">
           {item.inclusives &&
             item.inclusives.split(",").map((content, idx) => (
-              <div key={idx} className="relative inline-block">
+              <div key={idx} className="relative inline-block w-fit">
                 <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
-                  <div className="text-[14px] font-normal text-[#17C964] leading-5">
+                  <div className="text-[14px] font-normal text-[#17C964] leading-5 ">
                     {content.split("_@_")[0]}
                   </div>
                 </div>
