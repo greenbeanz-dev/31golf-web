@@ -183,6 +183,9 @@ model reservation {
   is_transaction_editable Boolean?
   is_web                  Boolean?
   product_name            String?
+  revenue_custom          Float?                @db.Real
+  commission_custom       Float?                @db.Real
+  revenue_final_custom    Float?                @db.Real
   message_history         message_history[]
   payment                 payment[]
   request                 request[]
