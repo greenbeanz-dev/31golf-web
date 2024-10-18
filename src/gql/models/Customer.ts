@@ -107,7 +107,7 @@ builder.queryField("customerList", (t) =>
   })
 );
 
-builder.mutationField("createCustomerByWeb", (t) =>
+builder.mutationField("createCustomer", (t) =>
   t.prismaField({
     type: "customer",
     args: {
@@ -129,9 +129,9 @@ builder.mutationField("createCustomerByWeb", (t) =>
           memo: _args.memo,
           fax: _args.fax,
           is_villain: _args.isVillain,
+          provider: _args.provider,
           created_at: new Date(Date.now()).toISOString(),
           updated_at: new Date(Date.now()).toISOString(),
-          provider: _args.provider,
         },
       });
       return result;
@@ -139,7 +139,7 @@ builder.mutationField("createCustomerByWeb", (t) =>
   })
 );
 
-builder.mutationField("UpdateCustomerByIdWeb", (t) =>
+builder.mutationField("updateCustomerById", (t) =>
   t.prismaField({
     type: "customer",
     args: {
@@ -193,7 +193,7 @@ builder.mutationField("deleteCustomerById", (t) =>
   })
 );
 
-builder.queryField("customerByIdWeb", (t) =>
+builder.queryField("customerById", (t) =>
   t.prismaField({
     type: "customer",
     args: {

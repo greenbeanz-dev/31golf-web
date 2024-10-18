@@ -76,17 +76,17 @@ query CustomerAllListQuery {
 // }
 // `);
 
-export const CustomerByIdQueryWeb = gql(`
-query customerByIdWeb($id: ID!) {
-  customerByIdWeb(id: $id) {
+export const CustomerByIdQuery = gql(`
+query customerById($id: ID!) {
+  customerById(id: $id) {
     id
     name
   }
 }
 `);
 
-export const CreateCustomerQueryByWeb = gql(`
-mutation CreateCustomerByWeb(
+export const CreateCustomerQueryBy = gql(`
+mutation CreateCustomerBy(
   $name: String!
   $phone: String
   $email: String
@@ -95,7 +95,7 @@ mutation CreateCustomerByWeb(
   $isVillain: Boolean
   $provider: String
 ) {
-  createCustomerByWeb(
+  createCustomer(
     name: $name
     phone: $phone
     email: $email
@@ -109,8 +109,8 @@ mutation CreateCustomerByWeb(
 }
 `);
 
-export const UpdateCustomerByIdQueryByWeb = gql(`
-mutation UpdateCustomerByIdWeb(
+export const UpdateCustomerByIdQueryBy = gql(`
+mutation UpdateCustomerById(
   $id: ID!
   $name: String!
   $phone: String
@@ -120,7 +120,7 @@ mutation UpdateCustomerByIdWeb(
   $isVillain: Boolean
   $provider: String
 ) {
-  UpdateCustomerByIdWeb(
+  updateCustomerById(
     id: $id
     name: $name
     phone: $phone

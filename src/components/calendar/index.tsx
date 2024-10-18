@@ -139,7 +139,7 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
     // 과거 날짜 클릭 시 선택 불가
     const isOutDated = slot.start < new Date();
-    if (isOutDated) return;
+    if (isOutDated || memo === "CLOSED") return;
 
     setSelectedDate(slot.start);
     onClick?.(slot);
@@ -377,9 +377,11 @@ const PriceLoader = () => {
         ? "오늘"
         : elem.memo === "INQUIRY"
           ? "별도 문의"
-          : elem.memo === "SOLDOUT"
-            ? "예약 마감"
-            : `${(elem.price || 0).toLocaleString()}`,
+          : elem.memo === "CLOSED"
+            ? "휴장"
+            : elem.memo === "SOLDOUT"
+              ? "예약 마감"
+              : `${(elem.price || 0).toLocaleString()}`,
       start: new Date(elem.date),
       end: new Date(elem.date),
       extendedProps: {

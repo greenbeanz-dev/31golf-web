@@ -20,6 +20,8 @@ function 상품이미지Component({
 }) {
   const isMobile = useIsMobile();
   const router = useRouter();
+  const highlightBadge = item.note ? JSON.parse(item.note) : undefined;
+  console.log("highlightBadge", highlightBadge);
   return (
     <div
       className="w-full "
@@ -32,7 +34,7 @@ function 상품이미지Component({
       }}
     >
       <div
-        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[384px]`}
+        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[446px]`}
       >
         <Image
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
@@ -49,13 +51,30 @@ function 상품이미지Component({
 
       <div className="pt-4" />
       <div className="flex items-end gap-1">
-        {item.note && item.note !== "NONE" && (
-          <div className="h-6 px-2 rounded-[8px] border border-[#FFA940] bg-[#FFA940] justify-center items-center inline-flex">
-            <div className="w-max text-[14px] font-normal text-white leading-5">
-              {item.note}
+        {item.note &&
+          item.note !== "NONE" &&
+          highlightBadge.bgColor &&
+          highlightBadge.text &&
+          highlightBadge.textColor &&
+          highlightBadge.textSize && (
+            <div
+              className={`h-6 px-2 rounded-[8px] justify-center items-center inline-flex`}
+              style={{
+                border: `1px solid ${highlightBadge.bgColor}`,
+                backgroundColor: highlightBadge.bgColor,
+              }}
+            >
+              <div
+                className={`w-max font-normal leading-5`}
+                style={{
+                  color: highlightBadge.textColor,
+                  fontSize: highlightBadge.textSize,
+                }}
+              >
+                {highlightBadge.text}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         <div className="text-[14px] font-normal truncate leading-6 opacity-70">
           {item.summary}
         </div>
@@ -68,8 +87,8 @@ function 상품이미지Component({
           {item.inclusives &&
             item.inclusives.split(",").map((content, idx) => (
               <div key={idx} className="relative inline-block w-fit">
-                <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
-                  <div className="text-[14px] font-normal text-[#17C964] leading-5 ">
+                <div className="h-4 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
+                  <div className="text-[14px] font-normal text-[#17C964] leading-5 truncate">
                     {content.split("_@_")[0]}
                   </div>
                 </div>
