@@ -1,5 +1,5 @@
 import gqlClient from "@/gql/gqlClient";
-import { CustomerByIdQueryWeb } from "@/gql/query/customer/crud";
+import { CustomerByIdQuery } from "@/gql/query/customer/crud";
 import { useQuery } from "@tanstack/react-query";
 
 interface useCustomerByParams {
@@ -11,7 +11,7 @@ export default function useCustomerBy({ id }: useCustomerByParams) {
     queryKey: ["customerByIdWeb", id],
     queryFn: async () => {
       if (!id) return;
-      const data = await gqlClient.request(CustomerByIdQueryWeb, {
+      const data = await gqlClient.request(CustomerByIdQuery, {
         id: id!.toString(),
       });
       return data.customerByIdWeb;
