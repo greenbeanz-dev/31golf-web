@@ -8,13 +8,13 @@ interface useCustomerByParams {
 
 export default function useCustomerBy({ id }: useCustomerByParams) {
   return useQuery({
-    queryKey: ["customerByIdWeb", id],
+    queryKey: ["customerById", id],
     queryFn: async () => {
       if (!id) return;
       const data = await gqlClient.request(CustomerByIdQuery, {
         id: id!.toString(),
       });
-      return data.customerByIdWeb;
+      return data.customerById;
     },
     enabled: !!id,
   });
