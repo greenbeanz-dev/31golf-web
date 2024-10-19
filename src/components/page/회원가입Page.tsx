@@ -1,7 +1,7 @@
 import gqlClient from "@/gql/gqlClient";
 import {
-  CreateCustomerQueryByWeb,
-  UpdateCustomerByIdQueryByWeb,
+  CreateCustomerQueryBy,
+  UpdateCustomerByIdQueryBy,
 } from "@/gql/query/customer/crud";
 import { Button, Input } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,7 +30,7 @@ export function 회원가입Page() {
   const { mutateAsync: createCustomer, isLoading } = useMutation(
     async () => {
       // if (!userProfile.provider) return;
-      return await gqlClient.request(CreateCustomerQueryByWeb, {
+      return await gqlClient.request(CreateCustomerQueryBy, {
         name: name,
         phone: phone,
         email: "",
@@ -43,13 +43,13 @@ export function 회원가입Page() {
     {
       onSuccess: async (result) => {
         if (result) {
-          const { createCustomerByWeb } = result;
+          const { createCustomer } = result;
           const smsData = await sendSms({
             phoneNumber: phone,
-            customerId: createCustomerByWeb.id,
+            customerId: createCustomer.id,
           });
           if (smsData === "OK") {
-            setCustomerId(createCustomerByWeb.id);
+            setCustomerId(createCustomer.id);
             setIsSendCode(true);
           }
         }
@@ -69,7 +69,7 @@ export function 회원가입Page() {
   const { mutateAsync: updateCustomer } = useMutation(
     async () => {
       if (!customerId) return;
-      return await gqlClient.request(UpdateCustomerByIdQueryByWeb, {
+      return await gqlClient.request(UpdateCustomerByIdQueryBy, {
         id: customerId.toString(),
         name: name,
         phone: phone,
@@ -85,8 +85,8 @@ export function 회원가입Page() {
         if (data) {
           queryClient.invalidateQueries(["customerList"]);
           const result = await login("credentials", {
-            name: data.UpdateCustomerByIdWeb.name,
-            phone: data.UpdateCustomerByIdWeb.phone,
+            name: data.updateCustomerById.name,
+            phone: data.updateCustomerById.phone,
             provider: "credentials",
             redirect: false,
             callbackUrl: "/",
