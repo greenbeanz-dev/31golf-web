@@ -34,7 +34,7 @@ function 상품이미지Component({
       }}
     >
       <div
-        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[384px]`}
+        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[446px]`}
       >
         <Image
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
@@ -87,8 +87,8 @@ function 상품이미지Component({
           {item.inclusives &&
             item.inclusives.split(",").map((content, idx) => (
               <div key={idx} className="relative inline-block w-fit">
-                <div className="h-6 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
-                  <div className="text-[14px] font-normal text-[#17C964] leading-5 ">
+                <div className="h-4 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
+                  <div className="text-[14px] font-normal text-[#17C964] leading-5 truncate">
                     {content.split("_@_")[0]}
                   </div>
                 </div>
