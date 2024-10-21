@@ -118,7 +118,7 @@ const initialState: State = {
   category1: undefined,
   category2: undefined,
   category3: undefined,
-  size: 50,
+  size: 200,
   isSortType: "추천순",
 };
 

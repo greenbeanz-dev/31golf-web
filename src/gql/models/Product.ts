@@ -324,7 +324,8 @@ builder.queryField("productList", (t) =>
         },
         orderBy: [
           {
-            ...sortType,
+            // ...sortType,
+            sort: "asc",
           },
         ],
       });
