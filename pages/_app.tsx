@@ -18,6 +18,7 @@ import "reflect-metadata";
 import "../styles/custom-calendar.css";
 import "../styles/global.css";
 import "../styles/tailwind.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 dayjs.locale("ko");
 
 (BigInt.prototype as any).toJSON = function () {
@@ -65,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
               <Analytics />
               <SpeedInsights />
+              <ReactQueryDevtools initialIsOpen={true} />
             </Layout>
           </Hydrate>
         </QueryClientProvider>
