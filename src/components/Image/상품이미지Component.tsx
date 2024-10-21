@@ -2,6 +2,7 @@ import { Product } from "@/gql/__generated__/graphql";
 import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useIntersectionObserver } from "usehooks-ts";
 import { useIsMobile } from "../../hooks/useIsMobile";
 function 상품이미지Component({
   item,
@@ -21,9 +22,15 @@ function 상품이미지Component({
   const isMobile = useIsMobile();
   const router = useRouter();
   const highlightBadge = item.note ? JSON.parse(item.note) : undefined;
+  const { isIntersecting, ref } = useIntersectionObserver({
+    threshold: 0.1,
+    freezeOnceVisible: true,
+  });
+
   console.log("highlightBadge", highlightBadge);
   return (
     <div
+      ref={ref}
       className="w-full "
       style={{
         marginBottom: isMobile ? "16px" : "48px",
@@ -36,17 +43,27 @@ function 상품이미지Component({
       <div
         className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[446px]`}
       >
-        <Image
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-          className="rounded-[24px]"
-          alt={"product_image_" + item.id}
-          src={
-            item.thumbnailImage
-              ? item.thumbnailImage
-              : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
-          }
-          fill
-        ></Image>
+        {isIntersecting ? (
+          <Image
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            className="rounded-[24px]"
+            alt={"product_image_" + item.id}
+            src={
+              item.thumbnailImage
+                ? item.thumbnailImage
+                : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
+            }
+            fill
+          ></Image>
+        ) : (
+          <Skeleton
+            className="rounded-[24px]"
+            style={{
+              width: isMobile ? mobileWidth : pcWidth,
+              height: isMobile ? mobileHeight : pcHeight,
+            }}
+          />
+        )}
       </div>
 
       <div className="pt-4" />

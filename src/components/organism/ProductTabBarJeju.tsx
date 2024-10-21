@@ -65,7 +65,7 @@ const ProductTabBarJeju = () => {
         </NavbarContent>
       </Navbar>
       <SortSelect />
-      <ProductListDetail category1="국내" category2="제주도" />;
+      <ProductListDetail category1="국내" category2="제주도" />
     </>
   );
 };
