@@ -15,6 +15,10 @@ const navItem = [
     label: "해외골프",
     href: "overseas",
   },
+  {
+    label: "Foreigner tour only",
+    href: "foreigner",
+  },
 ];
 
 export default function Topbar() {
