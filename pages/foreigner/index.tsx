@@ -24,7 +24,12 @@ export default OverseasPage;
 
 function ImageCard({ url, description }) {
   return (
-    <div className="border rounded-lg shadow-lg overflow-hidden m-4 w-72">
+    <div
+      className="border rounded-lg shadow-lg overflow-hidden m-4 w-72 cursor-pointer"
+      onClick={() => {
+        window.location.href = "/foreigner/detail";
+      }}
+    >
       <img
         src={url}
         alt="Incheon Wellness"
