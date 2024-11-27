@@ -61,12 +61,16 @@ const ProductListDetailSuspense = () => {
   const { pathname } = router;
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
-  const jejuListType = searchParams.get("type") || "1박 2일(36홀)";
+  const jejuListType = searchParams.get("type");
 
   const { data } = useProductInfiniteQuery();
   // 제주인 경우만 당일 상품을 보여줌
   const [isDay, setIsDay] = useState<boolean | undefined>(
     jejuListType === "당일(18홀)"
+      ? true
+      : jejuListType === "1박 2일(36홀)"
+        ? false
+        : undefined
   );
 
   let list = data?.pages
@@ -82,7 +86,13 @@ const ProductListDetailSuspense = () => {
   let listIsNight = list?.filter((product) => !product?.type?.includes("당일"));
 
   useEffect(() => {
-    setIsDay(jejuListType === "당일(18홀)");
+    setIsDay(
+      jejuListType === "당일(18홀)"
+        ? true
+        : jejuListType === "1박 2일(36홀)"
+          ? false
+          : undefined
+    );
   }, [jejuListType]);
 
   if (list === undefined || list.length === 0) {
