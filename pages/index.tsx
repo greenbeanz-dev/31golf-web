@@ -26,7 +26,7 @@ function Home({
           <title>국내/해외골프는 역시 31골프</title>
           <link
             rel="shortcut icon"
-            href="http://www.31golf.com/favicon.ico"
+            href="https://www.31golf.com/favicon.ico"
           ></link>
           <meta
             name="naver-site-verification"
