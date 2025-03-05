@@ -30,6 +30,7 @@ module.exports = async (phase, { defaultConfig }) => {
     },
     images: {
       domains: ["greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com"],
+      unoptimized: true,
     },
     webpack(config) {
       config.module.rules.push({
