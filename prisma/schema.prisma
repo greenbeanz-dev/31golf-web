@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64"]
 }
 
 generator pothos {
@@ -32,6 +33,9 @@ model course {
   confirm_check     String?
   memo              String?
   bank_account      String?
+  city              String?   @db.VarChar(255)
+  country           String?   @db.VarChar(255)
+  state             String?   @db.VarChar(255)
   product           product[]
 }
 
@@ -177,13 +181,17 @@ model reservation {
   sms_confirmation        String?
   cost_addon              Float?                @db.Real
   cost_addon_sub          Float?                @db.Real
-  transaction_deposit     Float?                @db.Real
+  transaction_deposit     Float?
   transaction_withdrawal  Float?                @db.Real
   transaction_remainder   Float?                @db.Real
   transaction_unpaid      Int?
   is_transaction_editable Boolean?
   is_web                  Boolean?
   product_name            String?
+  revenue_custom          Float?                @db.Real
+  commission_custom       Float?                @db.Real
+  revenue_final_custom    Float?                @db.Real
+  note_checkout_etc       String?
   message_history         message_history[]
   payment                 payment[]
   request                 request[]

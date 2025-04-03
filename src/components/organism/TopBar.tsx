@@ -16,7 +16,7 @@ const navItem = [
     href: "overseas",
   },
   {
-    label: "Foreigner tour only",
+    label: "반려동물 사랑🐶🐱",
     href: "foreigner",
   },
 ];
@@ -62,6 +62,21 @@ export default function Topbar() {
         />
         <div className="pl-7" />
         {navItem.map((item) => {
+          const isPetLabel = item.label === "반려동물 사랑🐶🐱";
+
+          const renderLabel = () => {
+            if (isPetLabel) {
+              const text = item.label.replace(/🐶🐱/, "");
+              return (
+                <>
+                  {text}
+                  <span className="text-xl">🐶🐱</span>
+                </>
+              );
+            }
+            return item.label;
+          };
+
           return (
             <NavbarItem
               className="w-[140px]"
@@ -69,7 +84,7 @@ export default function Topbar() {
               isActive={pathname === item.href}
             >
               <Link color="foreground" href={`/${item.href}`}>
-                {item.label}
+                {renderLabel()}
               </Link>
             </NavbarItem>
           );
