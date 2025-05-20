@@ -49,13 +49,17 @@ const 상품예약버튼 = ({
   return (
     <div>
       <상품결제정보
-        minCount={product.category1 === "해외" ? 2 : 4}
+        minCount={product.category1 === "해외" ? 1 : 4}
         count={reservation.numPeople}
         setCount={setNumPeople}
         name={product.name}
         price={reservation.priceCustom}
         schedule={product.schedule}
-        note="(2~3인 진행 시 별도 문의 / 2인 조인가능)"
+        note={
+          product.category1 === "해외"
+            ? ""
+            : "(2~3인 진행 시 별도 문의 / 2인 조인가능)"
+        }
       />
       <div style={{ minHeight: 8 }} />
       {isOpen && (
