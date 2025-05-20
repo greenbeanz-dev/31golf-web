@@ -375,13 +375,17 @@ export function 골프상세Page({
                   <MdKeyboardArrowDown size={24} />
                 </div>
                 <상품결제정보
-                  minCount={data?.category1 === "해외" ? 2 : 4}
+                  minCount={data?.category1 === "해외" ? 1 : 4}
                   count={numPeople}
                   setCount={setNumPeople}
                   name={data?.name + " " + data?.type}
                   price={판매가}
                   schedule={schedule}
-                  note="(2~3인 진행 시 별도 문의 / 2인 조인가능)"
+                  note={
+                    data?.category1 === "해외"
+                      ? ""
+                      : "(2~3인 진행 시 별도 문의 / 2인 조인가능)"
+                  }
                 />
               </div>
             )}
