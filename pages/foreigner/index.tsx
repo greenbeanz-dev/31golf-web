@@ -16,14 +16,14 @@ function OverseasPage() {
           description="Incheon Wellness Medical Tour"
           id={2}
         /> */}
-        <ImageCard
+        {/* <ImageCard
           url="/images/foreigner_3_list.png"
           description="반려동물 사랑🐶🐱 ₩10,000"
           id={3}
-        />
+        /> */}
         <ImageCard
           url="/images/foreigner_4_list.png"
-          description="반려동물 사랑🐶🐱 ₩10,000 (2)"
+          description="반려동물 사랑🐶🐱 ₩10,000"
           id={4}
         />
         <ImageCard
