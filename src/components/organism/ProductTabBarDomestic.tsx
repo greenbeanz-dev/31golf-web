@@ -17,6 +17,12 @@ const navItem = [
   {
     label: "경상도",
   },
+  {
+    label: "경기도",
+  },
+  {
+    label: "2인골프",
+  },
   // {
   //   label: "제주도",
   // },
