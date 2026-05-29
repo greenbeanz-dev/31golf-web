@@ -1,6 +1,43 @@
+import type { Prisma } from "@prisma/client";
 import prisma from "../../lib/prisma";
 import { conditionWithStartDateAndEndDate } from "../../utils/datetime/conditionWithStartDateAndEndDate";
 import { builder } from "../builder";
+
+function productSearchScopeWhere(
+  searchScope: string | null | undefined
+): Prisma.productWhereInput | Record<string, never> {
+  switch (searchScope) {
+    case "domestic":
+      return {
+        category_1: { contains: "국내" },
+        NOT: { category_2: { contains: "제주도" } },
+      };
+    case "jeju":
+      return {
+        category_1: { contains: "국내" },
+        category_2: { contains: "제주도" },
+      };
+    case "overseas":
+      return {
+        category_1: { contains: "해외" },
+      };
+    default:
+      return {};
+  }
+}
+
+function productSearchQueryWhere(
+  searchQuery: string | null | undefined
+): Prisma.productWhereInput | Record<string, never> {
+  const q = searchQuery?.trim();
+  if (!q) return {};
+  return {
+    OR: [
+      { name: { contains: q, mode: "insensitive" } },
+      { summary: { contains: q, mode: "insensitive" } },
+    ],
+  };
+}
 
 builder.prismaObject("product", {
   fields: (t) => ({
@@ -219,6 +256,8 @@ builder.queryField("productList", (t) =>
       memoManager: t.arg.string(),
       memoEtc: t.arg.string(),
       isSortType: t.arg.string(),
+      searchQuery: t.arg.string(),
+      searchScope: t.arg.string(),
     },
     resolve: (query, _parent, _args, _ctx, _info) => {
       const dateDepartureCondition = conditionWithStartDateAndEndDate(
@@ -320,14 +359,11 @@ builder.queryField("productList", (t) =>
                   },
                 }
               : {},
+            productSearchQueryWhere(_args.searchQuery),
+            productSearchScopeWhere(_args.searchScope),
           ],
         },
-        orderBy: [
-          {
-            // ...sortType,
-            sort: "asc",
-          },
-        ],
+        orderBy: [sortType],
       });
     },
   })
@@ -424,14 +460,15 @@ builder.queryField("blockList", (t) =>
 builder.queryField("productById", (t) =>
   t.prismaField({
     type: "product",
+    nullable: true,
     args: {
       id: t.arg.id(),
     },
-    resolve: (query, _parent, _args, _ctx, _info): any => {
+    resolve: async (query, _parent, _args) => {
       const { id } = _args;
-      return prisma.product.findUnique({
+      return await prisma.product.findUnique({
         ...query,
-        where: { id: Number(id) as any },
+        where: { id: Number(id) },
       });
     },
   })
@@ -478,7 +515,7 @@ builder.mutationField("createProduct", (t) =>
       cancellationPolicy: t.arg.string(),
       thumbnailImage: t.arg.string(),
     },
-    resolve: async (query, _parent, _args, _ctx): Promise<any> => {
+    resolve: async (query, _parent, _args) => {
       const result = await prisma.product.create({
         ...query,
         data: {
@@ -568,7 +605,7 @@ builder.mutationField("updateProductById", (t) =>
       cancellationPolicy: t.arg.string(),
       thumbnailImage: t.arg.string(),
     },
-    resolve: async (query, _parent, _args, _ctx): Promise<any> => {
+    resolve: async (_query, _parent, _args) => {
       const result = await prisma.product.update({
         where: {
           id: Number(_args.id),
@@ -626,7 +663,7 @@ builder.mutationField("deleteProductById", (t) =>
         required: true,
       }),
     },
-    resolve: async (query, _parent, _args, _ctx): Promise<any> => {
+    resolve: async (_query, _parent, _args) => {
       const deletedProduct = await prisma.product.delete({
         where: {
           id: Number(_args.id),

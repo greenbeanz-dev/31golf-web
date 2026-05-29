@@ -18,6 +18,9 @@ query productListInfinityQuery(
   $memoNotice: String,
   $memoManager: String,
   $memoEtc: String,
+  $searchQuery: String,
+  $searchScope: String,
+  $isSortType: String,
 ) {
   productList(
     first: $first
@@ -36,6 +39,9 @@ query productListInfinityQuery(
     memoNotice: $memoNotice
     memoManager: $memoManager
     memoEtc: $memoEtc
+    searchQuery: $searchQuery
+    searchScope: $searchScope
+    isSortType: $isSortType
   ) {
     pageInfo {
       endCursor
