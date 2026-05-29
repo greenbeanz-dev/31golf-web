@@ -16,10 +16,6 @@ const navItem = [
     label: "해외골프",
     href: "overseas",
   },
-  {
-    label: "반려동물 사랑🐶🐱",
-    href: "foreigner",
-  },
 ];
 
 export default function Topbar() {
