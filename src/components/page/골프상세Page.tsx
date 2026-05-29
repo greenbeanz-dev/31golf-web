@@ -16,7 +16,7 @@ import {
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { type Ref, Suspense, useEffect, useRef, useState } from "react";
 import { BsBuildingFillCheck } from "react-icons/bs";
 import {
   FaCheckToSlot,
@@ -29,6 +29,7 @@ import { Carousel } from "react-responsive-carousel";
 import { theme } from "../../../pages/_app";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import useProductBy from "../../service/product/useProductBy";
+import { getProductDisplayName } from "../../utils/format/getProductDisplayName";
 import useLogin from "../../utils/login/useLogin";
 
 const HEADER_HEIGHT = 95;
@@ -59,7 +60,7 @@ export function 골프상세Page({
   } = useDisclosure();
 
   const productRef = useRef(null);
-  const 예약가이드Ref = useRef(null);
+  const 예약가이드Ref = useRef<HTMLDivElement>(null);
 
   const scrollYRef = useRef(0);
   const [fixed, setFixed] = useState(false);
@@ -73,7 +74,7 @@ export function 골프상세Page({
       scrollYRef.current = window.scrollY;
 
       if (예약가이드Ref.current) {
-        const 예약가이드Top = (예약가이드Ref.current as any).offsetTop;
+        const 예약가이드Top = 예약가이드Ref.current.offsetTop;
 
         // 헤더높이만큼 더해줘야함
         if (scrollYRef.current + HEADER_HEIGHT > 예약가이드Top) {
@@ -91,7 +92,8 @@ export function 골프상세Page({
     };
   }, []);
 
-  const PC_MESSAGE = data?.name || "" + " " + data?.type;
+  const productDisplayName = getProductDisplayName(data?.name, data?.type);
+  const PC_MESSAGE = productDisplayName;
   const MOBILE_MESSAGE = data?.name || "";
   // make list from a list except for the last element
   // const MOBILE_CONTENT_NIGHTS = data?.type?.split(" ").slice(0, -1).join(" ");
@@ -119,7 +121,7 @@ export function 골프상세Page({
     numPeople: numPeople,
     numTeam: Math.floor(numPeople / 4),
     productId: productId,
-    productName: data?.name + " " + data?.type,
+    productName: productDisplayName,
     customerId: Number(userProfile.id),
     customerName: userProfile.name || "",
     priceCustom: 판매가,
@@ -129,7 +131,7 @@ export function 골프상세Page({
 
   useEffect(() => {
     const endDate = new Date(출발일);
-    if (!isNaN(DAYS_DAY)) {
+    if (!Number.isNaN(DAYS_DAY)) {
       endDate.setDate(endDate.getDate() + DAYS_DAY - 1);
     }
 
@@ -137,9 +139,9 @@ export function 골프상세Page({
     const formatted도착일 = dayjs(endDate).format("YY.MM.DD(ddd)");
 
     setSchedule(
-      `${formatted출발일} ~ ${formatted도착일} (${isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`
+      `${formatted출발일} ~ ${formatted도착일} (${Number.isNaN(DAYS_NIGHT) ? "당일" : `${DAYS_NIGHT}박 ${DAYS_DAY}일`})`
     );
-  }, [출발일]);
+  }, [출발일, DAYS_DAY, DAYS_NIGHT]);
 
   const inclusiveList = data?.inclusives
     ? data.inclusives
@@ -198,11 +200,11 @@ export function 골프상세Page({
                           ).values()
                         )
                       : [...productImageList]),
-                  ].map((image, idx) => {
+                  ].map((image) => {
                     return (
                       <Image
                         alt="detail_image"
-                        key={idx}
+                        key={image.url}
                         src={image.url}
                         width={640}
                         height={492}
@@ -260,8 +262,11 @@ export function 골프상세Page({
               <>
                 <div className="pt-2" />
                 <div className="flex gap-1">
-                  {MOBILE_CONTENT.map((content, idx) => (
-                    <div key={idx} className="relative inline-block">
+                  {MOBILE_CONTENT.map((content) => (
+                    <div
+                      key={content ?? "mobile-type"}
+                      className="relative inline-block"
+                    >
                       <div className="h-6 px-2 rounded-xl border border-green-500 justify-center items-center inline-flex">
                         <div className="text-green-500 text-sm">{content}</div>
                       </div>
@@ -279,7 +284,7 @@ export function 골프상세Page({
                 set판매가={set판매가}
                 출발일={출발일}
                 set출발일={set출발일}
-                onClick={(date) => {
+                onClick={() => {
                   if (data) {
                     setShowDetail(true);
                   }
@@ -327,7 +332,7 @@ export function 골프상세Page({
                 >
                   <상품예약버튼
                     product={{
-                      name: data?.name + " " + data?.type,
+                      name: productDisplayName,
                       schedule: schedule,
                       category1: data?.category1 || "",
                     }}
@@ -366,19 +371,20 @@ export function 골프상세Page({
           >
             {showDetail && (
               <div className="w-full p-4 flex-col justify-start inline-flex">
-                <div
-                  className="flex justify-center"
-                  onClick={(e) => {
+                <button
+                  type="button"
+                  className="flex w-full justify-center"
+                  onClick={() => {
                     setShowDetail(!showDetail);
                   }}
                 >
                   <MdKeyboardArrowDown size={24} />
-                </div>
+                </button>
                 <상품결제정보
                   minCount={data?.category1 === "해외" ? 1 : 4}
                   count={numPeople}
                   setCount={setNumPeople}
-                  name={data?.name + " " + data?.type}
+                  name={productDisplayName}
                   price={판매가}
                   schedule={schedule}
                   note={
@@ -391,14 +397,15 @@ export function 골프상세Page({
             )}
             <div className="w-full h-28 p-4 flex-col justify-start items-center gap-4 inline-flex">
               {!showDetail && (
-                <div
+                <button
+                  type="button"
                   className="w-full flex justify-center"
-                  onClick={(e) => {
+                  onClick={() => {
                     setShowDetail(!showDetail);
                   }}
                 >
                   <MdKeyboardArrowUp size={24} />
-                </div>
+                </button>
               )}
               <Button
                 size="lg"
@@ -411,11 +418,15 @@ export function 골프상세Page({
                 }}
                 onClick={() => {
                   const telNumber = "02-561-8008";
-                  판매가
-                    ? !userProfile.id
-                      ? loginOpen()
-                      : onOpen()
-                    : (window.location.href = `tel:${telNumber}`);
+                  if (판매가) {
+                    if (!userProfile.id) {
+                      loginOpen();
+                    } else {
+                      onOpen();
+                    }
+                    return;
+                  }
+                  window.location.href = `tel:${telNumber}`;
                 }}
               >
                 {판매가 ? "투어 예약하기" : "전화 문의"}
@@ -433,14 +444,18 @@ export function 골프상세Page({
   );
 }
 
-const 예약가이드 = ({ 예약가이드Ref }: any) => {
+const 예약가이드 = ({
+  예약가이드Ref,
+}: {
+  예약가이드Ref: Ref<HTMLDivElement>;
+}) => {
   return (
     <div>
       <div className="text-xl font-bold" ref={예약가이드Ref}>
         예약 가이드
       </div>
       <div style={{ minHeight: 16 }} />
-      <div className="w-full flex flex-grow justify-start items-center gap-1 inline-flex">
+      <div className="w-full flex flex-grow justify-start items-center gap-1">
         <Step
           number="1단계"
           description1="예약 신청 및 접수"
@@ -471,50 +486,6 @@ const 예약가이드 = ({ 예약가이드Ref }: any) => {
           icon={<FaGolfBallTee size={32} color={theme.colors.primary} />}
         />
       </div>
-    </div>
-  );
-};
-
-const GolfDetail = () => {
-  const detailList = [
-    { label: "골프장명", value: "영광CC" },
-    { label: "흡수/파", value: "18홀/72파" },
-    { label: "주소", value: "전남 영광군 백수읍 해안로 1362-70번지" },
-    { label: "홈페이지", value: "https://www.westoceancc.co.kr/" },
-  ];
-  const isMobile = useIsMobile();
-  return (
-    <div className={`flex ${isMobile ? "flex-col" : "flex-col"} items-center`}>
-      <img
-        src={"/images/logo/detail_image.png"}
-        height={492}
-        width={isMobile ? 328 : 822}
-      />
-      <div style={{ minHeight: 24 }}></div>
-      {detailList.map((data) => (
-        <>
-          <div
-            style={{
-              minHeight: 70,
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <div className="flex h-full items-center">
-              <div className="flex" style={{ flex: 1 }}>
-                {data.label}
-              </div>
-              <div className="flex" style={{ flex: 2 }}>
-                {data.value}
-              </div>
-            </div>
-          </div>
-          <Divider />
-        </>
-      ))}
     </div>
   );
 };

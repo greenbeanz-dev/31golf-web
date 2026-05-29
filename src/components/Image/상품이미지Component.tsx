@@ -1,9 +1,13 @@
-import { Product } from "@/gql/__generated__/graphql";
-import { Skeleton } from "@nextui-org/react";
+import type { Product } from "@/gql/__generated__/graphql";
+import { InclusiveBadge } from "@component/molecule/InclusiveBadge";
+import { cn, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useIntersectionObserver } from "usehooks-ts";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { getProductDisplayName } from "../../utils/format/getProductDisplayName";
+import { parseProductInclusives } from "../../utils/product/parseProductInclusives";
+
 function 상품이미지Component({
   item,
   mobileWidth,
@@ -11,6 +15,7 @@ function 상품이미지Component({
   pcWidth,
   pcHeight,
   discount,
+  dimmed = false,
 }: {
   item: Product;
   mobileWidth?: number;
@@ -18,6 +23,7 @@ function 상품이미지Component({
   pcWidth?: number;
   pcHeight?: number;
   discount?: number;
+  dimmed?: boolean;
 }) {
   const isMobile = useIsMobile();
   const router = useRouter();
@@ -27,11 +33,14 @@ function 상품이미지Component({
     freezeOnceVisible: true,
   });
 
-  console.log("highlightBadge", highlightBadge);
   return (
-    <div
+    <button
+      type="button"
       ref={ref}
-      className="w-full "
+      className={cn(
+        "w-full text-left transition-opacity duration-200",
+        dimmed && "opacity-35"
+      )}
       style={{
         marginBottom: isMobile ? "16px" : "48px",
         cursor: "pointer",
@@ -97,20 +106,15 @@ function 상품이미지Component({
         </div>
       </div>
       <div className="pt-1" />
-      <div className="text-[16px] font-bold truncate leading-6">{`${item.name} ${item.type}`}</div>
+      <div className="text-[16px] font-bold truncate leading-6">
+        {getProductDisplayName(item.name, item.type)}
+      </div>
       <div className="min-h-2" />
-      {!isMobile && (
-        <div className="flex gap-1 overflow-x-scroll overflow-y-hidden scrollbar-hide pb-1">
-          {item.inclusives &&
-            item.inclusives.split(",").map((content, idx) => (
-              <div key={idx} className="relative inline-block w-fit">
-                <div className="h-4 px-2 rounded-[12px] border border-[#17C964] justify-center items-center inline-flex">
-                  <div className="text-[14px] font-normal text-[#17C964] leading-5 truncate">
-                    {content.split("_@_")[0]}
-                  </div>
-                </div>
-              </div>
-            ))}
+      {!isMobile && item.inclusives && (
+        <div className="flex flex-wrap gap-1.5 overflow-x-auto overflow-y-hidden scrollbar-hide">
+          {parseProductInclusives(item.inclusives).map((label) => (
+            <InclusiveBadge key={label} label={label} />
+          ))}
         </div>
       )}
       <div className="min-h-2" />
@@ -127,7 +131,7 @@ function 상품이미지Component({
           {item.price ? `${item.price.toLocaleString()}원 ~` : "별도 문의"}
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

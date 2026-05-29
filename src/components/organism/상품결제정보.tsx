@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { theme } from "../../../pages/_app";
 dayjs.locale("ko");
@@ -29,7 +29,7 @@ const 상품결제정보 = ({
 }: 상품결제정보Props) => {
   return (
     <>
-      <div className="text-[16px] font-bold">{name.replaceAll("null", "")}</div>
+      <div className="text-[16px] font-bold">{name}</div>
       <div className="pt-2" />
       <div className="flex items-center">
         <div className="text-[14px] font-bold">기간</div>
