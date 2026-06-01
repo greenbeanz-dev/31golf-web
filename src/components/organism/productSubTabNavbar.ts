@@ -1,9 +1,14 @@
 import type { NavbarProps } from "@nextui-org/react";
 
+/** 상단 헤더(MobileTopBar / TopBar) 바로 아래에 고정 */
+export const productSubTabStickyClassName =
+  "sticky top-[var(--app-header-height)] z-40 bg-white border-b border-[#e0e0e0]";
+
 export const productSubTabNavbarProps: Pick<
   NavbarProps,
-  "style" | "classNames"
+  "style" | "classNames" | "className"
 > = {
+  className: productSubTabStickyClassName,
   style: {
     width: "100%",
     justifyContent: "flex-start",

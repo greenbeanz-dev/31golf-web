@@ -24,7 +24,7 @@ export default function Topbar() {
 
   return (
     <Navbar
-      className="flex justify-start z-50 border-b-1 border-[#e0e0e0] bg-white pb-5"
+      className="sticky top-0 flex justify-start z-50 border-b-1 border-[#e0e0e0] bg-white pb-5"
       classNames={{
         wrapper: ["px-0", "max-w-full", "items-end", "gap-4"],
         item: ["flex", "h-full", "justify-start", "items-end"],
