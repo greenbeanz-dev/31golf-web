@@ -9,158 +9,159 @@ import { getProductDisplayName } from "../../utils/format/getProductDisplayName"
 import { parseProductInclusives } from "../../utils/product/parseProductInclusives";
 
 function 상품이미지Component({
-  item,
-  mobileWidth,
-  mobileHeight,
-  pcWidth,
-  pcHeight,
-  discount,
-  dimmed = false,
+	item,
+	mobileWidth,
+	mobileHeight,
+	pcWidth,
+	pcHeight,
+	discount,
+	dimmed = false,
 }: {
-  item: Product;
-  mobileWidth?: number;
-  mobileHeight?: number;
-  pcWidth?: number;
-  pcHeight?: number;
-  discount?: number;
-  dimmed?: boolean;
+	item: Product;
+	mobileWidth?: number;
+	mobileHeight?: number;
+	pcWidth?: number;
+	pcHeight?: number;
+	discount?: number;
+	dimmed?: boolean;
 }) {
-  const isMobile = useIsMobile();
-  const router = useRouter();
-  const highlightBadge = item.note ? JSON.parse(item.note) : undefined;
-  const { isIntersecting, ref } = useIntersectionObserver({
-    threshold: 0.1,
-    freezeOnceVisible: true,
-  });
+	const isMobile = useIsMobile();
+	const router = useRouter();
+	const highlightBadge = item.note ? JSON.parse(item.note) : undefined;
+	const { isIntersecting, ref } = useIntersectionObserver({
+		threshold: 0.1,
+		freezeOnceVisible: true,
+	});
 
-  return (
-    <button
-      type="button"
-      ref={ref}
-      className={cn(
-        "w-full text-left transition-opacity duration-200",
-        dimmed && "opacity-35"
-      )}
-      style={{
-        marginBottom: isMobile ? "16px" : "48px",
-        cursor: "pointer",
-      }}
-      onClick={() => {
-        router.push(`/detail/${item.id}`);
-      }}
-    >
-      <div
-        className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[446px]`}
-      >
-        {isIntersecting ? (
-          <Image
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-            className="rounded-[24px]"
-            alt={"product_image_" + item.id}
-            src={
-              item.thumbnailImage
-                ? item.thumbnailImage
-                : "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
-            }
-            fill
-          ></Image>
-        ) : (
-          <Skeleton
-            className="rounded-[24px]"
-            style={{
-              width: isMobile ? mobileWidth : pcWidth,
-              height: isMobile ? mobileHeight : pcHeight,
-            }}
-          />
-        )}
-      </div>
+	return (
+		<button
+			type="button"
+			ref={ref}
+			className={cn(
+				"flex h-full w-full flex-col text-left transition-opacity duration-200",
+				dimmed && "opacity-35",
+			)}
+			style={{
+				marginBottom: isMobile ? "16px" : "48px",
+				cursor: "pointer",
+			}}
+			onClick={() => {
+				router.push(`/detail/${item.id}`);
+			}}
+		>
+			<div
+				className={`w-[${!isMobile ? pcWidth : mobileWidth}px] relative aspect-[4/3] max-w-[50vw] md:max-w-[446px]`}
+			>
+				{isIntersecting ? (
+					<Image
+						sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+						className="rounded-[24px]"
+						alt={"product_image_" + item.id}
+						src={
+							item.thumbnailImage
+								? item.thumbnailImage
+								: "https://greenbeanz-reservation-bucket.s3.ap-northeast-2.amazonaws.com/286e7e88-2e2a-4e21-b9de-688d9b3e011f"
+						}
+						fill
+					></Image>
+				) : (
+					<Skeleton
+						className="rounded-[24px]"
+						style={{
+							width: isMobile ? mobileWidth : pcWidth,
+							height: isMobile ? mobileHeight : pcHeight,
+						}}
+					/>
+				)}
+			</div>
 
-      <div className="pt-4" />
-      <div className="flex items-end gap-1">
-        {item.note &&
-          item.note !== "NONE" &&
-          highlightBadge.bgColor &&
-          highlightBadge.text &&
-          highlightBadge.textColor &&
-          highlightBadge.textSize && (
-            <div
-              className={`h-6 px-2 rounded-[8px] justify-center items-center inline-flex`}
-              style={{
-                border: `1px solid ${highlightBadge.bgColor}`,
-                backgroundColor: highlightBadge.bgColor,
-              }}
-            >
-              <div
-                className={`w-max font-normal leading-5`}
-                style={{
-                  color: highlightBadge.textColor,
-                  fontSize: highlightBadge.textSize,
-                }}
-              >
-                {highlightBadge.text}
-              </div>
-            </div>
-          )}
-        <div className="text-[14px] font-normal truncate leading-6 opacity-70">
-          {item.summary}
-        </div>
-      </div>
-      <div className="pt-1" />
-      <div className="text-[16px] font-bold truncate leading-6">
-        {getProductDisplayName(item.name, item.type)}
-      </div>
-      <div className="min-h-2" />
-      {!isMobile && item.inclusives && (
-        <div className="flex flex-wrap gap-1.5 overflow-x-auto overflow-y-hidden scrollbar-hide">
-          {parseProductInclusives(item.inclusives).map((label) => (
-            <InclusiveBadge key={label} label={label} />
-          ))}
-        </div>
-      )}
-      <div className="min-h-2" />
-      <div className="flex">
-        {!isMobile && discount && (
-          <>
-            <div className={`text-red-500 text-xl font-bold`}>
-              {discount}% 할인
-            </div>
-            <div style={{ minWidth: 16 }} />
-          </>
-        )}
-        <div className={`text-sky-600 text-xl font-bold`}>
-          {item.price ? `${item.price.toLocaleString()}원 ~` : "별도 문의"}
-        </div>
-      </div>
-    </button>
-  );
+			<div className="flex flex-1 flex-col pt-4">
+				<div className="flex items-end gap-1">
+					{item.note &&
+						item.note !== "NONE" &&
+						highlightBadge.bgColor &&
+						highlightBadge.text &&
+						highlightBadge.textColor &&
+						highlightBadge.textSize && (
+							<div
+								className={`h-6 px-2 rounded-[8px] justify-center items-center inline-flex`}
+								style={{
+									border: `1px solid ${highlightBadge.bgColor}`,
+									backgroundColor: highlightBadge.bgColor,
+								}}
+							>
+								<div
+									className={`w-max font-normal leading-5`}
+									style={{
+										color: highlightBadge.textColor,
+										fontSize: highlightBadge.textSize,
+									}}
+								>
+									{highlightBadge.text}
+								</div>
+							</div>
+						)}
+					<div className="text-[14px] font-normal truncate leading-6 opacity-70">
+						{item.summary}
+					</div>
+				</div>
+				<div className="pt-1" />
+				<div className="text-[16px] font-bold truncate leading-6">
+					{getProductDisplayName(item.name, item.type)}
+				</div>
+				<div className="min-h-2" />
+				{!isMobile && item.inclusives && (
+					<div className="flex flex-wrap content-start items-start gap-1.5 overflow-x-auto overflow-y-hidden scrollbar-hide">
+						{parseProductInclusives(item.inclusives).map((label) => (
+							<InclusiveBadge key={label} label={label} />
+						))}
+					</div>
+				)}
+				<div className="min-h-2" />
+				<div className="flex">
+					{!isMobile && discount && (
+						<>
+							<div className={`text-red-500 text-xl font-bold`}>
+								{discount}% 할인
+							</div>
+							<div style={{ minWidth: 16 }} />
+						</>
+					)}
+					<div className={`text-sky-600 text-xl font-bold`}>
+						{item.price ? `${item.price.toLocaleString()}원 ~` : "별도 문의"}
+					</div>
+				</div>
+			</div>
+		</button>
+	);
 }
 
 const 상품이미지SkeletonComponent = ({
-  mobileWidth,
-  mobileHeight,
-  pcWidth,
-  pcHeight,
+	mobileWidth,
+	mobileHeight,
+	pcWidth,
+	pcHeight,
 }: {
-  mobileWidth?: number;
-  mobileHeight?: number;
-  pcWidth?: number;
-  pcHeight?: number;
+	mobileWidth?: number;
+	mobileHeight?: number;
+	pcWidth?: number;
+	pcHeight?: number;
 }) => {
-  const isMobile = useIsMobile();
-  return (
-    <div className="">
-      <Skeleton
-        className="rounded-[24px]"
-        style={{
-          width: isMobile ? mobileWidth : pcWidth,
-          height: isMobile ? mobileHeight : pcHeight,
-        }}
-      />
-      <div className="pt-6" />
-      <Skeleton className="h-32 rounded-2xl" />
-      <div className="pt-6" />
-    </div>
-  );
+	const isMobile = useIsMobile();
+	return (
+		<div className="">
+			<Skeleton
+				className="rounded-[24px]"
+				style={{
+					width: isMobile ? mobileWidth : pcWidth,
+					height: isMobile ? mobileHeight : pcHeight,
+				}}
+			/>
+			<div className="pt-6" />
+			<Skeleton className="h-32 rounded-2xl" />
+			<div className="pt-6" />
+		</div>
+	);
 };
 
 export { 상품이미지Component, 상품이미지SkeletonComponent };
