@@ -28,4 +28,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# env
+.env
+.env.*
+!.env.example
+
 package-lock.json
