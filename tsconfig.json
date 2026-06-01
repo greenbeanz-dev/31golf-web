@@ -19,6 +19,7 @@
     "experimentalDecorators": true,
     "paths": {
       "@/gql/*": ["./src/gql/*"],
+      "@/types/*": ["./src/types/*"],
       "@lib/*": ["./lib/*"],
       "@component/*": ["./src/components/*"]
     }

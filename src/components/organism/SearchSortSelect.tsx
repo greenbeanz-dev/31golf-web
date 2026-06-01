@@ -1,64 +1,79 @@
+import type { ProductSortType } from "@/types/productSort";
 import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  type Selection,
+	Button,
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
+	type Selection,
 } from "@nextui-org/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BiSort } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
 
-type SortType = "추천순" | "가나다순";
+const SORT_OPTIONS = [
+	{ key: "option1", label: "추천순" },
+	{ key: "option2", label: "가나다순" },
+	{ key: "option3", label: "최저가순" },
+] as const satisfies ReadonlyArray<{ key: string; label: ProductSortType }>;
+
+const SORT_KEY_BY_TYPE = Object.fromEntries(
+	SORT_OPTIONS.map((option) => [option.label, option.key]),
+) as Record<ProductSortType, string>;
+
+const SORT_TYPE_BY_KEY = Object.fromEntries(
+	SORT_OPTIONS.map((option) => [option.key, option.label]),
+) as Record<string, ProductSortType>;
 
 type SearchSortSelectProps = {
-  value: SortType;
-  onChange: (value: SortType) => void;
+	value: ProductSortType;
+	onChange: (value: ProductSortType) => void;
 };
 
 const SearchSortSelect = ({ value, onChange }: SearchSortSelectProps) => {
-  const key = value === "가나다순" ? "option2" : "option1";
-  const [selectedKeys, setSelectedKeys] = useState(new Set([key]));
+	const [selectedKeys, setSelectedKeys] = useState(
+		() => new Set([SORT_KEY_BY_TYPE[value]]),
+	);
 
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
+	useEffect(() => {
+		setSelectedKeys(new Set([SORT_KEY_BY_TYPE[value]]));
+	}, [value]);
 
-  const selectMap = {
-    option1: "추천순",
-    option2: "가나다순",
-  } as const;
+	const selectedValue = useMemo(
+		() => Array.from(selectedKeys)[0] ?? "option1",
+		[selectedKeys],
+	);
 
-  return (
-    <div className="flex w-full justify-end">
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="light" className="capitalize" size="sm">
-            <BiSort /> {selectMap[selectedValue as keyof typeof selectMap]}{" "}
-            <IoIosArrowDown />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          aria-label="정렬"
-          variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          selectedKeys={selectedKeys}
-          onSelectionChange={(keys: Selection) => {
-            setSelectedKeys(keys as Set<string>);
-            const selected = Array.from(keys)[0];
-            if (selected === "option2") onChange("가나다순");
-            else onChange("추천순");
-          }}
-        >
-          <DropdownItem key="option1">추천순</DropdownItem>
-          <DropdownItem key="option2">가나다순</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </div>
-  );
+	const displayLabel = SORT_TYPE_BY_KEY[selectedValue] ?? SORT_OPTIONS[0].label;
+
+	return (
+		<div className="flex w-full justify-end">
+			<Dropdown>
+				<DropdownTrigger>
+					<Button variant="light" className="capitalize" size="sm">
+						<BiSort /> {displayLabel} <IoIosArrowDown />
+					</Button>
+				</DropdownTrigger>
+				<DropdownMenu
+					aria-label="정렬"
+					variant="flat"
+					disallowEmptySelection
+					selectionMode="single"
+					selectedKeys={selectedKeys}
+					onSelectionChange={(keys: Selection) => {
+						setSelectedKeys(keys as Set<string>);
+						const selected = Array.from(keys)[0];
+						const sortType = SORT_TYPE_BY_KEY[selected];
+						if (sortType) onChange(sortType);
+					}}
+				>
+					{SORT_OPTIONS.map((option) => (
+						<DropdownItem key={option.key}>{option.label}</DropdownItem>
+					))}
+				</DropdownMenu>
+			</Dropdown>
+		</div>
+	);
 };
 
 export default SearchSortSelect;

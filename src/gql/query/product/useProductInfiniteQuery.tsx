@@ -1,5 +1,6 @@
 import gqlClient from "@/gql/gqlClient";
 import { ProductListInfinityQuery } from "@/gql/query/product/crud";
+import type { ProductSortType } from "@/types/productSort";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
@@ -92,7 +93,7 @@ type State = {
   category1: string | undefined;
   category2: string | undefined;
   category3: string | undefined;
-  isSortType: "추천순" | "가나다순";
+  isSortType: ProductSortType;
 };
 
 type Actions = {

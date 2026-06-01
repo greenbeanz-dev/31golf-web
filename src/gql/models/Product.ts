@@ -270,9 +270,13 @@ builder.queryField("productList", (t) =>
           ? ({
               sort: "asc",
             } as const)
-          : ({
-              name: "asc",
-            } as const);
+          : _args.isSortType === "최저가순"
+            ? ({
+                price: "asc",
+              } as const)
+            : ({
+                name: "asc",
+              } as const);
 
       return prisma.product.findMany({
         ...query,
