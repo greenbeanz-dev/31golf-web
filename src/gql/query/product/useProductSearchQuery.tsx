@@ -1,5 +1,8 @@
 import gqlClient from "@/gql/gqlClient";
-import { ProductListInfinityQuery } from "@/gql/query/product/crud";
+import {
+  ProductListInfinityQuery,
+  ProductSearchCountQuery,
+} from "@/gql/query/product/crud";
 import type { ProductSortType } from "@/types/productSort";
 import { useInfiniteQuery, useQueries } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -14,12 +17,11 @@ async function fetchProductSearchCount(
   searchQuery: string,
   searchScope: ProductSearchScope
 ) {
-  const response = await gqlClient.request(ProductListInfinityQuery, {
-    first: PAGE_SIZE,
+  const response = await gqlClient.request(ProductSearchCountQuery, {
     searchQuery: searchQuery || undefined,
     searchScope,
   });
-  return response.productList.edges.length;
+  return response.productSearchCount;
 }
 
 export function useProductSearchScopeCounts(searchQuery: string) {

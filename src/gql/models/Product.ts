@@ -35,6 +35,128 @@ function productSearchQueryWhere(
     OR: [
       { name: { contains: q, mode: "insensitive" } },
       { summary: { contains: q, mode: "insensitive" } },
+      { category_2: { contains: q, mode: "insensitive" } },
+      { category_3: { contains: q, mode: "insensitive" } },
+      { course_address: { contains: q, mode: "insensitive" } },
+      {
+        course: {
+          is: {
+            OR: [
+              { address: { contains: q, mode: "insensitive" } },
+              { city: { contains: q, mode: "insensitive" } },
+              { state: { contains: q, mode: "insensitive" } },
+            ],
+          },
+        },
+      },
+    ],
+  };
+}
+
+type ProductListFilterArgs = {
+  dateDeparture?: string | null;
+  name?: string | null;
+  memo?: string | null;
+  isBest?: boolean | null;
+  isMain?: boolean | null;
+  courseId?: number | null;
+  category1?: string | null;
+  category2?: string | null;
+  category3?: string | null;
+  memoNotice?: string | null;
+  memoManager?: string | null;
+  memoEtc?: string | null;
+  searchQuery?: string | null;
+  searchScope?: string | null;
+};
+
+function buildProductListWhere(
+  args: ProductListFilterArgs
+): Prisma.productWhereInput {
+  const dateDepartureCondition = conditionWithStartDateAndEndDate(
+    args.dateDeparture,
+    args.dateDeparture
+  );
+
+  return {
+    AND: [
+      { is_block: false },
+      { is_active: true },
+      { is_web: true },
+      args.isBest !== null && args.isBest !== undefined
+        ? { is_best: args.isBest }
+        : {},
+      args.isMain !== null && args.isMain !== undefined
+        ? { is_main: args.isMain }
+        : {},
+      dateDepartureCondition
+        ? {
+            date_departure: dateDepartureCondition,
+          }
+        : {},
+      args.name
+        ? {
+            name: {
+              contains: args.name,
+            },
+          }
+        : {},
+      args.memo
+        ? {
+            memo: {
+              contains: args.memo,
+            },
+          }
+        : {},
+      args.courseId
+        ? {
+            course_id: Number(args.courseId),
+          }
+        : {},
+      args.category1
+        ? {
+            category_1: {
+              contains: args.category1,
+            },
+          }
+        : {},
+      args.category2
+        ? {
+            category_2: {
+              contains: args.category2,
+            },
+          }
+        : {},
+      args.category3
+        ? {
+            category_3: {
+              contains: args.category3,
+            },
+          }
+        : {},
+      args.memoNotice
+        ? {
+            memo_notice: {
+              contains: args.memoNotice,
+            },
+          }
+        : {},
+      args.memoManager
+        ? {
+            memo_manager: {
+              contains: args.memoManager,
+            },
+          }
+        : {},
+      args.memoEtc
+        ? {
+            memo_etc: {
+              contains: args.memoEtc,
+            },
+          }
+        : {},
+      productSearchQueryWhere(args.searchQuery),
+      productSearchScopeWhere(args.searchScope),
     ],
   };
 }
@@ -236,6 +358,21 @@ builder.prismaObject("product", {
   }),
 });
 
+builder.queryField("productSearchCount", (t) =>
+  t.field({
+    type: "Int",
+    args: {
+      searchQuery: t.arg.string(),
+      searchScope: t.arg.string(),
+    },
+    resolve: async (_parent, args) => {
+      return prisma.product.count({
+        where: buildProductListWhere(args),
+      });
+    },
+  })
+);
+
 builder.queryField("productList", (t) =>
   t.prismaConnection({
     type: "product",
@@ -260,11 +397,6 @@ builder.queryField("productList", (t) =>
       searchScope: t.arg.string(),
     },
     resolve: (query, _parent, _args, _ctx, _info) => {
-      const dateDepartureCondition = conditionWithStartDateAndEndDate(
-        _args.dateDeparture,
-        _args.dateDeparture
-      );
-
       const sortType =
         _args.isSortType === "추천순"
           ? ({
@@ -280,93 +412,7 @@ builder.queryField("productList", (t) =>
 
       return prisma.product.findMany({
         ...query,
-        where: {
-          AND: [
-            { is_block: false },
-            { is_active: true },
-            { is_web: true },
-            // _args.isActive !== null && _args.isActive !== undefined
-            //   ? { is_active: _args.isActive }
-            //   : {},
-            // _args.isWeb !== null && _args.isWeb !== undefined
-            //   ? { is_web: _args.isWeb }
-            //   : {},
-            _args.isBest !== null && _args.isBest !== undefined
-              ? { is_best: _args.isBest }
-              : {},
-            _args.isMain !== null && _args.isMain !== undefined
-              ? { is_main: _args.isMain }
-              : {},
-            dateDepartureCondition
-              ? {
-                  date_departure: dateDepartureCondition,
-                }
-              : {},
-            _args.name
-              ? {
-                  name: {
-                    contains: _args.name,
-                  },
-                }
-              : {},
-            _args.memo
-              ? {
-                  memo: {
-                    contains: _args.memo,
-                  },
-                }
-              : {},
-            _args.courseId
-              ? {
-                  course_id: Number(_args.courseId),
-                }
-              : {},
-            _args.category1
-              ? {
-                  category_1: {
-                    contains: _args.category1,
-                  },
-                }
-              : {},
-            _args.category2
-              ? {
-                  category_2: {
-                    contains: _args.category2,
-                  },
-                }
-              : {},
-            _args.category3
-              ? {
-                  category_3: {
-                    contains: _args.category3,
-                  },
-                }
-              : {},
-            _args.memoNotice
-              ? {
-                  memo_notice: {
-                    contains: _args.memoNotice,
-                  },
-                }
-              : {},
-            _args.memoManager
-              ? {
-                  memo_manager: {
-                    contains: _args.memoManager,
-                  },
-                }
-              : {},
-            _args.memoEtc
-              ? {
-                  memo_etc: {
-                    contains: _args.memoEtc,
-                  },
-                }
-              : {},
-            productSearchQueryWhere(_args.searchQuery),
-            productSearchScopeWhere(_args.searchScope),
-          ],
-        },
+        where: buildProductListWhere(_args),
         orderBy: [sortType],
       });
     },

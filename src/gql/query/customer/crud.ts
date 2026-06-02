@@ -85,6 +85,30 @@ query customerById($id: ID!) {
 }
 `);
 
+export const FindOrCreateCustomerQuery = gql(`
+mutation FindOrCreateCustomer(
+  $name: String!
+  $phone: String
+  $email: String
+  $memo: String
+  $fax: String
+  $isVillain: Boolean
+  $provider: String
+) {
+  findOrCreateCustomer(
+    name: $name
+    phone: $phone
+    email: $email
+    memo: $memo
+    fax: $fax
+    isVillain: $isVillain
+    provider: $provider
+  ) {
+    id
+  }
+}
+`);
+
 export const CreateCustomerQueryBy = gql(`
 mutation CreateCustomerBy(
   $name: String!

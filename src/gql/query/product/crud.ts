@@ -96,6 +96,18 @@ query productListInfinityQuery(
 }
 `);
 
+export const ProductSearchCountQuery = gql(`
+query productSearchCountQuery(
+  $searchQuery: String,
+  $searchScope: String,
+) {
+  productSearchCount(
+    searchQuery: $searchQuery
+    searchScope: $searchScope
+  )
+}
+`);
+
 export const CreateProductQuery = gql(`
 mutation createProduct(
   $commissionCompany: String

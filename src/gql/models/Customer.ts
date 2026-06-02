@@ -1,4 +1,6 @@
 import prisma from "../../lib/prisma";
+import { findCustomerByPhone } from "../../utils/customer/findCustomerByPhone";
+import normalizePhoneDigits from "../../utils/format/normalizePhoneDigits";
 import { builder } from "../builder";
 
 builder.prismaObject("customer", {
@@ -135,6 +137,46 @@ builder.mutationField("createCustomer", (t) =>
         },
       });
       return result;
+    },
+  })
+);
+
+builder.mutationField("findOrCreateCustomer", (t) =>
+  t.prismaField({
+    type: "customer",
+    args: {
+      name: t.arg.string(),
+      phone: t.arg.string(),
+      email: t.arg.string(),
+      memo: t.arg.string(),
+      fax: t.arg.string(),
+      isVillain: t.arg.boolean(),
+      provider: t.arg.string(),
+    },
+    resolve: async (query, _parent, _args, _ctx): Promise<any> => {
+      const normalizedPhone = normalizePhoneDigits(_args.phone ?? "");
+      const existing = normalizedPhone
+        ? await findCustomerByPhone(normalizedPhone)
+        : null;
+
+      if (existing) {
+        return existing;
+      }
+
+      return prisma.customer.create({
+        ...query,
+        data: {
+          name: _args.name || "",
+          phone: normalizedPhone || _args.phone,
+          email: _args.email,
+          memo: _args.memo,
+          fax: _args.fax,
+          is_villain: _args.isVillain,
+          provider: _args.provider,
+          created_at: new Date(Date.now()).toISOString(),
+          updated_at: new Date(Date.now()).toISOString(),
+        },
+      });
     },
   })
 );
