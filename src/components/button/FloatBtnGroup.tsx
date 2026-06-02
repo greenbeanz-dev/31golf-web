@@ -26,17 +26,17 @@ const FloatBtnGroup = () => {
   const BtnGroup = [
     {
       name: "카카오톡",
-      icon: <SiKakaotalk size={isMobile ? 20 : 32} />,
+      icon: <SiKakaotalk size={isMobile ? 16 : 32} />,
       type: "kakao",
     },
     {
       name: "견적 문의",
-      icon: <MdEventNote size={isMobile ? 20 : 32} />,
+      icon: <MdEventNote size={isMobile ? 16 : 32} />,
       type: "request",
     },
     {
       name: "전화 연결",
-      icon: <BiSolidPhoneCall size={isMobile ? 20 : 32} />,
+      icon: <BiSolidPhoneCall size={isMobile ? 16 : 32} />,
       type: "call",
     },
   ];
@@ -400,19 +400,20 @@ const FloatBtnGroup = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const itemHeightClass = isMobile ? "h-[60px]" : "h-[96px]";
-  const labelClass = isMobile ? "text-[11px]" : "text-[13px]";
+  const itemSizeClass = isMobile ? "aspect-square w-full" : "h-[96px]";
+  const labelClass = isMobile ? "text-[10px]" : "text-[13px]";
+  const widthClass = isMobile ? "w-[60px]" : "w-[90px]";
 
   return (
     <div
-      className="fixed z-[100] flex w-[90px] flex-col overflow-hidden rounded-sm shadow-md"
+      className={`fixed z-[100] flex flex-col overflow-hidden rounded-sm shadow-md ${widthClass}`}
       style={{ top: 362, right: isMobile ? 0 : 60 }}
     >
       {BtnGroup.map((group) => (
         <button
           type="button"
           key={group.name}
-          className={`flex w-full flex-col items-center justify-center gap-1 border-0 border-b border-[#e5e5e5] cursor-pointer ${itemHeightClass} ${getFloatItemClass(group.type)}`}
+          className={`flex w-full flex-col items-center justify-center ${isMobile ? "gap-0.5" : "gap-1"} border-0 border-b border-[#e5e5e5] cursor-pointer ${itemSizeClass} ${getFloatItemClass(group.type)}`}
           onClick={() => {
             handleFloat(group);
           }}
@@ -424,10 +425,10 @@ const FloatBtnGroup = () => {
       <button
         type="button"
         aria-label="맨 위로 이동"
-        className={`flex w-full flex-col items-center justify-center border-0 cursor-pointer bg-[#4a4a4a] text-white ${isMobile ? "h-10" : "h-12"}`}
+        className={`flex w-full flex-col items-center justify-center ${isMobile ? "gap-0.5 aspect-square w-full" : "gap-1 h-12"} border-0 cursor-pointer bg-[#4a4a4a] text-white`}
         onClick={scrollToTop}
       >
-        <IoChevronUp size={isMobile ? 20 : 24} />
+        <IoChevronUp size={isMobile ? 16 : 24} />
         <span className={labelClass}>TOP</span>
       </button>
       <ModalContent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
