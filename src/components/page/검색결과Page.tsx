@@ -2,6 +2,7 @@ import type { Product } from "@/gql/__generated__/graphql";
 import {
   parseProductSearchScope,
   parseSearchQuery,
+  pickProductSearchScopeWithResults,
   useProductSearchQuery,
   useProductSearchScopeCounts,
   type ProductSearchScope,
@@ -20,7 +21,7 @@ import {
 import { Navbar, NavbarContent, NavbarItem, cn } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import {
   collectInclusiveOptions,
@@ -58,6 +59,7 @@ export function 검색결과Page() {
     isLoading: isCountsLoading,
   } = useProductSearchScopeCounts(keyword);
   const [selectedInclusives, setSelectedInclusives] = useState<string[]>([]);
+  const autoSelectedKeywordRef = useRef<string | null>(null);
 
   const inclusiveOptions = useMemo(
     () =>
@@ -79,6 +81,22 @@ export function 검색결과Page() {
       prev.filter((label) => inclusiveOptions.includes(label))
     );
   }, [inclusiveOptions]);
+
+  useEffect(() => {
+    if (!keyword || isCountsLoading) return;
+    if (autoSelectedKeywordRef.current === keyword) return;
+
+    const preferred = pickProductSearchScopeWithResults(countsByScope);
+    autoSelectedKeywordRef.current = keyword;
+
+    if (scope !== preferred) {
+      router.replace(
+        `/search?q=${encodeURIComponent(keyword)}&scope=${preferred}`,
+        undefined,
+        { shallow: true }
+      );
+    }
+  }, [keyword, isCountsLoading, countsByScope, scope, router]);
 
   const toggleInclusive = (label: string) => {
     setSelectedInclusives((prev) =>

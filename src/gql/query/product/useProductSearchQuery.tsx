@@ -65,6 +65,15 @@ export function parseProductSearchScope(
   return "domestic";
 }
 
+export function pickProductSearchScopeWithResults(
+  countsByScope: Record<ProductSearchScope, number | undefined>
+): ProductSearchScope {
+  for (const searchScope of SEARCH_SCOPES) {
+    if ((countsByScope[searchScope] ?? 0) > 0) return searchScope;
+  }
+  return "domestic";
+}
+
 export function parseSearchQuery(q: string | string[] | undefined): string {
   if (typeof q === "string") return q.trim();
   if (Array.isArray(q) && typeof q[0] === "string") return q[0].trim();
