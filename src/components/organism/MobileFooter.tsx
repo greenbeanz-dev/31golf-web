@@ -8,7 +8,7 @@ export const MobileFooter = () => {
   const 개인정보관리책임자 = "삼일골프";
   const 이메일 = "31golf@gmail.com";
   const 주소1 = "서울특별시 종로구 삼일대로 30길 10-3 ";
-  const 주소2 = "(낙원동 56-0) 각연빌딩 8층";
+  const 주소2 = "(낙원동 56-0) 각연빌딩 5층";
 
   return (
     <div className="flex flex-col items-start py-10 px-[3vw] mb-24 md:mb-0">
