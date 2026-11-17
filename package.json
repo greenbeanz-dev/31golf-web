@@ -2,6 +2,9 @@
   "name": "31golf-web",
   "version": "0.2.9",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "start": "next start",
