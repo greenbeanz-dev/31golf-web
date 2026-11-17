@@ -15,6 +15,8 @@ import { useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "reflect-metadata";
+import { SkulletProvider } from "skullet/react";
+import "skullet/styles.css";
 import "../styles/custom-calendar.css";
 import "../styles/global.css";
 import "../styles/tailwind.css";
@@ -62,12 +64,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NextUIProvider>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <Layout>
-              <Component {...pageProps} />
-              <Analytics />
-              <SpeedInsights />
-              <ReactQueryDevtools initialIsOpen={true} />
-            </Layout>
+            <SkulletProvider>
+              <Layout>
+                <Component {...pageProps} />
+                <Analytics />
+                <SpeedInsights />
+                <ReactQueryDevtools initialIsOpen={true} />
+              </Layout>
+            </SkulletProvider>
           </Hydrate>
         </QueryClientProvider>
       </NextUIProvider>

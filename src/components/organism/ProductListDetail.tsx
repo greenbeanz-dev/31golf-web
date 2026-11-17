@@ -2,16 +2,13 @@ import { Product } from "@/gql/__generated__/graphql";
 import useProductInfiniteQuery, {
   useProductInfiniteQueryBody,
 } from "@/gql/query/product/useProductInfiniteQuery";
-import {
-  상품이미지Component,
-  상품이미지SkeletonComponent,
-} from "@component/Image/상품이미지Component";
-import Repeat from "@component/molecule/Repeat";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
+import { 상품이미지Component } from "@component/Image/상품이미지Component";
+import { ProductCardGridSample } from "@component/Product/ProductCardGridSample";
 import { cn } from "@nextui-org/react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface ProductListDetailProps {
@@ -34,22 +31,14 @@ const ProductListDetail = ({
 
   return (
     <div className="w-full">
-      <Suspense
-        fallback={
-          <div className="w-full flex flex-wrap justify-between">
-            <Repeat repeat={15}>
-              <상품이미지SkeletonComponent
-                mobileWidth={160}
-                mobileHeight={160}
-                pcWidth={384}
-                pcHeight={295}
-              />
-            </Repeat>
-          </div>
-        }
+      <SkeletonBoundary
+        label="투어 상품을 불러오는 중"
+        id={`product-list-detail-${category1 ?? ""}-${category2 ?? ""}-${category3 ?? ""}`}
+        resetKeys={[category1, category2, category3]}
+        skeleton={<ProductCardGridSample count={8} compact />}
       >
         <ProductListDetailSuspense />
-      </Suspense>
+      </SkeletonBoundary>
     </div>
   );
 };
@@ -57,14 +46,11 @@ const ProductListDetail = ({
 export default ProductListDetail;
 
 const ProductListDetailSuspense = () => {
-  const router = useRouter();
-  const { pathname } = router;
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
   const jejuListType = searchParams.get("type");
 
   const { data } = useProductInfiniteQuery();
-  // 제주인 경우만 당일 상품을 보여줌
   const [isDay, setIsDay] = useState<boolean | undefined>(
     jejuListType === "당일(18홀)"
       ? true
@@ -73,17 +59,19 @@ const ProductListDetailSuspense = () => {
         : undefined
   );
 
-  let list = data?.pages
+  const list = data?.pages
     .map((page) => page.productList.edges.map((item) => item?.node))
     .flat()
-    .map((item, index) => {
+    .map((item) => {
       return {
         ...item,
       };
     });
 
-  let listIsDay = list?.filter((product) => product?.type?.includes("당일"));
-  let listIsNight = list?.filter((product) => !product?.type?.includes("당일"));
+  const listIsDay = list?.filter((product) => product?.type?.includes("당일"));
+  const listIsNight = list?.filter(
+    (product) => !product?.type?.includes("당일")
+  );
 
   useEffect(() => {
     setIsDay(

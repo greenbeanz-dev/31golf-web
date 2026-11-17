@@ -63,6 +63,7 @@
     "react-resizable-panels": "^0.0.55",
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
+    "skullet": "^0.0.3",
     "styled-components": "^6.1.8",
     "ts-pattern": "^5.0.5",
     "usehooks-ts": "^3.1.0",

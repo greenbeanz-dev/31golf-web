@@ -1,8 +1,9 @@
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
+import { GolfDetailSample } from "@component/page/GolfDetailSample";
 import { 골프상세Page } from "@component/page/골프상세Page";
 import { PrismaClient } from "@prisma/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
 
 function Detail({
   data: { productImageList },
@@ -25,12 +26,17 @@ function Detail({
         <title>국내/해외골프는 역시 31골프</title>
       </Head>
       <div style={{ height: 20 }} />
-      <Suspense fallback={<div></div>}>
+      <SkeletonBoundary
+        label="상품 상세를 불러오는 중"
+        id={`product-detail-${String(id)}`}
+        resetKeys={[id]}
+        skeleton={<GolfDetailSample />}
+      >
         <골프상세Page
           productId={Number(id)}
           productImageList={productImageList}
         />
-      </Suspense>
+      </SkeletonBoundary>
     </div>
   );
 }

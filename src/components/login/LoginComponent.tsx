@@ -1,20 +1,15 @@
-import {
-  Button,
-  ButtonProps,
-  CircularProgress,
-  Input,
-} from "@nextui-org/react";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
+import { Button, ButtonProps, Input } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { SiKakaotalk } from "react-icons/si";
+import styled from "styled-components";
 import { theme } from "../../../pages/_app";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import usePopupList from "../../service/webSetting/usePopupList";
 import useLogin from "../../utils/login/useLogin";
-import styled from "styled-components";
-import { useIsMobile } from "../../hooks/useIsMobile";
-import { SiKakaotalk } from "react-icons/si";
 
 const Login = ({ useHelperMsg = false, banner = true }) => {
   const [id, setId] = useState("");
@@ -151,17 +146,23 @@ const Login = ({ useHelperMsg = false, banner = true }) => {
             </>
           )}
           {!isMobile && banner && (
-            <ErrorBoundary fallback={<></>}>
-              <Suspense
-                fallback={
-                  <div className="w-full flex items-center justify-center min-h-20">
-                    <CircularProgress />
-                  </div>
-                }
-              >
-                <BannerWhenUserLoginIn />
-              </Suspense>
-            </ErrorBoundary>
+            <SkeletonBoundary
+              label="배너를 불러오는 중"
+              id="login-left-banner"
+              skeleton={
+                <div className="mt-24">
+                  <Image
+                    className="rounded-[20px]"
+                    src="/images/logo/golf_img1.png"
+                    alt="banner"
+                    width={240}
+                    height={360}
+                  />
+                </div>
+              }
+            >
+              <BannerWhenUserLoginIn />
+            </SkeletonBoundary>
           )}
         </div>
       </div>

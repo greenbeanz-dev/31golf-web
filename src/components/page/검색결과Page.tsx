@@ -7,11 +7,9 @@ import {
   useProductSearchScopeCounts,
   type ProductSearchScope,
 } from "@/gql/query/product/useProductSearchQuery";
-import {
-  상품이미지Component,
-  상품이미지SkeletonComponent,
-} from "@component/Image/상품이미지Component";
-import Repeat from "@component/molecule/Repeat";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
+import { 상품이미지Component } from "@component/Image/상품이미지Component";
+import { ProductCardGridSample } from "@component/Product/ProductCardGridSample";
 import SearchInclusiveFilter from "@component/organism/SearchInclusiveFilter";
 import SearchSortSelect from "@component/organism/SearchSortSelect";
 import {
@@ -21,7 +19,7 @@ import {
 import { Navbar, NavbarContent, NavbarItem, cn } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import {
   collectInclusiveOptions,
@@ -45,14 +43,66 @@ function formatSearchSuffix(keyword: string) {
   return "로";
 }
 
+function SearchResultsSample({ keyword }: { keyword: string }) {
+  const suffix = formatSearchSuffix(keyword);
+  return (
+    <div className="flex flex-col w-full gap-2 py-4">
+      <div className="text-xl font-bold">검색 결과</div>
+      <div className="text-[16px] font-normal">
+        <span className="font-semibold text-[#004964]">
+          &quot;{keyword}&quot;
+        </span>
+        {suffix} …개 상품이 검색되었습니다.
+      </div>
+      <div className="h-8" />
+      <div className="h-10" />
+      <div className="h-10" />
+      <ProductCardGridSample count={6} compact />
+    </div>
+  );
+}
+
 export function 검색결과Page() {
   const router = useRouter();
-  const isMobile = useIsMobile();
   const keyword = parseSearchQuery(router.query.q);
   const scope = parseProductSearchScope(router.query.scope);
 
-  const { products, isLoading, isSortType, setIsSortType } =
-    useProductSearchQuery(keyword, scope);
+  if (!keyword) {
+    return (
+      <div className="flex flex-col w-full gap-4 py-8">
+        <h1 className="text-xl font-bold">상품 검색</h1>
+        <p className="text-[16px] text-[#666]">
+          상단 검색창에서 상품명을 입력해 주세요.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <SkeletonBoundary
+      label="검색 결과를 불러오는 중"
+      id={`search-results-${keyword}-${scope}`}
+      resetKeys={[keyword, scope]}
+      skeleton={<SearchResultsSample keyword={keyword} />}
+    >
+      <SearchResultsContent keyword={keyword} scope={scope} />
+    </SkeletonBoundary>
+  );
+}
+
+function SearchResultsContent({
+  keyword,
+  scope,
+}: {
+  keyword: string;
+  scope: ProductSearchScope;
+}) {
+  const router = useRouter();
+  const isMobile = useIsMobile();
+  const { products, isSortType, setIsSortType } = useProductSearchQuery(
+    keyword,
+    scope
+  );
   const {
     countsByScope,
     totalCount: totalSearchCount,
@@ -108,23 +158,14 @@ export function 검색결과Page() {
 
   const changeScope = (nextScope: ProductSearchScope) => {
     if (!keyword) return;
-    router.replace(
-      `/search?q=${encodeURIComponent(keyword)}&scope=${nextScope}`,
-      undefined,
-      { shallow: true }
-    );
+    startTransition(() => {
+      router.replace(
+        `/search?q=${encodeURIComponent(keyword)}&scope=${nextScope}`,
+        undefined,
+        { shallow: true }
+      );
+    });
   };
-
-  if (!keyword) {
-    return (
-      <div className="flex flex-col w-full gap-4 py-8">
-        <h1 className="text-xl font-bold">상품 검색</h1>
-        <p className="text-[16px] text-[#666]">
-          상단 검색창에서 상품명을 입력해 주세요.
-        </p>
-      </div>
-    );
-  }
 
   const suffix = formatSearchSuffix(keyword);
 
@@ -168,18 +209,7 @@ export function 검색결과Page() {
 
       <SearchSortSelect value={isSortType} onChange={setIsSortType} />
 
-      {isLoading ? (
-        <div className="w-full flex flex-wrap justify-between gap-4">
-          <Repeat repeat={6}>
-            <상품이미지SkeletonComponent
-              mobileWidth={160}
-              mobileHeight={160}
-              pcWidth={384}
-              pcHeight={295}
-            />
-          </Repeat>
-        </div>
-      ) : products.length === 0 ? (
+      {products.length === 0 ? (
         <div className="flex flex-col grow w-full h-[432px] items-center justify-center">
           <Image
             alt="list_empty"

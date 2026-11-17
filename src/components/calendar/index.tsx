@@ -1,11 +1,12 @@
 import moment from "moment";
 import "moment-timezone/builds/moment-timezone-with-data";
 import "moment/locale/ko";
-import { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import useProductPriceCalendarInfiniteQuery, {
   useProductPriceCalendarInfiniteQueryBody,
 } from "@/gql/query/productPrice/useProductPriceCalendarInfiniteQuery";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
 import { cn } from "@nextui-org/react";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
@@ -208,9 +209,13 @@ export const 상품캘린더: React.FC<I상품캘린더Props> = ({
 
   return (
     <div className="flex flex-col w-full px-5 pt-4 pb-2 rounded-lg border border-black border-opacity-10 w-100">
-      <Suspense>
+      <SkeletonBoundary
+        label="요금을 불러오는 중"
+        id="product-price-calendar"
+        skeleton={<div className="h-5 w-32 text-sm">890,000</div>}
+      >
         <PriceLoader />
-      </Suspense>
+      </SkeletonBoundary>
       <div style={{ height: 354, width: "100%" }}>
         <Calendar
           defaultDate={new Date()}

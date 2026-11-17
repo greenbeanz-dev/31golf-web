@@ -2,6 +2,7 @@ import { Customer } from "@/gql/__generated__/graphql";
 import useCustomerInfiniteQuery, {
   useCustomerInfiniteQueryBody,
 } from "@/gql/query/customer/useCustomerInfiniteQuery";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
 import {
   Button,
   Input,
@@ -17,8 +18,7 @@ import {
   getKeyValue,
   useDisclosure,
 } from "@nextui-org/react";
-import { Suspense, useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { useEffect } from "react";
 import { MdArrowDropDown, MdSearch } from "react-icons/md";
 import { getFormatedPhoneNumber } from "../../utils/format/getFormatedPhoneNumber";
 
@@ -27,6 +27,36 @@ interface 예약자SelectProps {
   onSelect: (담당자: Customer) => void;
   isSimple?: boolean;
 }
+
+const CustomerTableSample = () => (
+  <Table
+    aria-label="예약자 검색 테이블 샘플"
+    className="w-full mt-2 max-h-[30vh]"
+  >
+    <TableHeader>
+      <TableColumn key="id">회원번호</TableColumn>
+      <TableColumn key="name">이름</TableColumn>
+      <TableColumn key="phone">전화번호</TableColumn>
+    </TableHeader>
+    <TableBody>
+      <TableRow key="1">
+        <TableCell>1001</TableCell>
+        <TableCell>홍길동</TableCell>
+        <TableCell>01012345678</TableCell>
+      </TableRow>
+      <TableRow key="2">
+        <TableCell>1002</TableCell>
+        <TableCell>김삼일</TableCell>
+        <TableCell>01098765432</TableCell>
+      </TableRow>
+      <TableRow key="3">
+        <TableCell>1003</TableCell>
+        <TableCell>이골프</TableCell>
+        <TableCell>01011112222</TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+);
 
 const 예약자Select = ({
   onSelect,
@@ -38,8 +68,10 @@ const 예약자Select = ({
     useCustomerInfiniteQueryBody.getState().reset();
   }, []);
 
-  const handleSelect = (customer: Customer) => {
-    onSelect(customer);
+  void isSimple;
+
+  const handleSelect = (nextCustomer: Customer) => {
+    onSelect(nextCustomer);
     onClose();
   };
   return (
@@ -74,9 +106,13 @@ const 예약자Select = ({
             labelPlacement="outside"
             startContent={<MdSearch />}
           />
-          <Suspense>
+          <SkeletonBoundary
+            label="예약자를 불러오는 중"
+            id="customer-select-table"
+            skeleton={<CustomerTableSample />}
+          >
             <PopoverContentBody onSelect={handleSelect} customer={customer} />
-          </Suspense>
+          </SkeletonBoundary>
         </PopoverContent>
       </Popover>
     </div>
@@ -101,40 +137,38 @@ const PopoverContentBody = ({
     }
   }, []);
 
-  let list = data?.pages
+  const list = data?.pages
     .map((page) => page.customerList.edges.map((item) => item?.node))
     .flat();
 
   return (
-    <ErrorBoundary fallback={<>Error</>}>
-      <Table
-        aria-label="예약자 검색 테이블"
-        className="w-full mt-2 max-h-[30vh]"
-        selectionMode="single"
-        defaultSelectedKeys={customer ? [customer.id] : undefined}
-      >
-        <TableHeader>
-          <TableColumn key="id">회원번호</TableColumn>
-          <TableColumn key="name">이름</TableColumn>
-          <TableColumn key="phone">전화번호</TableColumn>
-        </TableHeader>
-        <TableBody items={list}>
-          {(item) => (
-            <TableRow
-              className="cursor-pointer"
-              key={item?.id}
-              onClick={() => {
-                if (!item) return;
-                onSelect(item);
-              }}
-            >
-              {(columnKey) => {
-                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
-              }}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </ErrorBoundary>
+    <Table
+      aria-label="예약자 검색 테이블"
+      className="w-full mt-2 max-h-[30vh]"
+      selectionMode="single"
+      defaultSelectedKeys={customer ? [customer.id] : undefined}
+    >
+      <TableHeader>
+        <TableColumn key="id">회원번호</TableColumn>
+        <TableColumn key="name">이름</TableColumn>
+        <TableColumn key="phone">전화번호</TableColumn>
+      </TableHeader>
+      <TableBody items={list}>
+        {(item) => (
+          <TableRow
+            className="cursor-pointer"
+            key={item?.id}
+            onClick={() => {
+              if (!item) return;
+              onSelect(item);
+            }}
+          >
+            {(columnKey) => {
+              return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+            }}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 };

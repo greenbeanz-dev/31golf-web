@@ -1,43 +1,62 @@
 import gqlClient from "@/gql/gqlClient";
 import { ProductListInfinityQuery } from "@/gql/query/product/crud";
-import { getProductDisplayName } from "../../utils/format/getProductDisplayName";
-import { Skeleton, cn } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { getProductDisplayName } from "../../utils/format/getProductDisplayName";
+
 const defaultImage = "/images/logo/golf_img1.png";
 
-export function 베스트상품Component() {
-  const data = useQuery({
-    queryKey: ["productListInfinity"],
-    queryFn: async () => {
-      const response = await gqlClient.request(ProductListInfinityQuery, {
-        isBest: true,
-      });
-      return response;
-    },
-  });
+export type BestProductItem = {
+  id?: string | number | null;
+  type?: string | null;
+  name?: string | null;
+  price?: number | null;
+  thumbnailImage?: string | null;
+  summary?: string | null;
+};
 
-  const list = data.data?.productList.edges.map((item) => {
-    return {
-      id: item?.node.id,
-      type: item?.node.type || "",
-      name: item?.node.name,
-      price: item?.node.price,
-      thumbnailImage: item?.node.thumbnailImage,
-      summary: item?.node.summary,
-      course: item?.node.course,
-    };
-  });
+const BEST_PRODUCT_SAMPLES: BestProductItem[] = [
+  {
+    id: "sample-1",
+    type: "domestic",
+    name: "샘플 베스트 투어 상품 A",
+    price: 890000,
+    thumbnailImage: defaultImage,
+    summary: "삼일골프 베스트 투어 상품 요약 문구",
+  },
+  {
+    id: "sample-2",
+    type: "domestic",
+    name: "샘플 베스트 투어 상품 B",
+    price: 990000,
+    thumbnailImage: defaultImage,
+    summary: "삼일골프 베스트 투어 상품 요약 문구",
+  },
+  {
+    id: "sample-3",
+    type: "overseas",
+    name: "샘플 베스트 투어 상품 C",
+    price: 1290000,
+    thumbnailImage: defaultImage,
+    summary: "삼일골프 베스트 투어 상품 요약 문구",
+  },
+];
 
+export function BestProductList({
+  items,
+  interactive = true,
+}: {
+  items: BestProductItem[];
+  interactive?: boolean;
+}) {
   const isMobile = useIsMobile();
   const router = useRouter();
+
   return (
-    <div
-      className={`flex w-full max-w-[95vw] justify-between overflow-x-auto gap-4 overflow-y-hidden`}
-    >
-      {list?.map((item) => {
+    <div className="flex w-full max-w-[95vw] justify-between overflow-x-auto gap-4 overflow-y-hidden">
+      {items.map((item) => {
         return (
           <button
             type="button"
@@ -46,9 +65,10 @@ export function 베스트상품Component() {
             style={{
               width: isMobile ? 256 : 292,
               minWidth: isMobile ? 256 : 292,
-              cursor: "pointer",
+              cursor: interactive ? "pointer" : "default",
             }}
             onClick={() => {
+              if (!interactive) return;
               if (item.id) router.push(`/detail/${item.id}`);
             }}
           >
@@ -78,58 +98,34 @@ export function 베스트상품Component() {
   );
 }
 
-export const 베스트상품ComponentSkleleton = () => {
-  const isMobile = useIsMobile();
-  return (
-    <>
-      <div
-        className={`flex w-full max-w-[95vw] justify-between overflow-x-auto gap-4 overflow-y-hidden`}
-      >
-        {(
-          ["best-skeleton-1", "best-skeleton-2", "best-skeleton-3"] as const
-        ).map((skeletonKey) => {
-          return (
-            <div
-              key={skeletonKey}
-              className="cursor-pointer h-[320px]"
-              style={{
-                width: isMobile ? 256 : 292,
-                minWidth: isMobile ? 256 : 292,
-                cursor: "pointer",
-              }}
-            >
-              <Skeleton
-                className={cn(
-                  isMobile ? "w-[256px] h-[343px]" : "w-[292px] h-[223px]",
-                  "rounded-2xl"
-                )}
-              >
-                <div
-                  className={
-                    isMobile ? "w-[256px] h-[343px]" : "w-[292px] h-[223px]"
-                  }
-                ></div>
-              </Skeleton>
-              <div className="min-h-4" />
-              <Skeleton className="rounded">
-                <div className="text-[16px] font-bold leading-6">title</div>
-              </Skeleton>
-              <div className="pt-1" />
-              <Skeleton className="rounded">
-                <div className="text-[16px] font-normal w-full overflow-ellipsis truncate overflow-hidden leading-normal tracking-tight opacity-70">
-                  Summary
-                </div>
-              </Skeleton>
-              <div className="pt-1" />
-              <Skeleton className="rounded">
-                <div className="text-[20px] font-bold text-[#0A7BE4] leading-6 tracking-tight">
-                  Price
-                </div>
-              </Skeleton>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
-};
+/** skullet 측정용 — 조회 훅 없이 실제 카드 마크업만 그린다 */
+export function BestProductListSample() {
+  return <BestProductList items={BEST_PRODUCT_SAMPLES} interactive={false} />;
+}
+
+export function 베스트상품Component() {
+  const data = useQuery({
+    queryKey: ["productListInfinity"],
+    queryFn: async () => {
+      const response = await gqlClient.request(ProductListInfinityQuery, {
+        isBest: true,
+      });
+      return response;
+    },
+  });
+
+  const list =
+    data.data?.productList.edges.map((item) => {
+      return {
+        id: item?.node.id,
+        type: item?.node.type || "",
+        name: item?.node.name,
+        price: item?.node.price,
+        thumbnailImage: item?.node.thumbnailImage,
+        summary: item?.node.summary,
+        course: item?.node.course,
+      };
+    }) ?? [];
+
+  return <BestProductList items={list} />;
+}

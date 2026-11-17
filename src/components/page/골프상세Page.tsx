@@ -1,4 +1,5 @@
 import { 상품캘린더 } from "@component/calendar";
+import { SkeletonBoundary } from "@component/error/SkeletonBoundary";
 import LoginModal from "@component/login/LoginModal";
 import 예약추가Modal from "@component/molecule/modal/예약추가Modal";
 import 상품결제정보 from "@component/organism/상품결제정보";
@@ -16,7 +17,7 @@ import {
 import dayjs from "dayjs";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { type Ref, Suspense, useEffect, useRef, useState } from "react";
+import { type Ref, useEffect, useRef, useState } from "react";
 import { BsBuildingFillCheck } from "react-icons/bs";
 import {
   FaCheckToSlot,
@@ -278,7 +279,13 @@ export function 골프상세Page({
             <div className="pt-2" />
             <div className="text-[16px] opacity-70">{data?.summary}</div>
             <div className="pt-[10px]" />
-            <Suspense>
+            <SkeletonBoundary
+              label="예약 캘린더를 불러오는 중"
+              id={`product-calendar-${productId}`}
+              skeleton={
+                <div className="w-full h-[400px] rounded-lg border border-black border-opacity-10" />
+              }
+            >
               <상품캘린더
                 판매가={판매가}
                 set판매가={set판매가}
@@ -290,7 +297,7 @@ export function 골프상세Page({
                   }
                 }}
               />
-            </Suspense>
+            </SkeletonBoundary>
           </div>
         </div>
         <div className="pt-8" />
